@@ -1,0 +1,72 @@
+---
+title: Content Data
+sources:
+  - src/data/
+pinned_commit: 7e14a2d
+updated: 2026-10-25
+confidence: observed
+---
+
+# Content data
+
+All study material is hand-authored JS in `src/data/<track>/`. Header comments say it
+was written or parsed from the official syllabus and sample-exam PDFs kept in the
+(git-ignored) `trainings/` folder — e.g. `src/data/ctmat/quiz.js:1-2`,
+`src/data/ctflv4/quiz.js:1-3`. There is no generator script in the repo; the PDFs are
+not shipped.
+
+Each track directory has the same files:
+
+```
+chapterN.js        summary/revision data per chapter
+learn/chapterN.js  long-form teaching content per chapter
+index.js           merges the two → export const chapters
+quiz.js            export const questions (+ totalPoints on most tracks)
+glossary.js        export const glossary
+```
+
+## chapterN.js
+
+Default export `{id, title, time, color, bg, overview, sections[]}`. Each section has
+`id` (syllabus number, e.g. `'1.1'`), `title`, `level` (K1–K4), `type`
+(`'deep'` | `'skim'`), and either `deepPoints[]` (deep) or `summary` (skim), plus
+optional `examInsights[]` — `src/data/ctmat/chapter1.js:3-26`, `src/data/ctmat/chapter2.js:30-35`.
+The Summaries and Exam Insights [pages](pages.md) render these.
+
+## learn/chapterN.js
+
+Default export `{intro, keywords[], objectives[], sections: {"<id>": {objective, body[]}}}`.
+`body` is a list of blocks: `p`, `list` (`{intro?, items}`), `table` (`{headers, rows}`),
+`example` (`{title, text}`), `note` (`{title?, text}`) —
+documented at `src/data/ctmat/learn/chapter1.js:1-4`, rendered by the switch at
+`src/pages/ctmat-learn.jsx:25-70`.
+
+## index.js — attachLearn
+
+`attachLearn(chapter, learn)` copies `intro/keywords/objectives` onto `chapter.learn`
+and, for each section whose id appears in `learn.sections`, sets `section.learn`
+(`src/data/ctmat/index.js:15-24`). The same function is duplicated in every track's
+`index.js` (e.g. `src/data/ctaiv1/index.js:31-40`). **Section ids must match between
+`chapterN.js` and `learn/chapterN.js`** or the learn content silently drops.
+
+## quiz.js
+
+Question shape: `{id, lo, level, points, chapter, multi, text, options[{id,text}], correct[], explanation}`
+— `src/data/ctmat/quiz.js:7-24`. Track-specific variations:
+
+- CTFL: extra `exam` (`"A"`–`"D"`) and `num` fields; four sample exams in one file
+  (`src/data/ctflv4/quiz.js:5-8`). No `totalPoints` export — the quiz page computes per-set totals.
+- CT-QDO: `appendix: true` on extra questions; exports `mainQuestions` and
+  `totalPoints` over main questions only (`src/data/ctqdo/quiz.js:848-849`).
+- CT-AI v1: no `lo` field on any question, and marks extra questions with `isAppendix` instead of `appendix`
+  (`src/data/ctaiv1/quiz.js:4-10`).
+- `totalPoints` = sum of `points` for ctaiv2, ctmat, softskills (e.g. `src/data/ctmat/quiz.js:691`).
+
+Source-data corrections are documented inline — e.g. CT-MAT Q31 follows the official
+rationale over the answer-key table (`src/data/ctmat/quiz.js:3-5`).
+
+## glossary.js
+
+`export const glossary = [{term, chapters[], ref, definition}]` —
+`src/data/ctmat/glossary.js:5-8`. ctaiv2 also exports `glossaryByLetter()`
+(`src/data/ctaiv2/glossary.js:71`), which no page imports.
