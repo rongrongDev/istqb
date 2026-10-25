@@ -1,9 +1,10 @@
 import { Routes, Route, Link } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { lazy, useEffect, useState } from "react";
+import { ArrowRight, CircleCheck, CircleAlert, Circle, TriangleAlert, Folder } from "lucide-react";
 import { tracks, registeredPaths } from "./lib/tracks.js";
-import { T } from "./lib/theme.js";
 import TrackPage from "./components/TrackPage.jsx";
-import PageChrome from "./components/PageChrome.jsx";
+import Shell from "./components/Shell.jsx";
+import { Meter, Hint, pct, passMark } from "./components/ui.jsx";
 
 // Auto-discover all JSX files in src/pages/
 // To add a new guide: drop a .jsx file into src/pages/ — it becomes /<filename>.
@@ -15,112 +16,200 @@ const routes = Object.entries(pageModules).map(([path, loader]) => {
   return { path: name, Component: lazy(loader) };
 });
 
-function Home() {
-  const known = registeredPaths();
-  const extra = routes.filter((r) => !known.has(r.path));
+function storageWorks() {
+  try {
+    localStorage.setItem("__probe", "1");
+    localStorage.removeItem("__probe");
+    return true;
+  } catch {
+    return false;
+  }
+}
 
+// Per-track progress derived from studied ids and chapter order only (no extra storage).
+function summarize(track, chapters) {
+  const studied = track.progress.getStudied();
+  const best = track.progress.getBestExam();
+  if (!chapters) return { track, studied, best, total: null, count: studied.size };
+  const all = chapters.flatMap((ch) => ch.sections.map((s) => ({ ch, s })));
+  const left = all.filter(({ s }) => !studied.has(s.id));
+  const byChapter = chapters.map((ch) => ({ ch, left: ch.sections.filter((s) => !studied.has(s.id)).length }));
+  const weakest = byChapter.reduce((a, b) => (b.left > a.left ? b : a));
+  return { track, studied, best, chapters, total: all.length, count: all.length - left.length, next: left[0] || null, weakest };
+}
+
+function NextCard({ sum }) {
+  const { track, next } = sum;
+  if (!next) {
+    return (
+      <div className="next">
+        <div className="stack" style={{ gap: 6 }}>
+          <span className="lbl">All sections studied · {track.shortName}</span>
+          <b className="nt2">Ready for a mock exam</b>
+          <span className="mu sm">Every section is ticked. Test yourself against the 65% pass mark.</span>
+        </div>
+        <Link className="btn pri" to={`/${track.steps[4].path}`}>Take a mock exam <ArrowRight className="i" /></Link>
+      </div>
+    );
+  }
+  const inCh = next.ch.sections.filter((s) => sum.studied.has(s.id)).length;
   return (
-    <div style={{
-      fontFamily: "'Inter', system-ui, sans-serif",
-      background: T.pageGradient,
-      minHeight: "100vh",
-      padding: "40px 16px",
-    }}>
-      <div style={{ maxWidth: "560px", margin: "0 auto" }}>
-        <div style={{ textAlign: "center", color: T.ink, marginBottom: "28px" }}>
-          <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", color: T.muted, marginBottom: "8px" }}>
-            ISTQB & ASTQB CERTIFICATION STUDY TRACKS
+    <div className="next">
+      <div className="stack" style={{ gap: 6 }}>
+        <span className="lbl">Next up · {track.shortName} · Chapter {next.ch.id}</span>
+        <b className="nt2">{next.s.id} {next.s.title}</b>
+        <span className="mu sm">
+          {next.s.level} · {next.s.type === "deep" ? "deep" : "skim"} section · {inCh} of {next.ch.sections.length} studied in this chapter
+        </span>
+      </div>
+      <Link className="btn pri" to={`/${track.steps[0].path}?ch=${next.ch.id}&s=${encodeURIComponent(next.s.id)}`}>Continue <ArrowRight className="i" /></Link>
+    </div>
+  );
+}
+
+function Readiness({ sum }) {
+  const { track, best, total, count, weakest } = sum;
+  const pass = best ? passMark(best.total) : null;
+  return (
+    <div className="boxc">
+      <div className="isec">
+        <span className="lbl">{track.shortName} · exam readiness</span>
+        {best ? (
+          <div className="crow sm">
+            {best.score >= pass ? <CircleCheck className="i ok" /> : <CircleAlert className="i bad" />}
+            <span>
+              {best.score >= pass
+                ? `Best mock passes: ${pct(best.score, best.total)}% against the 65% line`
+                : `Best mock ${pct(best.score, best.total)}% · ${pass - best.score} points short of the pass mark`}
+            </span>
           </div>
-          <h1 style={{ fontSize: "30px", fontWeight: 800, margin: "0 0 8px" }}>ISTQB Learning Hub</h1>
-          <p style={{ fontSize: "14px", color: T.body, margin: 0, lineHeight: 1.6 }}>
-            Everything you need to pass — no PDF required.<br />Pick a certification track to see its study path and progress.
-          </p>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          {tracks.map((track) => {
-            const studiedCount = track.progress.getStudied().size;
-            const bestExam = track.progress.getBestExam();
-            return (
-              <Link key={track.id} to={`/track/${track.id}`} style={{
-                background: "white", border: `1px solid ${T.border}`, borderRadius: "14px",
-                padding: "18px 20px", color: T.inkSoft, textDecoration: "none", display: "block",
-              }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px" }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginBottom: "4px" }}>
-                      <span style={{ background: track.accent, color: "white", borderRadius: "999px", fontSize: "10px", fontWeight: 800, padding: "2px 9px", letterSpacing: "0.04em" }}>
-                        {track.badge}
-                      </span>
-                      <span style={{ fontSize: "11px", fontWeight: 700, color: T.muted }}>{track.org} · {track.level}</span>
-                    </div>
-                    <div style={{ fontWeight: 800, fontSize: "16px", marginBottom: "3px" }}>{track.title}</div>
-                    <div style={{ fontSize: "12.5px", color: T.muted, lineHeight: 1.5 }}>{track.blurb}</div>
-                    {(studiedCount > 0 || bestExam) && (
-                      <div style={{ fontSize: "12px", color: T.body, marginTop: "8px", fontWeight: 600 }}>
-                        {studiedCount > 0 && `${studiedCount} sections studied`}
-                        {studiedCount > 0 && bestExam && " · "}
-                        {bestExam && (
-                          <span style={{ color: bestExam.score / bestExam.total >= 0.65 ? "#059669" : "#DC2626" }}>
-                            best mock {Math.round((bestExam.score / bestExam.total) * 100)}%
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  <span style={{ color: T.faint, fontSize: "18px", flexShrink: 0 }}>›</span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-
-        {extra.length > 0 && (
-          <>
-            <div style={{ color: T.muted, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", margin: "24px 0 10px" }}>
-              MORE
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              {extra.map((r) => (
-                <Link key={r.path} to={`/${r.path}`} style={{
-                  background: "white", border: `1px solid ${T.border}`, borderRadius: "12px",
-                  padding: "14px 20px", color: T.inkSoft, textDecoration: "none",
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
-                  fontWeight: 700, fontSize: "14px",
-                }}>
-                  {r.path}
-                  <span style={{ color: T.faint, fontSize: "18px" }}>›</span>
-                </Link>
-              ))}
-            </div>
-          </>
+        ) : (
+          <div className="crow sm"><Circle className="i mu" /><span>No mock exam yet — the pass mark is 65%</span></div>
+        )}
+        {total != null && (
+          <div className="crow sm">
+            {count === total ? <CircleCheck className="i ok" /> : <CircleAlert className="i bad" />}
+            <span>
+              {count === total
+                ? `All ${total} sections studied`
+                : `${total - count} of ${total} sections not studied yet, ${weakest.left} of them in Chapter ${weakest.ch.id} (${weakest.ch.title})`}
+            </span>
+          </div>
         )}
       </div>
     </div>
   );
 }
 
+function Tile({ sum }) {
+  const { track, best, total, count } = sum;
+  const bp = best ? pct(best.score, best.total) : 0;
+  return (
+    <Link to={`/track/${track.id}`} className="tile">
+      <div className="crow"><span className="dot" style={{ "--h": track.accent }} /><b className="ell">{track.shortName}</b><span className="mu sm push">{track.level}</span></div>
+      <div className="mu sm ell">{track.title.replace(/ \(.*\)$/, "")}</div>
+      <div className="stack" style={{ gap: 4 }}>
+        <div className="crow sm"><span className="mu">Studied</span><span className="push">{count}{total != null ? `/${total}` : ""}</span></div>
+        <Meter value={total ? pct(count, total) : 0} />
+      </div>
+      <div className="stack" style={{ gap: 4 }}>
+        <div className="crow sm">
+          <span className="mu">Best mock · pass 65%</span>
+          <span className={`push ${best ? (best.score >= passMark(best.total) ? "ok" : "bad") : "mu"}`}>{best ? `${bp}%` : "No attempt"}</span>
+        </div>
+        <Meter value={bp} pass />
+      </div>
+    </Link>
+  );
+}
+
+function Home() {
+  const known = registeredPaths();
+  const extra = routes.filter((r) => !known.has(r.path));
+  const [chapters, setChapters] = useState({});
+  const [storageOk] = useState(storageWorks);
+
+  useEffect(() => {
+    let alive = true;
+    for (const t of tracks) t.loadData().then((m) => alive && setChapters((c) => ({ ...c, [t.id]: m.chapters }))).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
+  const sums = tracks.map((t) => summarize(t, chapters[t.id]));
+  const started = sums.filter((s) => s.count > 0 || s.best);
+  const focus = started.length ? started.reduce((a, b) => (b.count > a.count ? b : a)) : null;
+  const first = sums.find((s) => s.track.id === "ctfl") || sums[0];
+  const firstSec = first.chapters?.[0]?.sections[0];
+
+  return (
+    <div className="page">
+      {!storageOk && (
+        <Hint icon={TriangleAlert} tone="warn">
+          This browser isn’t saving progress (private window or blocked storage). You can still study, but ticks and scores are lost when you close the tab.
+        </Hint>
+      )}
+      <div className="g2a">
+        {focus ? (
+          <>
+            {focus.chapters ? <NextCard sum={focus} /> : <div className="next"><span className="mu">Loading…</span></div>}
+            <Readiness sum={focus} />
+          </>
+        ) : (
+          <>
+            <div className="next">
+              <div className="stack" style={{ gap: 6 }}>
+                <span className="lbl">Start here · {first.track.shortName} · no prerequisite</span>
+                <b className="nt2">{firstSec ? `${firstSec.id} ${firstSec.title}` : "Foundation Level"}</b>
+                <span className="mu sm">
+                  Most learners start with Foundation Level.{first.chapters ? ` ${first.chapters.length} chapters, ${first.total} sections.` : ""}
+                </span>
+              </div>
+              <Link className="btn pri" to={`/${first.track.steps[0].path}${firstSec ? `?ch=1&s=${encodeURIComponent(firstSec.id)}` : ""}`}>
+                Start learning <ArrowRight className="i" />
+              </Link>
+            </div>
+            <div className="boxc">
+              <div className="isec">
+                <span className="lbl">How each track works</span>
+                {first.track.steps.map((s, i) => (
+                  <div key={s.path} className="crow sm"><span className="num">{i + 1}</span><span className="ell">{s.title}</span></div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="crow wrap">
+        <h2>Your tracks</h2>
+        <span className="mu sm push">Progress stays in this browser</span>
+      </div>
+      <div className="g3">
+        {sums.map((s) => <Tile key={s.track.id} sum={s} />)}
+      </div>
+
+      {extra.length > 0 && (
+        <div className="stack" style={{ gap: 8 }}>
+          <div className="crow sm mu"><Folder className="i" /><span className="lbl">More pages</span></div>
+          <div className="tbl">
+            {extra.map((r) => (
+              <Link key={r.path} to={`/${r.path}`} className="chr"><span className="sid">/{r.path}</span></Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function App() {
   return (
-    <Suspense fallback={
-      <div style={{
-        minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
-        fontFamily: "system-ui", color: T.muted, fontSize: "14px"
-      }}>
-        Loading…
-      </div>
-    }>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/track/:id" element={<TrackPage />} />
-        {routes.map(({ path, Component }) => (
-          <Route key={path} path={`/${path}`} element={
-            <PageChrome path={path}>
-              <Component />
-            </PageChrome>
-          } />
-        ))}
-      </Routes>
-    </Suspense>
+    <Routes>
+      <Route path="/" element={<Shell><Home /></Shell>} />
+      <Route path="/track/:id" element={<TrackPage />} />
+      {routes.map(({ path, Component }) => (
+        <Route key={path} path={`/${path}`} element={<Shell path={path}><Component /></Shell>} />
+      ))}
+    </Routes>
   );
 }
