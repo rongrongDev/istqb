@@ -1,32 +1,40 @@
 ---
 title: Theme
 sources:
+  - src/styles.css
   - src/lib/theme.js
-pinned_commit: 7e14a2d
+  - index.html
+pinned_commit: 70b2e7a
 updated: 2026-10-25
 confidence: observed
 ---
 
 # Theme
 
-`src/lib/theme.js` exports `T`, the shared neutral palette: beige surfaces and a dark
-grey text scale (`src/lib/theme.js:6-24`). Every page imports it
-(`import { T } from "../lib/theme.js"`), and styles are inline objects — see
+The "Chalkboard" palette from the design blueprint, as CSS variables in
+`src/styles.css`, with all component classes (buttons, chips, meters, cards, shell,
+exam) in the same file. Pages use class names, not inline colour values — see
 [architecture](architecture.md#styling).
 
-| Token | Use |
-|---|---|
-| `pageBg`, `pageGradient` | page background (flat / hub gradient) |
-| `panel`, `surface`, `track` | inner boxes, chips, progress-bar tracks |
-| `border`, `borderStrong`, `hairline` | card borders, inputs, separators |
-| `disabled` | disabled text/icons |
-| `ink`, `inkSoft`, `body`, `muted`, `faint` | text, strongest → faintest |
+## Light and dark
+
+- Light tokens on `:root` (`src/styles.css:4`); dark under
+  `prefers-color-scheme: dark` unless `data-theme="light"` (`styles.css:16-17`), or
+  forced with `:root[data-theme="dark"]` (`styles.css:27`).
+- The top-bar toggle calls `setThemeChoice` (`src/lib/theme.js:33-40`), which sets
+  `data-theme` on `<html>` and remembers it in `localStorage["theme"]`; an inline script in
+  `index.html` applies it before first paint.
+
+## Tokens
+
+`--app`, `--surface`, `--surface-2`, `--raised`, `--line`, `--text`, `--muted`,
+`--accent`, `--accent-fg`, `--accent-soft`, `--sel`, `--sel-fg`, `--ok`, `--warn`,
+`--danger`, `--chip`, plus shadows, scrim, fonts (Lexend, Spline Sans Mono) and radii.
+`T` in `src/lib/theme.js:5-19` maps the same names to `var(--…)` for inline styles.
 
 ## Rules
 
-- Don't hard-code neutral greys/beiges; use `T` (`src/lib/theme.js:1-2`).
-- **Not** in `T` on purpose: track accents and gradients (in [tracks](tracks.md) and
-  per-chapter `color`/`bg` in [content-data](content-data.md)), and the pass/fail colours
-  `#059669` / `#DC2626` (`src/lib/theme.js:3-4`), which are repeated as literals in
-  pages.
-- No dark mode exists.
+- Don't hard-code colours in components; use the classes or `T`.
+- Track colours (`accent` in [tracks](tracks.md)) appear only as small dots.
+- Breakpoints: 900px (step tabs become the icon strip, grids collapse) and 640px
+  (phone layout, exam grid/confirm become bottom sheets) — `styles.css:291,304`.

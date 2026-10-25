@@ -6,7 +6,6 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 ## Backlog
 
 - [Site-wide design revamp — directions → blueprint](tasks/backlog/task-design-revamp.md) — picked Exam Room + Chalkboard; blueprint in `design/site-revamp-blueprint.html` (design history per round)
-- [Exam Room redesign — implementation](tasks/backlog/task-exam-room-redesign.md) — TODO: Exam Room + Chalkboard + Test brackets logo, 7 phases (shared pages → tokens → shell → dashboard → learn/glossary → exam flow → phone)
 - [Resume an exam after refresh](tasks/backlog/task-resume-exam-after-refresh.md) — save the in-progress attempt with its deadline; resume or discard (after the redesign)
 - [Mock exam attempt history and score trend](tasks/backlog/task-attempt-history.md) — keep every attempt incl. per-chapter points; trend vs 65% line
 - [Weak-spot drill](tasks/backlog/task-weak-spot-drill.md) — name the weakest chapter and start a filtered practice set (needs attempt history)
@@ -22,6 +21,8 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 (none)
 
 ## Done
+
+- [Exam Room redesign — implementation](tasks/done/task-exam-room-redesign.md) — rebuilt the UI as the Exam Room design with the Chalkboard palette (light/dark, remembered toggle) and the Test brackets logo: the 29 page files are now thin wrappers over shared `LearnPage`, `NotesPage`, `GlossaryPage` and `QuizPage` components; `Shell.jsx` (track switcher, step tabs, ⌘K lookup, phone tab strip) replaces PageChrome; readiness dashboard, exam-facts track page, full-screen exam with segment navigator and finish confirm bar; checked in headless Chrome at 1280px and 390px
 
 - [ISTQB learning hub main page + sitewide end-to-end navigation](tasks/done/task-learning-hub-and-navigation.md) — rebuilt `src/App.jsx` Home as a multi-track ISTQB hub driven by a new `src/lib/tracks.js` registry (5 tracks, config-only to extend), added `/track/:id` landing pages (`src/components/TrackPage.jsx`: study path, progress stats, exam readiness, CT-AI v1 legacy pages grouped under the CT-AI track), and wrapped every routed page in `src/components/PageChrome.jsx` — a breadcrumb bar (Hub › Track › Step) with next-step / back-to-track links on all 29 leaf routes
 

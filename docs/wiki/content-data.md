@@ -39,7 +39,7 @@ Default export `{intro, keywords[], objectives[], sections: {"<id>": {objective,
 `body` is a list of blocks: `p`, `list` (`{intro?, items}`), `table` (`{headers, rows}`),
 `example` (`{title, text}`), `note` (`{title?, text}`) —
 documented at `src/data/ctmat/learn/chapter1.js:1-4`, rendered by the switch at
-`src/pages/ctmat-learn.jsx:25-70`.
+`src/components/LearnPage.jsx:6-43`.
 
 ## index.js — attachLearn
 

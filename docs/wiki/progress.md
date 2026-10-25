@@ -4,7 +4,8 @@ sources:
   - src/lib/progress.js
   - src/lib/tracks.js
   - src/pages/
-pinned_commit: 7e14a2d
+  - src/components/
+pinned_commit: 70b2e7a
 updated: 2026-10-25
 confidence: observed
 ---
@@ -42,14 +43,20 @@ Source: `src/lib/progress.js:49-90`. Renaming a key wipes existing learners' pro
 
 ## Readers and writers
 
-- Writers: each `<t>-learn.jsx` (studied toggles) and `<t>-quiz.jsx` (best exam) — see [pages](pages.md).
-- Readers: hub cards (`src/App.jsx:42-43`) and `TrackPage` (`src/components/TrackPage.jsx:31-37`)
-  via `track.progress` in [tracks](tracks.md). Pass colouring uses ≥65%.
+- Writers: each `<t>-learn.jsx` wrapper passes its `getStudiedSections*` /
+  `setSectionStudied*` to `LearnPage`, and each `<t>-quiz.jsx` passes `recordExamScore*` /
+  `getBestExamScore*` to `QuizPage` — see [pages](pages.md).
+- Readers: the dashboard (`src/App.jsx:31-32`, also derives "next up" from studied ids and
+  chapter order) and `TrackPage` (`src/components/TrackPage.jsx:35-36`) via
+  `track.progress` in [tracks](tracks.md). Pass colouring uses the pass mark, 65% of the total
+  rounded up.
+- The dashboard probes `localStorage` and shows a banner when writes throw (`src/App.jsx:19-27`).
+- The theme choice uses its own key, `theme` ([theme](theme.md)).
 
 ## Known gaps
 
 - `recordExamScoreV1` is exported but never called: `ctai-quiz.jsx` has no exam mode, so
-  the "Best v1 mock" line on the CT-AI track page (`src/components/TrackPage.jsx:37,117`)
+  the "Best v1 mock" line on the CT-AI track page (`src/components/TrackPage.jsx:41,113`)
   can never appear.
 - CTFL stores a single `bestExam` across Sample Exams A–D, so the best score does not say
-  which set it came from (`src/pages/ctflv4-quiz.jsx:56`).
+  which set it came from (`src/pages/ctflv4-quiz.jsx:5,16`).
