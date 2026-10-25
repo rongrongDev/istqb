@@ -548,7 +548,7 @@ kbd.k { font-family: var(--font-mono); font-size: 11px; border: 1px solid var(--
       'Your pick from the three-layout comparison, worked out in detail: <b>Exam Room</b> as the whole app, with <b>Study Desk</b>’s chapter outline added to Learn. It shows every screen and state on desktop and phone, in light and dark, and asks the questions still open.',
       'Round 2 focuses on <b>Chalkboard</b> (default below), tightens the exam options and the phone step tabs, and adds a <a href="#logo">logo</a>. Parchment and Answer Sheet are still on the Palette switch. Content is real CTFL v4.0, CT-AI v2.0 and CT-QDO material; learner progress is an example.'
     ],
-    footer: 'ISTQB Learning Hub · Exam Room Blueprint. The mockups are the design reference; no application code changes until the implementation task starts.'
+    footer: 'ISTQB Learning Hub · Exam Room Blueprint. The mockups are the design reference; see As built for what shipped and where it differs.'
   };
 
   const PALETTES = {
@@ -1075,9 +1075,25 @@ kbd.k { font-family: var(--font-mono); font-size: 11px; border: 1px solid var(--
     },
     {
       id: 'built', name: 'As built',
-      intro: 'Filled in after implementation: each decision as built, deviations and why, and anything added since.',
-      answers: [],
-      body: () => table(['Area', 'As built', 'Why'], [['—', 'Not built yet.', '']])
+      intro: 'Built on 2026-10-25 (task: tasks/in-progress/task-exam-room-redesign.md). Each decision as implemented, deviations and why, and follow-ups.',
+      answers: [
+        { q: 'Where does it live?', text: '<code class="c">src/styles.css</code> (tokens + component classes), <code class="c">src/components/Shell.jsx</code> (top bar, track switcher, tabs, ⌘K, theme toggle, phone strip, footer), <code class="c">LearnPage</code>, <code class="c">NotesPage</code>, <code class="c">GlossaryPage</code>, <code class="c">QuizPage</code>, <code class="c">TrackPage</code>, hub in <code class="c">src/App.jsx</code>, small parts in <code class="c">ui.jsx</code>. The 29 files in <code class="c">src/pages/</code> are thin wrappers passing data, progress functions and their original text.' },
+        { q: 'What did not change?', text: 'Routes (still auto-generated), progress keys and shapes, content data files, and every exam rule (60/75 min, 65% rounded up, exact-set matching, CT-QDO main questions only, CT-AI v1.x practice only, highest score kept).' }
+      ],
+      body: () => table(['Area', 'As built', 'Why'], [
+        ['Shared pages', '5 shared components; one Notes component serves Summaries and Exam Insights (mode prop). Chapter colours dropped; track colour only as dots.', 'Phase 0 and the visual work were done in one pass, so no throwaway intermediate refactor.'],
+        ['Tokens', 'Chalkboard light on <code class="c">:root</code>, dark via <code class="c">prefers-color-scheme</code> or <code class="c">data-theme</code>; <code class="c">T</code> maps to the CSS variables. Theme applied before first paint from <code class="c">localStorage["theme"]</code>.', 'Classes instead of inline styles: hover, focus and the 640/900px breakpoints need CSS.'],
+        ['Type', 'Interface 14px (13.5px on phones), teaching text 15px / 1.7.', 'Deviation: the mockups’ 12.5px reads too small at real size.'],
+        ['Shell', 'Top bar as designed; tabs collapse to the icon-over-label strip under 900px (not 640px) so tablets don’t overflow. ⌘K searches the current track, or every track on the dashboard; terms open the glossary with <code class="c">?q=</code>, sections open Learn at <code class="c">?ch=&amp;s=</code>.', 'Five tabs plus the search bar don’t fit between 640 and 900px.'],
+        ['Dashboard', 'Next-up uses the started track with the most studied sections; readiness names the chapter with the most unstudied sections. First-visit and storage-blocked states as designed.', 'No new storage: derived from studied ids and chapter order only.'],
+        ['Track page', 'Exam facts come from a new <code class="c">exam</code> field in tracks.js. CT-AI v2.0 shows 44 points, pass at 29.', 'Deviation: the mockup said 26/40; the real sample exam is 44 points.'],
+        ['Learn', 'Reader A, with chapter intro, objectives and keywords shown above the first section. URL keeps the place (<code class="c">?ch=&amp;s=</code>); the old v1 <code class="c">?ch=N</code> link still works.', 'Keeps all chapter content from the old pages.'],
+        ['Insights', 'All insights of the chapter in the side column, labelled Trap / Key / Insight by keyword.', 'Union of the per-track keyword rules from the old pages.'],
+        ['Exam', 'Navigator A and finish confirm B as designed; grid and confirm become bottom sheets under 640px. Practice and review use the same bar (right/wrong).', '—'],
+        ['Practice reveal', 'Correct options green for every track.', 'Deviation: CT-AI v1 used to show a missed correct option in yellow.'],
+        ['Icons and mark', 'lucide-react 0.460; Test brackets mark in the top bar, <code class="c">favicon.svg</code>, 32px PNG and 180px apple-touch icon.', '—'],
+        ['Follow-ups', 'Phone Learn footer is not sticky; Parchment / Answer Sheet palettes not built; the CT-SS quiz rules still say “Prerequisite: CTFL certificate” (track page says none) — copied as-is.', 'Out of scope; content unchanged on purpose.']
+      ])
     }
   ];
 
