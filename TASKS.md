@@ -5,6 +5,17 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 
 ## Backlog
 
+- [Site-wide design revamp — directions → blueprint](tasks/backlog/task-design-revamp.md) — picked Exam Room + Chalkboard; blueprint in `design/site-revamp-blueprint.html` (design history per round)
+- [Exam Room redesign — implementation](tasks/backlog/task-exam-room-redesign.md) — TODO: Exam Room + Chalkboard + Test brackets logo, 7 phases (shared pages → tokens → shell → dashboard → learn/glossary → exam flow → phone)
+- [Resume an exam after refresh](tasks/backlog/task-resume-exam-after-refresh.md) — save the in-progress attempt with its deadline; resume or discard (after the redesign)
+- [Mock exam attempt history and score trend](tasks/backlog/task-attempt-history.md) — keep every attempt incl. per-chapter points; trend vs 65% line
+- [Weak-spot drill](tasks/backlog/task-weak-spot-drill.md) — name the weakest chapter and start a filtered practice set (needs attempt history)
+- [Mistake deck](tasks/backlog/task-mistake-deck.md) — wrong answers become a deck cleared by two right answers in a row
+- [Flag questions for review](tasks/backlog/task-flag-for-review.md) — flag during the exam; markers in the bar/grid and finish bar
+- [Exam-day countdown](tasks/backlog/task-exam-day-countdown.md) — booked date per track; days left and daily section target
+- [Best score per CTFL sample exam](tasks/backlog/task-best-score-per-ctfl-set.md) — `bestBySet` for Sets A–D alongside the overall best
+- [Export and import progress](tasks/backlog/task-export-import-progress.md) — JSON backup/restore of all track keys, validated
+- [Sync across devices](tasks/backlog/task-sync-across-devices.md) — OPEN: needs a backend; 4 questions to answer
 
 ## In progress
 
