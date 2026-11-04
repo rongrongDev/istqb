@@ -10,6 +10,7 @@ import {
   getStudiedSectionsQDO, getBestExamScoreQDO,
   getStudiedSectionsMAT, getBestExamScoreMAT,
   getStudiedSectionsSS, getBestExamScoreSS,
+  getStudiedSectionsGenAI, getBestExamScoreGenAI,
 } from "./progress.js";
 
 export const tracks = [
@@ -127,6 +128,27 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsSS, getBestExam: getBestExamScoreSS },
     loadData: () => import("../data/softskills/index.js"),
+  },
+  {
+    id: "ctgenai",
+    shortName: "CT-GenAI v1.1",
+    title: "Testing with Generative AI (CT-GenAI v1.1)",
+    org: "ISTQB",
+    level: "Specialist",
+    badge: "AI PATH",
+    blurb: "Using LLMs in testing: prompt engineering for test tasks, GenAI risks, RAG and agents, and rolling GenAI out in a test organization — 5 chapters.",
+    gradient: "linear-gradient(135deg, #0C1A3A 0%, #1E3A8A 50%, #2563EB 100%)",
+    accent: "#2563EB",
+    prerequisite: "CTFL certificate",
+    steps: [
+      { path: "ctgenai-learn", step: 1, title: "Learn", desc: "Full teaching content for all 5 chapters, written from the official v1.1 syllabus — start here" },
+      { path: "ctgenai", step: 2, title: "Chapter Summaries", desc: "Condensed revision notes: skim vs deep-dive per section" },
+      { path: "ctgenai-guide", step: 3, title: "Exam Insights", desc: "Summaries + known traps and key facts from the ISTQB and ASTQB sample exams" },
+      { path: "ctgenai-glossary", step: 4, title: "Glossary", desc: "50 keywords and Generative AI specific terms with definitions — exams test exact wording" },
+      { path: "ctgenai-quiz", step: 5, title: "Quiz & Exam Simulation", desc: "80 official sample questions (ISTQB Exam A + ASTQB exam): practice with explanations, or a timed 60-min mock exam" },
+    ],
+    progress: { getStudied: getStudiedSectionsGenAI, getBestExam: getBestExamScoreGenAI },
+    loadData: () => import("../data/ctgenai/index.js"),
   },
 ];
 

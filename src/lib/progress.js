@@ -88,3 +88,10 @@ export const getStudiedSectionsSS = ss.getStudiedSections;
 export const setSectionStudiedSS = ss.setSectionStudied;
 export const getBestExamScoreSS = ss.getBestExamScore;
 export const recordExamScoreSS = ss.recordExamScore;
+
+// CT-GenAI v1.1 track
+const ctgenai = makeProgress("ct-genai-progress");
+export const getStudiedSectionsGenAI = ctgenai.getStudiedSections;
+export const setSectionStudiedGenAI = ctgenai.setSectionStudied;
+export const getBestExamScoreGenAI = ctgenai.getBestExamScore;
+export const recordExamScoreGenAI = ctgenai.recordExamScore;
