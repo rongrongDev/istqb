@@ -33,6 +33,7 @@ export default {
           "V-model — every requirement level has a matching test level: component, component integration, system, system integration and acceptance. A test automation framework (TAF) per test level is possible and recommended.",
           "Agile — TAEs and business representatives agree the automation roadmap and timeline together. Code reviews, pair programming and frequent automated execution are common. Eliminating silos between developers, testers and other stakeholders lets the team automate every test level to the right depth — the goal called in-sprint automation.",
         ]},
+        { type: "seealso", label: "CT-TAS Learn — Chapter 3", href: "/cttas-learn", text: "test automation in waterfall, V-model, Agile (in-sprint automation) and DevOps from the strategy side (3.2)" },
       ],
     },
     "1.2.2": {
