@@ -11,6 +11,8 @@ const CHAPTERS = [1, 2, 3, 4, 5];
 
 // CT-GenAI v1.1 exam rules: 40 questions, 60 min (+25% non-native), pass = 65% of points (ISTQB set A: 46 pts → 30; ASTQB set: 46 pts → 30).
 const EXAM_MINUTES = 60;
+// Official pass marks where the source states one; otherwise 65% of the set's points.
+const PASS_POINTS = {};
 const setQuestions = (set) => questions.filter((q) => q.exam === set);
 const setPoints = (set) => setQuestions(set).reduce((s, q) => s + q.points, 0);
 
@@ -31,7 +33,7 @@ export default function CTGenAIQuiz() {
 
   const examQs = setQuestions(examSet);
   const examTotal = setPoints(examSet);
-  const passPoints = Math.ceil(examTotal * 0.65);
+  const passPoints = PASS_POINTS[examSet] ?? Math.ceil(examTotal * 0.65);
 
   const practiceQs = (practiceSet === 0 ? questions : setQuestions(practiceSet))
     .filter((q) => filter === 0 || q.chapter === filter);

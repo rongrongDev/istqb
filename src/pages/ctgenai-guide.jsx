@@ -110,7 +110,7 @@ export default function CTGenAIGuide() {
               ))}
             </div>
             <div style={{ marginTop: "10px", fontSize: "12px", color: T.muted, background: "#FFFBEB", borderRadius: "8px", padding: "8px 12px" }}>
-              ★ The K3 objectives — test analysis (2.2.1), test design & implementation (2.2.2), regression testing (2.2.3), monitoring & control (2.2.4), choosing prompting techniques (2.2.5), identifying hallucinations/reasoning errors/biases (3.1.2) — are 2-point apply-style scenario questions.
+              ★ The K3 objectives — test analysis (2.2.1), test design &amp; implementation (2.2.2), regression testing (2.2.3), monitoring &amp; control (2.2.4), choosing prompting techniques (2.2.5), identifying hallucinations/reasoning errors/biases (3.1.2) — are 2-point apply-style scenario questions.
             </div>
           </div>
         </>
@@ -163,7 +163,7 @@ export default function CTGenAIGuide() {
               <div>System prompt = whole conversation, hidden · User prompt = each turn</div>
               <div>Hallucination = made-up/irrelevant · Reasoning error = bad logic · Bias = training data</div>
               <div>Attack vectors = context manip. · request manip. · data poisoning · malicious code</div>
-              <div>Adoption      = discovery → initiation & usage definition → utilization & iteration</div>
+              <div>Adoption      = discovery → initiation &amp; usage definition → utilization &amp; iteration</div>
               <div>Back-end      = auth, retrieval, PROMPT PREPARATION, post-processing</div>
             </div>
             <div style={{ marginTop: "10px", background: "#FFFBEB", borderRadius: "8px", padding: "10px 12px", fontSize: "12px", color: "#92400E" }}>

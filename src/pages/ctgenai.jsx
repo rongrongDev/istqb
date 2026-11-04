@@ -77,7 +77,7 @@ export default function CTGenAISummaries() {
             ))}
           </div>
           <div style={{ marginTop: "10px", fontSize: "12px", color: T.muted, background: "#FFFBEB", borderRadius: "8px", padding: "8px 12px" }}>
-            ★ The 6 K3 objectives (test analysis, test design & implementation, regression automation, monitoring & control, choosing prompting techniques, identifying hallucinations/reasoning errors/biases) each yield a 2-point scenario question in the ISTQB sample exam.
+            ★ The 6 K3 objectives (test analysis, test design &amp; implementation, regression automation, monitoring &amp; control, choosing prompting techniques, identifying hallucinations/reasoning errors/biases) each yield a 2-point scenario question in the ISTQB sample exam.
           </div>
         </div>
       )}
