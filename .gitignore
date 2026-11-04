@@ -2,6 +2,6 @@ node_modules/
 dist/
 trainings/
 _refactor/
-tasks/
+/tasks/
 .DS_Store
-features/
+/features/
