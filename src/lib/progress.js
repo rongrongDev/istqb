@@ -137,3 +137,10 @@ export const getStudiedSectionsACT = ctact.getStudiedSections;
 export const setSectionStudiedACT = ctact.setSectionStudied;
 export const getBestExamScoreACT = ctact.getBestExamScore;
 export const recordExamScoreACT = ctact.recordExamScore;
+
+// CT-UT (2018) track
+const ctut = makeProgress("ct-ut-progress");
+export const getStudiedSectionsUT = ctut.getStudiedSections;
+export const setSectionStudiedUT = ctut.setSectionStudied;
+export const getBestExamScoreUT = ctut.getBestExamScore;
+export const recordExamScoreUT = ctut.recordExamScore;

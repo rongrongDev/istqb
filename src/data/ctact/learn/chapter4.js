@@ -61,6 +61,7 @@ export default {
           ["Biometrics-based evaluation", "Devices such as eye tracking show what attracts attention and what is (not) visible"],
           ["Log file analysis", "Retrospective review of how users actually interacted, compared with the intended use"],
         ]},
+        { type: "seealso", label: "CT-UT Learn", href: "/ctut-learn", text: "usability testing in depth (ISTQB Usability Testing syllabus)" },
       ],
     },
     "4.3.1": {
