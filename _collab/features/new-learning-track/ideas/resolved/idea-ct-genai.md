@@ -23,12 +23,16 @@ It's the natural companion to the CT-AI v2 track already on the site: CT-AI cove
 
 ## Open Questions
 
-- [ ] Should it sit as its own hub card, or be grouped with CT-AI under an “AI testing” heading?
-                                  > YOUR ANSWER:
+- [x] Should it sit as its own hub card, or be grouped with CT-AI under an “AI testing” heading?
+                                  > YOUR ANSWER: Default (set by Claude after your approval; change in the task if wrong): its own hub card, like every other track, with cross-links to CT-AI v2.
 
-- [ ] Do you have the official syllabus PDF and a sample exam with its answer key for this one (to put in `trainings/`), or should I work only from the public istqb.org downloads?
-                                  > YOUR ANSWER:
+- [x] Do you have the official syllabus PDF and a sample exam with its answer key for this one (to put in `trainings/`), or should I work only from the public istqb.org downloads?
+                                  > YOUR ANSWER: Default (set by Claude after your 2026-11-04 approval; change it in the task if wrong): work from the public istqb.org downloads (syllabus, sample exam, answer key). If you have the PDFs, drop them into `trainings/` and they take precedence.
+
+## Decision
+
+Approved in chat on 2026-11-04 as a track to build.
 
 ## Status
 
-OPEN
+RESOLVED

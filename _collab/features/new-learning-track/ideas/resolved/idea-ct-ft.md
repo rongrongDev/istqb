@@ -19,12 +19,16 @@ It's the newest syllabus on ISTQB's list, mirroring how CT-QDO was added as “N
 
 ## Open Questions
 
-- [ ] Is there real demand for this from you or your audience, or is it only “new and available”?
-                                  > YOUR ANSWER:
+- [x] Is there real demand for this from you or your audience, or is it only “new and available”?
+                                  > YOUR ANSWER: Yes: approved by you in chat, 2026-11-04.
 
-- [ ] Do you have the official syllabus PDF and a sample exam with its answer key for this one (to put in `trainings/`), or should I work only from the public istqb.org downloads?
-                                  > YOUR ANSWER:
+- [x] Do you have the official syllabus PDF and a sample exam with its answer key for this one (to put in `trainings/`), or should I work only from the public istqb.org downloads?
+                                  > YOUR ANSWER: Default (set by Claude after your 2026-11-04 approval; change it in the task if wrong): work from the public istqb.org downloads (syllabus, sample exam, answer key). If you have the PDFs, drop them into `trainings/` and they take precedence.
+
+## Decision
+
+Approved in chat on 2026-11-04 as a track to build.
 
 ## Status
 
-OPEN
+RESOLVED

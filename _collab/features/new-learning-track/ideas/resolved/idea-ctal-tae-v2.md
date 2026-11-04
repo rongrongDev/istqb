@@ -21,12 +21,16 @@ It pairs naturally with CT-QDO (DevOps pipelines) and CT-MAT (mobile automation)
 
 ## Open Questions
 
-- [ ] If only one automation track is added, should it be TAE (engineer, Advanced) or CT-TAS (strategy, Specialist)?
-                                  > YOUR ANSWER:
+- [x] If only one automation track is added, should it be TAE (engineer, Advanced) or CT-TAS (strategy, Specialist)?
+                                  > YOUR ANSWER: Both: you approved CTAL-TAE v2.0 and CT-TAS as separate tracks (chat, 2026-11-04). Scope each distinctly: TAE = engineering/architecture, TAS = organisational strategy.
 
-- [ ] Do you have the official syllabus PDF and a sample exam with its answer key for this one (to put in `trainings/`), or should I work only from the public istqb.org downloads?
-                                  > YOUR ANSWER:
+- [x] Do you have the official syllabus PDF and a sample exam with its answer key for this one (to put in `trainings/`), or should I work only from the public istqb.org downloads?
+                                  > YOUR ANSWER: Default (set by Claude after your 2026-11-04 approval; change it in the task if wrong): work from the public istqb.org downloads (syllabus, sample exam, answer key). If you have the PDFs, drop them into `trainings/` and they take precedence.
+
+## Decision
+
+Approved in chat on 2026-11-04 as a track to build.
 
 ## Status
 
-OPEN
+RESOLVED
