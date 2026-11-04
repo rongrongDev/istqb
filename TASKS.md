@@ -12,6 +12,8 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 
 ## Done
 
+- [CT-FT study content — Finance Testing v1.0](_collab/tasks/done/task-006-ct-ft-track.md) — built the CT-FT track: `src/data/ctft/` (6 chapters with full learn content, 40-question / 45-point quiz from the ASTQB Finance Testing v1.0 sample exam cross-checked against its answer document — the ISTQB set A was left out because its answers don't match its questions, 52-term glossary), `/ctft` + `/ctft-learn` + `/ctft-guide` + `/ctft-glossary` + `/ctft-quiz` pages with a 60-min (assumed) exam simulation and 30-point pass mark, `ct-ft-progress` key, and a "NEW 2026" hub card
+
 - [CT-SEC study content — Security Testing (2016 syllabus)](_collab/tasks/done/task-005-security-testing-track.md) — built the CT-SEC track: `src/data/ctsec/` (9 chapters with full learn content, 45-question / 80-point quiz from ISTQB Sample Exam set A v1.1 cross-checked against its answer key — LO/chapter mapping by topic since the official key lists none, 57-term glossary), `/ctsec` + `/ctsec-learn` + `/ctsec-guide` + `/ctsec-glossary` + `/ctsec-quiz` pages with a 120-min exam simulation, `ct-sec-progress` key, and a hub card
 
 - [CT-PT study content — Performance Testing (2018)](_collab/tasks/done/task-004-ct-pt-track.md) — built the CT-PT track: `src/data/ctpt/` (5 chapters with full learn content, 79-question quiz from ISTQB Sample Exam A v1.3 + the ASTQB 2019 sample exam — base scenario repeated per question, image-only chart question omitted — cross-checked against both answer keys, 36-term glossary), `/ctpt` + `/ctpt-learn` + `/ctpt-guide` + `/ctpt-glossary` + `/ctpt-quiz` pages with per-set 60-min exam simulation, `ct-pt-progress` key, and a hub card
