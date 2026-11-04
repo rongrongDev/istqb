@@ -10,6 +10,7 @@ import {
   getStudiedSectionsQDO, getBestExamScoreQDO,
   getStudiedSectionsMAT, getBestExamScoreMAT,
   getStudiedSectionsSS, getBestExamScoreSS,
+  getStudiedSectionsTAS, getBestExamScoreTAS,
   getStudiedSectionsTAE, getBestExamScoreTAE,
   getStudiedSectionsGenAI, getBestExamScoreGenAI,
 } from "./progress.js";
@@ -171,6 +172,27 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsTAE, getBestExam: getBestExamScoreTAE },
     loadData: () => import("../data/ctaltae/index.js"),
+  },
+  {
+    id: "cttas",
+    shortName: "CT-TAS v1.0",
+    title: "Test Automation Strategy (CT-TAS v1.0)",
+    org: "ISTQB",
+    level: "Specialist",
+    badge: "STRATEGY",
+    blurb: "Planning and governing test automation: ownership and licensing, test distributions, deployment, ROI and metrics, and moving to continuous testing — 6 chapters. For hands-on engineering instead, see CTAL-TAE.",
+    gradient: "linear-gradient(135deg, #1A1A2E 0%, #3F3D56 50%, #6D28D9 100%)",
+    accent: "#6D28D9",
+    prerequisite: "CTFL certificate",
+    steps: [
+      { path: "cttas-learn", step: 1, title: "Learn", desc: "Full teaching content for all 6 chapters, written from the official v1.0 syllabus — start here" },
+      { path: "cttas", step: 2, title: "Chapter Summaries", desc: "Condensed revision notes: skim vs deep-dive per section" },
+      { path: "cttas-guide", step: 3, title: "Exam Insights", desc: "Summaries + known traps and key facts from the ISTQB and ASTQB sample exams" },
+      { path: "cttas-glossary", step: 4, title: "Glossary", desc: "35 keywords and strategy terms with definitions — exams test exact wording" },
+      { path: "cttas-quiz", step: 5, title: "Quiz & Exam Simulation", desc: "80 official sample questions (ISTQB Exam A + ASTQB exam): practice with explanations, or a timed 60-min mock exam" },
+    ],
+    progress: { getStudied: getStudiedSectionsTAS, getBestExam: getBestExamScoreTAS },
+    loadData: () => import("../data/cttas/index.js"),
   },
 ];
 

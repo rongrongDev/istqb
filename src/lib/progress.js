@@ -102,3 +102,10 @@ export const getStudiedSectionsTAE = ctaltae.getStudiedSections;
 export const setSectionStudiedTAE = ctaltae.setSectionStudied;
 export const getBestExamScoreTAE = ctaltae.getBestExamScore;
 export const recordExamScoreTAE = ctaltae.recordExamScore;
+
+// CT-TAS v1.0 track
+const cttas = makeProgress("ct-tas-progress");
+export const getStudiedSectionsTAS = cttas.getStudiedSections;
+export const setSectionStudiedTAS = cttas.setSectionStudied;
+export const getBestExamScoreTAS = cttas.getBestExamScore;
+export const recordExamScoreTAS = cttas.recordExamScore;
