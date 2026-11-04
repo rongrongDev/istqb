@@ -12,6 +12,8 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 
 ## Done
 
+- [CT-SEC study content — Security Testing (2016 syllabus)](_collab/tasks/done/task-005-security-testing-track.md) — built the CT-SEC track: `src/data/ctsec/` (9 chapters with full learn content, 45-question / 80-point quiz from ISTQB Sample Exam set A v1.1 cross-checked against its answer key — LO/chapter mapping by topic since the official key lists none, 57-term glossary), `/ctsec` + `/ctsec-learn` + `/ctsec-guide` + `/ctsec-glossary` + `/ctsec-quiz` pages with a 120-min exam simulation, `ct-sec-progress` key, and a hub card
+
 - [CT-PT study content — Performance Testing (2018)](_collab/tasks/done/task-004-ct-pt-track.md) — built the CT-PT track: `src/data/ctpt/` (5 chapters with full learn content, 79-question quiz from ISTQB Sample Exam A v1.3 + the ASTQB 2019 sample exam — base scenario repeated per question, image-only chart question omitted — cross-checked against both answer keys, 36-term glossary), `/ctpt` + `/ctpt-learn` + `/ctpt-guide` + `/ctpt-glossary` + `/ctpt-quiz` pages with per-set 60-min exam simulation, `ct-pt-progress` key, and a hub card
 
 - [CT-TAS v1.0 study content — Test Automation Strategy](_collab/tasks/done/task-003-ct-tas-track.md) — built the CT-TAS track: `src/data/cttas/` (6 chapters with full learn content and CTAL-TAE cross-links, 80-question quiz from ISTQB Sample Exam A v1.2 + the ASTQB TAS sample exam, cross-checked against both answer keys, 35-term glossary), `/cttas` + `/cttas-learn` + `/cttas-guide` + `/cttas-glossary` + `/cttas-quiz` pages with per-set 60-min exam simulation, `ct-tas-progress` key, and a hub card that contrasts it with CTAL-TAE
