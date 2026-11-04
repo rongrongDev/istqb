@@ -12,6 +12,8 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 
 ## Done
 
+- [CT-AcT study content — Acceptance Testing (2019 syllabus)](_collab/tasks/done/task-007-acceptance-testing-track.md) — built the CT-AcT track: `src/data/ctact/` (5 chapters with full learn content linking ATDD/BDD to CTFL 2.1.3/2.2.1, 40-question quiz from ISTQB Sample Exam set A v1.3 cross-checked against its answer key — BPMN/DMN figures described in text, 36-term glossary), `/ctact` + `/ctact-learn` + `/ctact-guide` + `/ctact-glossary` + `/ctact-quiz` pages with a 60-min exam simulation, `ct-act-progress` key, and a hub card
+
 - [CT-FT study content — Finance Testing v1.0](_collab/tasks/done/task-006-ct-ft-track.md) — built the CT-FT track: `src/data/ctft/` (6 chapters with full learn content, 40-question / 45-point quiz from the ASTQB Finance Testing v1.0 sample exam cross-checked against its answer document — the ISTQB set A was left out because its answers don't match its questions, 52-term glossary), `/ctft` + `/ctft-learn` + `/ctft-guide` + `/ctft-glossary` + `/ctft-quiz` pages with a 60-min (assumed) exam simulation and 30-point pass mark, `ct-ft-progress` key, and a "NEW 2026" hub card
 
 - [CT-SEC study content — Security Testing (2016 syllabus)](_collab/tasks/done/task-005-security-testing-track.md) — built the CT-SEC track: `src/data/ctsec/` (9 chapters with full learn content, 45-question / 80-point quiz from ISTQB Sample Exam set A v1.1 cross-checked against its answer key — LO/chapter mapping by topic since the official key lists none, 57-term glossary), `/ctsec` + `/ctsec-learn` + `/ctsec-guide` + `/ctsec-glossary` + `/ctsec-quiz` pages with a 120-min exam simulation, `ct-sec-progress` key, and a hub card
