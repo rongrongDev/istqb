@@ -12,6 +12,8 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 
 ## Done
 
+- [CT-GenAI v1.1 study content — Testing with Generative AI](_collab/tasks/done/task-001-ct-genai-track.md) — built the CT-GenAI track: `src/data/ctgenai/` (5 chapters with full learn content and CT-AI v2 cross-links, 80-question quiz from ISTQB Sample Exam A v1.1 + the ASTQB v1.1 sample exam, cross-checked against both answer keys, 50-term glossary from chapter keywords + Appendix D), `/ctgenai` + `/ctgenai-learn` + `/ctgenai-guide` + `/ctgenai-glossary` + `/ctgenai-quiz` pages with per-set 60-min exam simulation, `ct-genai-progress` key, and a hub card
+
 - [ISTQB learning hub main page + sitewide end-to-end navigation](tasks/done/task-learning-hub-and-navigation.md) — rebuilt `src/App.jsx` Home as a multi-track ISTQB hub driven by a new `src/lib/tracks.js` registry (5 tracks, config-only to extend), added `/track/:id` landing pages (`src/components/TrackPage.jsx`: study path, progress stats, exam readiness, CT-AI v1 legacy pages grouped under the CT-AI track), and wrapped every routed page in `src/components/PageChrome.jsx` — a breadcrumb bar (Hub › Track › Step) with next-step / back-to-track links on all 29 leaf routes
 
 - [Site-wide color scheme consistency (beige + dark grey)](tasks/done/task-sitewide-color-consistency.md) — created `src/lib/theme.js` (beige surface tokens + dark grey text scale) and pointed all 29 page files + `App.jsx` at it, replacing every cool-grey neutral (#F8FAFC/#F3F4F6/#F9FAFB/#E5E7EB/#D1D5DB → beige #F5F0E6/#EDE6D8/#E3DCCB/#D6CDB8); verified by grep (zero stray neutrals in src/) and headless-Chrome screenshots of home, learn, quiz, guide, glossary, and summaries pages
