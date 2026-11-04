@@ -11,5 +11,5 @@ Numbered task files live in `_collab/tasks/<status>/task-<NNN>-<slug>.md`, creat
 | 005 | Security Testing study track | DONE | `tasks/done/task-005-security-testing-track.md` |
 | 006 | Finance Testing (CT-FT v1.0) study track | DONE | `tasks/done/task-006-ct-ft-track.md` |
 | 007 | Acceptance Testing (CT-AcT) study track | DONE | `tasks/done/task-007-acceptance-testing-track.md` |
-| 008 | Usability Testing (ISTQB CT-UT) study track | TODO | `tasks/backlog/task-008-usability-testing-track.md` |
+| 008 | Usability Testing (ISTQB CT-UT) study track | DONE | `tasks/done/task-008-usability-testing-track.md` |
 | 009 | Accessibility Testing (ASTQB) study track | TODO | `tasks/backlog/task-009-accessibility-testing-track.md` |
