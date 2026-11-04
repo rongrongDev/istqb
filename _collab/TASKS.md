@@ -5,7 +5,7 @@ Numbered task files live in `_collab/tasks/<status>/task-<NNN>-<slug>.md`, creat
 | # | Title | Status | Path |
 |---|---|---|---|
 | 001 | Testing with Generative AI (CT-GenAI v1.1) study track | DONE | `tasks/done/task-001-ct-genai-track.md` |
-| 002 | Advanced Test Automation Engineering (CTAL-TAE v2.0) study track | TODO | `tasks/backlog/task-002-ctal-tae-v2-track.md` |
+| 002 | Advanced Test Automation Engineering (CTAL-TAE v2.0) study track | DONE | `tasks/done/task-002-ctal-tae-v2-track.md` |
 | 003 | Test Automation Strategy (CT-TAS) study track | TODO | `tasks/backlog/task-003-ct-tas-track.md` |
 | 004 | Performance Testing (CT-PT) study track | TODO | `tasks/backlog/task-004-ct-pt-track.md` |
 | 005 | Security Testing study track | TODO | `tasks/backlog/task-005-security-testing-track.md` |
