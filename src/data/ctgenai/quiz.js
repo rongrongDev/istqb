@@ -417,7 +417,7 @@ export const questions = [
     "points": 2,
     "chapter": 2,
     "multi": false,
-    "text": "Consider applying the few-shot structured prompting technique to generate Gherkin-style test cases (i.e., scenario-based) for the following user story and acceptance criterion:\n- User story: “As a user, I want to reset my password so that I can regain access to my account if I forget it.”\n- Acceptance criterion: “When a user submits a registered email address then they receive a password reset email.” You can rely on predefined examples that include user stories, acceptance criteria, and Gherkin-style test cases. Your task is to create a prompt to guide the LLM in generating accurate test cases aligned with the acceptance criterion for the user story above.\n\nWhich one of the following prompts is BEST suited to this task?",
+    "text": "Consider applying the few-shot structured prompting technique to generate Gherkin-style test cases (i.e., scenario-based) for the following user story and acceptance criterion:\n- User story: “As a user, I want to reset my password so that I can regain access to my account if I forget it.”\n- Acceptance criterion: “When a user submits a registered email address then they receive a password reset email.”\n\nYou can rely on predefined examples that include user stories, acceptance criteria, and Gherkin-style test cases. Your task is to create a prompt to guide the LLM in generating accurate test cases aligned with the acceptance criterion for the user story above.\n\nWhich one of the following prompts is BEST suited to this task?",
     "options": [
       {
         "id": "a",
