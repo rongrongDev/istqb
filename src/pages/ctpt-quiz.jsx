@@ -29,7 +29,7 @@ export default function CTPTQuiz() {
   const [revealed, setRevealed] = useState({});
   const [filter, setFilter] = useState(0); // chapter filter (practice)
   const [practiceSet, setPracticeSet] = useState(0); // 0 = all exam sets (practice)
-  const [examSet, setExamSet] = useState("A"); // exam simulation set
+  const [examSet, setExamSet] = useState(EXAM_SETS[0]); // exam simulation set
 
   const examQs = setQuestions(examSet);
   const examTotal = setPoints(examSet);
@@ -137,7 +137,7 @@ export default function CTPTQuiz() {
           </div>
           <div style={{ background: "#FFFBEB", borderRadius: "8px", padding: "10px 12px", fontSize: "12px", color: "#92400E" }}>
             📝 <b>Practice mode</b>: pick any mix of sample exams and chapters, submit each question to see the official explanation immediately.{" "}
-            <b>Exam simulation</b>: one full sample exam, real timer, no feedback until you finish — then pass/fail against the official 65% mark.
+            <b>Exam simulation</b>: one full sample exam, real timer, no feedback until you finish — then pass/fail against the set's pass mark.
           </div>
         </div>
 
@@ -474,7 +474,7 @@ export default function CTPTQuiz() {
             }} />
           </div>
           <div style={{ fontSize: "11px", color: T.muted, marginTop: "6px" }}>
-            {answeredCount} of {filteredQs.length} questions answered · official pass mark: 65%
+            {answeredCount} of {filteredQs.length} questions answered · exam pass mark: {passPoints} of {examTotal} points
           </div>
         </div>
       )}
