@@ -12,6 +12,8 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 
 ## Done
 
+- [CT-TAS v1.0 study content — Test Automation Strategy](_collab/tasks/done/task-003-ct-tas-track.md) — built the CT-TAS track: `src/data/cttas/` (6 chapters with full learn content and CTAL-TAE cross-links, 80-question quiz from ISTQB Sample Exam A v1.2 + the ASTQB TAS sample exam, cross-checked against both answer keys, 35-term glossary), `/cttas` + `/cttas-learn` + `/cttas-guide` + `/cttas-glossary` + `/cttas-quiz` pages with per-set 60-min exam simulation, `ct-tas-progress` key, and a hub card that contrasts it with CTAL-TAE
+
 - [CTAL-TAE v2.0 study content — Advanced Test Automation Engineering](_collab/tasks/done/task-002-ctal-tae-v2-track.md) — built the CTAL-TAE track: `src/data/ctaltae/` (8 chapters with full learn content and CT-QDO cross-links, 80-question quiz from ISTQB Sample Exam v2.4 + the ASTQB TAE sample exam with 1–3-point K2–K4 items, cross-checked against both answer keys, 43-term glossary), `/ctaltae` + `/ctaltae-learn` + `/ctaltae-guide` + `/ctaltae-glossary` + `/ctaltae-quiz` pages with per-set 90-min exam simulation, `ctal-tae-progress` key, and a hub card
 
 - [CT-GenAI v1.1 study content — Testing with Generative AI](_collab/tasks/done/task-001-ct-genai-track.md) — built the CT-GenAI track: `src/data/ctgenai/` (5 chapters with full learn content and CT-AI v2 cross-links, 80-question quiz from ISTQB Sample Exam A v1.1 + the ASTQB v1.1 sample exam, cross-checked against both answer keys, 50-term glossary from chapter keywords + Appendix D), `/ctgenai` + `/ctgenai-learn` + `/ctgenai-guide` + `/ctgenai-glossary` + `/ctgenai-quiz` pages with per-set 60-min exam simulation, `ct-genai-progress` key, and a hub card
