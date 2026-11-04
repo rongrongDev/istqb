@@ -116,3 +116,10 @@ export const getStudiedSectionsPT = ctpt.getStudiedSections;
 export const setSectionStudiedPT = ctpt.setSectionStudied;
 export const getBestExamScorePT = ctpt.getBestExamScore;
 export const recordExamScorePT = ctpt.recordExamScore;
+
+// CT-SEC (2016) track
+const ctsec = makeProgress("ct-sec-progress");
+export const getStudiedSectionsSEC = ctsec.getStudiedSections;
+export const setSectionStudiedSEC = ctsec.setSectionStudied;
+export const getBestExamScoreSEC = ctsec.getBestExamScore;
+export const recordExamScoreSEC = ctsec.recordExamScore;
