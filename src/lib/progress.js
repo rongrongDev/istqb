@@ -95,3 +95,10 @@ export const getStudiedSectionsGenAI = ctgenai.getStudiedSections;
 export const setSectionStudiedGenAI = ctgenai.setSectionStudied;
 export const getBestExamScoreGenAI = ctgenai.getBestExamScore;
 export const recordExamScoreGenAI = ctgenai.recordExamScore;
+
+// CTAL-TAE v2.0 track
+const ctaltae = makeProgress("ctal-tae-progress");
+export const getStudiedSectionsTAE = ctaltae.getStudiedSections;
+export const setSectionStudiedTAE = ctaltae.setSectionStudied;
+export const getBestExamScoreTAE = ctaltae.getBestExamScore;
+export const recordExamScoreTAE = ctaltae.recordExamScore;

@@ -10,6 +10,7 @@ import {
   getStudiedSectionsQDO, getBestExamScoreQDO,
   getStudiedSectionsMAT, getBestExamScoreMAT,
   getStudiedSectionsSS, getBestExamScoreSS,
+  getStudiedSectionsTAE, getBestExamScoreTAE,
   getStudiedSectionsGenAI, getBestExamScoreGenAI,
 } from "./progress.js";
 
@@ -149,6 +150,27 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsGenAI, getBestExam: getBestExamScoreGenAI },
     loadData: () => import("../data/ctgenai/index.js"),
+  },
+  {
+    id: "ctaltae",
+    shortName: "CTAL-TAE v2.0",
+    title: "Advanced Test Automation Engineering (CTAL-TAE v2.0)",
+    org: "ISTQB",
+    level: "Advanced",
+    badge: "ADVANCED",
+    blurb: "Engineering test automation: architecture (gTAA, layered frameworks, patterns), pipelines, reporting, verification and continuous improvement — 8 chapters. For strategy instead, see CT-TAS.",
+    gradient: "linear-gradient(135deg, #111827 0%, #374151 50%, #0E7490 100%)",
+    accent: "#0E7490",
+    prerequisite: "CTFL certificate",
+    steps: [
+      { path: "ctaltae-learn", step: 1, title: "Learn", desc: "Full teaching content for all 8 chapters, written from the official v2.0 syllabus — start here" },
+      { path: "ctaltae", step: 2, title: "Chapter Summaries", desc: "Condensed revision notes: skim vs deep-dive per section" },
+      { path: "ctaltae-guide", step: 3, title: "Exam Insights", desc: "Summaries + known traps and key facts from the ISTQB and ASTQB sample exams" },
+      { path: "ctaltae-glossary", step: 4, title: "Glossary", desc: "43 keywords, architecture and design-pattern terms with definitions — exams test exact wording" },
+      { path: "ctaltae-quiz", step: 5, title: "Quiz & Exam Simulation", desc: "80 official sample questions (ISTQB Sample Exam + ASTQB exam), 1–3 points each: practice with explanations, or a timed 90-min mock exam" },
+    ],
+    progress: { getStudied: getStudiedSectionsTAE, getBestExam: getBestExamScoreTAE },
+    loadData: () => import("../data/ctaltae/index.js"),
   },
 ];
 
