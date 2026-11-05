@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Timer, Play, Flag, X, Check, Grid3x3, ChevronUp, ChevronLeft, ChevronRight, ListChecks, RotateCcw, BookOpen, Info, Trophy } from "lucide-react";
 import { KChip, Meter, Hint, pct, passMark } from "./ui.jsx";
+import { useCurrentTrack, recordTraps } from "../lib/learning.js";
+import { trapsFor, getTrapType } from "../data/learning/traps.js";
+import { workingFor } from "../data/learning/workings.js";
 
 // Official rules shared by every track: 60 min by default (examMinutes overrides, e.g. advanced-level 120 min),
 // +25% non-native, pass = 65% of points rounded up.
@@ -55,6 +58,13 @@ export default function QuizPage({
   const [gridOpen, setGridOpen] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [result, setResult] = useState(null);
+  const [working, setWorking] = useState(false);
+  const trackId = useCurrentTrack()?.id;
+  // Trap ids of the wrong options the learner chose on a question (distractor anatomy).
+  const caughtBy = (qq) => {
+    const tags = trackId ? trapsFor(trackId, qq) : null;
+    return tags ? (selected[qq.id] || []).filter((o) => !qq.correct.includes(o) && tags[o]).map((o) => tags[o]) : [];
+  };
 
   const set = examSets.find((s) => s.key === setKey);
   const examQs = set?.questions || [];
@@ -84,6 +94,7 @@ export default function QuizPage({
   const finishExam = (auto = false) => {
     if (!auto && unanswered.length > 0 && !confirm) { setConfirm(true); setGridOpen(false); return; }
     const score = sumPoints(examQs.filter(isCorrect));
+    recordTraps(examQs.flatMap(caughtBy));
     const prev = getBest();
     record(score, examTotal);
     setResult({ score, answered: examQs.length - unanswered.length, prev, newBest: !prev || score > prev.score });
@@ -107,7 +118,7 @@ export default function QuizPage({
     setMode("quiz");
   };
 
-  const goTo = (i) => { if (i >= 0 && i < list.length) { setCurrent(i); setGridOpen(false); } };
+  const goTo = (i) => { if (i >= 0 && i < list.length) { setCurrent(i); setGridOpen(false); setWorking(false); } };
 
   // ── check-in ──
   if (mode === "start") {
@@ -116,6 +127,7 @@ export default function QuizPage({
       <div className="boxc"><div className="isec">
         <b>Practice mode</b>
         <span className="mu sm">Submit each question to see the official explanation immediately.</span>
+        <Link className="sm" to="/playbook">New to these exams? Read the exam technique playbook first.</Link>
         {pools.length > 1 && (
           <>
             <span className="lbl">Question set</span>
@@ -304,6 +316,8 @@ export default function QuizPage({
     </div>
   );
 
+  const tags = trackId ? trapsFor(trackId, q) : null;
+  const steps = trackId ? workingFor(trackId, q) : null;
   const options = (
     <div className="optg" role={q.multi ? "group" : "radiogroup"} aria-label="Answer options">
       {q.options.map((opt) => {
@@ -314,6 +328,9 @@ export default function QuizPage({
             role={q.multi ? "checkbox" : "radio"} aria-checked={sel}>
             <span className={`key${q.multi ? " sq" : ""}`}>{q.multi && sel && !isRevealed ? "✓" : opt.id}</span>
             <span className="tx">{opt.text}</span>
+            {isRevealed && !right && tags?.[opt.id] && (sel || review) && (
+              <span className={`chip trapc${sel ? " bad" : ""}`} title={getTrapType(tags[opt.id])?.desc}>Trap: {getTrapType(tags[opt.id])?.title}</span>
+            )}
             {isRevealed && right && <span className="mk ok"><Check className="i" /></span>}
             {isRevealed && sel && !right && <span className="mk bad"><X className="i" /></span>}
           </button>
@@ -323,10 +340,25 @@ export default function QuizPage({
   );
 
   const explanation = isRevealed && (
-    <div className="callout">
-      <span className="lbl">Official explanation</span>
-      <div className="t">{q.explanation}</div>
-    </div>
+    <>
+      <div className="callout">
+        <span className="lbl">Official explanation</span>
+        <div className="t">{q.explanation}</div>
+      </div>
+      {steps && (
+        <div className="stack" style={{ gap: 8 }}>
+          <button className="btn" style={{ alignSelf: "flex-start" }} onClick={() => setWorking((w) => !w)} aria-expanded={working}>
+            {working ? "Hide the working" : "Show the working"}
+          </button>
+          {working && (
+            <div className="callout ex">
+              <span className="lbl">Step by step (written for this site)</span>
+              <ol className="pts">{steps.map((st, i) => <li key={i}>{st}</li>)}</ol>
+            </div>
+          )}
+        </div>
+      )}
+    </>
   );
 
   const counter = exam ? `${doneCount} answered` : review ? `${rightCount} right · ${list.length - rightCount} wrong` : `${doneCount} answered`;
@@ -342,7 +374,7 @@ export default function QuizPage({
             {options}
             {q.multi && !isRevealed && <span className="mu sm">{ua.length} of 2 selected. Both must be right to score.</span>}
             {kind === "practice" && !isRevealed && (
-              <div><button className="btn pri" disabled={!ua.length} onClick={() => setRevealed((r) => ({ ...r, [q.id]: true }))}>
+              <div><button className="btn pri" disabled={!ua.length} onClick={() => { setRevealed((r) => ({ ...r, [q.id]: true })); recordTraps(caughtBy(q)); }}>
                 {q.multi ? `Submit (${ua.length}/2 selected)` : "Submit answer"}
               </button></div>
             )}
