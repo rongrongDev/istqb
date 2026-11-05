@@ -20,11 +20,11 @@ Exercises cover one technique each; paths are reading lists. Capstones combine t
 
 ## Open Questions
 
-- [ ] Which domains first — fintech (CT-FT), e-commerce, mobile (CT-MAT), or AI features (CT-GenAI / CT-AI)?
-                                  > YOUR ANSWER:
-- [ ] Self-assessed only, or with a checklist rubric per stage?
-                                  > YOUR ANSWER:
+- [x] Which domains first — fintech (CT-FT), e-commerce, mobile (CT-MAT), or AI features (CT-GenAI / CT-AI)?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Two to start: an e-commerce checkout launch (practitioner) and a mobile banking release (expert).
+- [x] Self-assessed only, or with a checklist rubric per stage?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Self-assessed with a checklist rubric per stage.
 
 ## Status
 
-OPEN
+RESOLVED

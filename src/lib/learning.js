@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 import { tracks, getTrack, findPage } from "./tracks.js";
 
 const KEY = "learning-state";
-const DEFAULTS = { mode: "exam", level: null, role: null, exercisesDone: [], selfCheck: null };
+const DEFAULTS = { mode: "exam", level: null, role: null, exercisesDone: [], selfCheck: null, trapTally: {} };
 const listeners = new Set();
 
 function read() {
@@ -52,6 +52,16 @@ export function setExerciseDone(id, done) {
     if (done) set.add(id);
     else set.delete(id);
     return { exercisesDone: [...set] };
+  });
+}
+
+// Count the distractor traps that caught the learner (ids from src/data/learning/traps.js).
+export function recordTraps(ids) {
+  if (!ids.length) return;
+  updateLearning((s) => {
+    const tally = { ...s.trapTally };
+    for (const id of ids) tally[id] = (tally[id] || 0) + 1;
+    return { trapTally: tally };
   });
 }
 
@@ -169,3 +179,15 @@ export async function conceptOfTheDay(trackIdList, day = todayKey()) {
     .sort((a, b) => (a.track.id + a.entry.term).localeCompare(b.track.id + b.entry.term));
   return pool.length ? pool[hash(day) % pool.length] : null;
 }
+
+// ---- Official quiz data on demand (playbook demos) ---------------------------------------
+const DATA_DIR = { ctai: "ctaiv2", ctfl: "ctflv4", ctqdo: "ctqdo", ctmat: "ctmat", softskills: "softskills", ctgenai: "ctgenai", ctaltae: "ctaltae", cttas: "cttas", ctpt: "ctpt", ctsec: "ctsec", ctft: "ctft", ctact: "ctact", ctut: "ctut" };
+const quizModules = import.meta.glob("../data/*/quiz.js");
+const quizCache = {};
+export function loadQuiz(trackId) {
+  const loader = quizModules[`../data/${DATA_DIR[trackId]}/quiz.js`];
+  if (!loader) return Promise.reject(new Error(`No quiz for ${trackId}`));
+  quizCache[trackId] ??= loader().then((m) => m.questions);
+  return quizCache[trackId];
+}
+export const findQuestion = (questions, exam, num) => questions.find((q) => String(q.exam ?? "") === String(exam) && String(q.num ?? q.id) === String(num));

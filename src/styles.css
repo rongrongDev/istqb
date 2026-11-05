@@ -315,6 +315,16 @@ button.sech:hover { background: var(--surface-2); }
 .tip { position: fixed; z-index: 30; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--raised); box-shadow: var(--shadow-lg); font-size: 13px; line-height: 1.55; font-weight: 400; white-space: normal; text-align: left; }
 .tip b { font-size: 13.5px; }
 .tip a { color: var(--accent); font-weight: 600; font-size: 12.5px; }
+.btn.wrapb { white-space: normal; text-align: left; height: auto; min-height: 34px; padding-block: 6px; max-width: 100%; }
+.btn.badb { background: var(--danger); border-color: var(--danger); color: var(--surface); }
+.callout.rw { border-color: var(--warn); }
+.callout.rw .lbl { color: var(--warn); }
+.callout.rw p { white-space: normal; }
+.boxc.focus { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.opt .trapc { flex: none; font-size: 11px; min-height: 20px; padding: 0 7px; }
+.rub { cursor: pointer; align-items: flex-start; line-height: 1.5; }
+.rub input { margin-top: 3px; accent-color: var(--accent); }
+details.callout summary { cursor: pointer; }
 @media (max-width: 900px) { .g2 { grid-template-columns: minmax(0, 1fr); } }
 
 @media (max-width: 900px) {

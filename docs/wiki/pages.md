@@ -8,14 +8,14 @@ sources:
   - src/components/QuizPage.jsx
   - src/components/Blocks.jsx
   - src/components/LearnExtras.jsx
-pinned_commit: 47192d8
+pinned_commit: aa5da0b
 updated: 2026-11-05
 confidence: observed
 ---
 
 # Study pages
 
-78 page files in `src/pages/`, each one a route by filename ([architecture](architecture.md)): 13 tracks × 5 steps, the CT-AI v1 legacy pages, and 9 pages of the [learning](learning.md) area.
+85 page files in `src/pages/`, each one a route by filename ([architecture](architecture.md)): 13 tracks × 5 steps, the CT-AI v1 legacy pages, and 16 pages of the [learning](learning.md) area.
 Each is a thin wrapper that passes its track's data, progress functions and original
 wording to one of four shared components, so **a fix in a component reaches every
 track**. Each track has five pages, registered as steps in [tracks](tracks.md).
@@ -72,6 +72,8 @@ PATTERN, MEMORY AID → key; else plain insight (`src/components/NotesPage.jsx:6
 - Track rules come in as props: `examSets` (CTFL: Sample Exams A–D; CT-QDO: `mainQuestions`
   only; others: all questions), `practicePools`, and no `record` = practice only.
 - CT-AI v1 (`ctai-quiz.jsx`): practice only — no timer and no score recording.
+- Distractor traps and worked solutions from `src/data/learning/` appear in feedback and review
+  where a question has them ([learning](learning.md#inside-the-quizzes)).
 
 ## Pages outside the standard set
 

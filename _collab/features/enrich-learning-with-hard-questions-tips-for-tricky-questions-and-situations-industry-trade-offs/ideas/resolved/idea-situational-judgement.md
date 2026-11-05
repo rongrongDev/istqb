@@ -20,11 +20,11 @@ Soft Skills, CT-AcT collaboration and CTFL test management cover the theory; not
 
 ## Open Questions
 
-- [ ] Single-step choices, or multi-step branching (choice → new situation → choice)?
-                                  > YOUR ANSWER:
-- [ ] Should responses be rated (best / acceptable / risky), or only discussed?
-                                  > YOUR ANSWER:
+- [x] Single-step choices, or multi-step branching (choice → new situation → choice)?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Single-step choices (one situation, pick a response) — easier to read and maintain.
+- [x] Should responses be rated (best / acceptable / risky), or only discussed?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Rated best / acceptable / risky, always with the reasoning.
 
 ## Status
 
-OPEN
+RESOLVED

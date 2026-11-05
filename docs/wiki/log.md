@@ -16,3 +16,8 @@ Created: learning (the "learn without an exam" area — pages, data shapes, stat
 Corrected: tracks.md legacy block cite (was `src/lib/tracks.js:34-45`, now 69-80 after the new imports); theme.md breakpoint cite no longer uses line numbers that shift.
 Rationale (commits 0dae344, 449ca80, tasks 010–021): make the site useful to engineers at every level who aren't sitting an exam, reusing the syllabus content; the 8 new tracks (tasks 001–008) arrived via the merge of main and commit 858c745.
 Scale: 336 files changed, ~150 of them track data files covered by shape per the schema.
+
+## [2026-11-05] update | 47192d8..aa5da0b
+Revised: learning (7 new pages, 10 new data files, quiz integration, trapTally, check-script coverage, open question on site-judgement content), progress (`trapTally`, `capstone-progress` key), pages (85 page files; trap chips and workings in QuizPage), index.
+Left alone: architecture, tracks, content-data, theme — no behaviour change in their sources beyond new CSS classes (theme not re-pinned).
+Rationale (commits 54573e0, 995a692, tasks 022–031): enrich learning with tactics for tricky questions, workplace judgement and industry trade-offs; challenge questions and explain-it-back parked as KIV.

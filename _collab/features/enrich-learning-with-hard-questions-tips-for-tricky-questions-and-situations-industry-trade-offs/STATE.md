@@ -12,17 +12,22 @@ Left out because they're planned elsewhere: inline sample questions and exam tra
 (`study-experience`), question-stem keyword highlighting, K-level practice and answer confidence
 (`exam-prep-tools`), and the hands-on exercises, case studies and toolbox already built in tasks 015–018.
 
+## Round 1 closed (2026-11-05)
+You asked to build every idea except Challenge Questions and Explain It Back, which are parked as KIV.
+The other 10 were answered with defaults picked by Claude (marked in each file) and became tasks 022–031.
+No new ideas were added this round; run `/tome:brainstorm` on this topic again for a fresh set.
+
 | Idea | File | Status | Open questions |
 |---|---|---|---|
-| Testing Anti-Patterns and Their Fixes | ideas/open/idea-anti-patterns.md | OPEN | 1 |
-| Capstone Projects (Multi-Skill Case Work) | ideas/open/idea-capstone-projects.md | OPEN | 2 |
-| Challenge Questions (Hard Mode) | ideas/open/idea-challenge-questions.md | OPEN | 3 |
-| Confusable Pairs Library | ideas/open/idea-confusable-pairs.md | OPEN | 1 |
-| Distractor Anatomy: Why Wrong Answers Look Right | ideas/open/idea-distractor-anatomy.md | OPEN | 2 |
-| Exam Technique Playbook | ideas/open/idea-exam-technique-playbook.md | OPEN | 1 |
-| Explain It Back (Self-Explanation Prompts) | ideas/open/idea-explain-it-back.md | OPEN | 1 |
-| QA Interview Prep | ideas/open/idea-interview-prep.md | OPEN | 1 |
-| "In the Real World" Notes on Sections | ideas/open/idea-real-world-notes.md | OPEN | 1 |
-| Tricky Situations: What Would You Do? | ideas/open/idea-situational-judgement.md | OPEN | 2 |
-| Trade-Off Decision Guides | ideas/open/idea-trade-off-guides.md | OPEN | 2 |
-| Step-by-Step Worked Solutions for K3/K4 Questions | ideas/open/idea-worked-solutions.md | OPEN | 1 |
+| Testing Anti-Patterns and Their Fixes | ideas/resolved/idea-anti-patterns.md | RESOLVED | 0 |
+| Capstone Projects (Multi-Skill Case Work) | ideas/resolved/idea-capstone-projects.md | RESOLVED | 0 |
+| Confusable Pairs Library | ideas/resolved/idea-confusable-pairs.md | RESOLVED | 0 |
+| Distractor Anatomy: Why Wrong Answers Look Right | ideas/resolved/idea-distractor-anatomy.md | RESOLVED | 0 |
+| Exam Technique Playbook | ideas/resolved/idea-exam-technique-playbook.md | RESOLVED | 0 |
+| QA Interview Prep | ideas/resolved/idea-interview-prep.md | RESOLVED | 0 |
+| "In the Real World" Notes on Sections | ideas/resolved/idea-real-world-notes.md | RESOLVED | 0 |
+| Tricky Situations: What Would You Do? | ideas/resolved/idea-situational-judgement.md | RESOLVED | 0 |
+| Trade-Off Decision Guides | ideas/resolved/idea-trade-off-guides.md | RESOLVED | 0 |
+| Step-by-Step Worked Solutions for K3/K4 Questions | ideas/resolved/idea-worked-solutions.md | RESOLVED | 0 |
+| Challenge Questions (Hard Mode) | ideas/kiv/idea-challenge-questions.md | KIV | 3 |
+| Explain It Back (Self-Explanation Prompts) | ideas/kiv/idea-explain-it-back.md | KIV | 1 |

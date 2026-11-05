@@ -1,0 +1,96 @@
+// Capstone projects: longer case work in stages. Each stage has a task, a model answer to
+// compare with (one good answer, not the only one), a rubric checklist for self-assessment,
+// templates to use and related sections. Written for this site.
+
+export const capstones = [
+  {
+    id: "checkout-launch",
+    title: "Launching a new e-commerce checkout",
+    level: "practitioner",
+    brief: "An online shop is replacing its checkout. The new one adds guest checkout, saved cards, discount codes and a new payment provider. Launch is in six weeks, before the holiday season. The team is five developers, one tester (you) and a product owner. Last year's checkout went down for 40 minutes on Black Friday.",
+    stages: [
+      {
+        title: "Identify and rate product risks",
+        task: "List the eight to ten most important product risks for the new checkout and rate each by likelihood and impact.",
+        model: "High: payment provider integration failures (double charges, timeouts); performance at holiday peak (last year's outage); discount code rules (stacking, expiry, rounding); card data security (PCI scope). Medium: guest checkout edge cases (no account, address validation); saved cards across devices; accessibility of the payment form; tax and shipping calculation. Lower: copy and layout issues. Rate each with a 1–3 scale and put payment, peak load and discounts at the top.",
+        rubric: ["Risks are about users and the business, not about testing tasks", "Each risk has likelihood and impact", "Last year's outage shows up as a performance risk", "Security of card data is included", "The list is prioritised"],
+        templates: ["risk-register"],
+        links: [["ctfl", "5.2.3"], ["ctfl", "5.2.4"]],
+      },
+      {
+        title: "Choose the test approach",
+        task: "With one tester and six weeks, decide what to test at which level, what to automate, and what you'll leave out.",
+        model: "Developers own unit tests for discount and tax rules (table-driven, boundary values). API tests for the payment integration including timeouts and retries against the provider's sandbox, plus a contract test. A handful of end-to-end UI journeys (guest, logged-in with saved card, discount) automated for regression. Exploratory sessions each sprint on new features. A load test before launch based on last year's peak plus growth. Accessibility check on the payment form. Explicitly out of scope: legacy order history (unchanged).",
+        rubric: ["Work is spread across the team, not only the tester", "Higher-risk areas get more and earlier testing", "Automation is at the lowest useful level", "Performance testing is planned before launch", "What's out of scope is stated"],
+        templates: ["test-plan"],
+        links: [["ctfl", "5.1.1"], ["ctfl", "5.1.6"], ["cttas", "3.3.1"]],
+      },
+      {
+        title: "Design tests for discount codes",
+        task: "Discount rules: one code per order; percentage codes 5–50%; fixed codes up to the order value; codes expire at midnight UTC on their end date; minimum order 20.00. Design the key test cases.",
+        model: "Partitions: valid/invalid/expired/already-used code; percentage vs fixed. Boundaries: order total 19.99 / 20.00; percentage 4/5/50/51 (if editable by admins); fixed code equal to and above order value (total not negative); expiry 23:59:59 vs 00:00:00 UTC, including a user in another time zone. Rules combination (decision table): member vs guest × code type × minimum met. Plus: two codes in one order (second rejected with a clear message), rounding of percentages to cents.",
+        rubric: ["Uses partitions and boundaries explicitly", "Covers the time-zone boundary on expiry", "Checks the total can't go negative", "Includes invalid and combined-code cases", "Expected results are stated"],
+        templates: ["gherkin-feature"],
+        links: [["ctfl", "4.2.1"], ["ctfl", "4.2.2"], ["ctfl", "4.2.3"]],
+      },
+      {
+        title: "Plan the peak-load test",
+        task: "Outline the load test that would give the team confidence for the holiday peak.",
+        model: "Objective: at 2× last year's peak checkouts per minute, the 90th-percentile checkout response stays under 2 s with under 1% errors. Operational profile from analytics (browse : cart : checkout ratio). Load profile: ramp up over 15 minutes, hold 30 minutes at target, then a stress step to 3× to find the breaking point. Payment provider: use their load-test sandbox or a stub with realistic latency — agree with the provider. Monitor app servers, database and the provider calls. Report against the objective with bottlenecks found.",
+        rubric: ["Objectives are measurable and use percentiles", "Load comes from real usage data", "Includes a stress step beyond target", "Third-party payment limits are handled", "Results are compared to objectives"],
+        templates: ["performance-test-plan"],
+        links: [["ctpt", "4.1.1"], ["ctpt", "4.2.4"], ["ctpt", "4.2.5"]],
+        recipes: ["k6-load"],
+      },
+      {
+        title: "Make the go/no-go recommendation",
+        task: "Two days before launch: all high-risk tests pass except one — saved cards fail for about 1% of users with a specific card type; a workaround is to re-enter the card. The load test met its objective. Write your recommendation.",
+        model: "Summarise: high risks covered (payments, discounts, load); one open major defect affecting ~1% of saved-card users with a workaround; no critical defects. Options: launch with the defect known (support briefed, message on failure prompting re-entry, fix in the first patch), or disable saved cards for that card type, or delay. Recommendation: launch with the workaround and monitoring, fix within a week — decision for the product owner.",
+        rubric: ["States what was covered and what's open", "Quantifies the impact of the open defect", "Gives options, not just an opinion", "Leaves the decision with the accountable person", "Includes monitoring after launch"],
+        templates: [],
+        links: [["ctfl", "5.3.2"], ["ctact", "5.2.2"]],
+      },
+    ],
+  },
+  {
+    id: "mobile-banking-release",
+    title: "Releasing a mobile banking app update",
+    level: "expert",
+    brief: "A bank is releasing version 5 of its mobile app: biometric login, instant payments up to 5,000, and a redesigned home screen. It must meet PSD2 strong customer authentication, WCAG 2.1 AA, and the bank's DORA resilience obligations. Releases go through app-store review. You lead a test team of four.",
+    stages: [
+      {
+        title: "Map regulations to test obligations",
+        task: "For each regulation or standard, state what it means for testing and what evidence you'll need.",
+        model: "PSD2 SCA: two independent factors for login and payments — test factor combinations, exemptions, failures and lockouts; keep test evidence per requirement. WCAG 2.1 AA: screen reader labels, contrast, text resizing, focus order on the new home screen — automated checks plus manual VoiceOver/TalkBack sessions. DORA: resilience of instant payments — failover and recovery tests with RTO/RPO evidence, third-party dependency tests. Evidence: traceability from each requirement to tests and results, kept for audit.",
+        rubric: ["Each regulation has concrete test obligations", "Evidence and traceability are planned", "Accessibility includes manual assistive-tech testing", "Resilience includes recovery objectives"],
+        templates: ["security-checklist"],
+        links: [["ctft", "2.2.1"], ["ctft", "2.4.1"], ["ctut", "3.2.2"], ["ctft", "5.4"]],
+      },
+      {
+        title: "Plan device and platform coverage",
+        task: "You can't test every phone. Decide your device and OS coverage for this release.",
+        model: "Use analytics: cover the OS versions and devices used by the top ~90% of customers, plus the oldest supported OS. Mix real devices (biometrics, camera, notifications) with a device cloud for breadth. Include low-end Android for performance, a tablet for layout, and devices with accessibility settings (large text, dark mode). Re-check after store submission on the store build.",
+        rubric: ["Coverage is based on real usage data", "Biometrics are tested on real devices", "Oldest supported OS and low-end devices are included", "Accessibility settings are part of the matrix"],
+        templates: ["test-plan"],
+        links: [["ctmat", "1.6"], ["ctmat", "4.4"], ["ctmat", "2.1.8"]],
+      },
+      {
+        title: "Test instant payments end to end",
+        task: "Design the key tests for instant payments up to 5,000.",
+        model: "Boundaries: 0.01, 4,999.99, 5,000.00, 5,000.01; daily limits across several payments. SCA on each payment; exemptions for trusted payees. Interrupts mid-payment (call, app backgrounded, network loss) — no double payment, clear status. Reconciliation: payment recorded identically in app, core banking and the scheme. Failure of the payment scheme: timeouts, retries, user messaging. Security: tampered amounts, replayed requests.",
+        rubric: ["Boundaries at currency precision", "Interrupts and network loss covered", "Reconciliation across systems included", "Security abuse cases included", "No double-payment scenarios tested"],
+        templates: [],
+        links: [["ctft", "5.1"], ["ctft", "4.2"], ["ctmat", "2.1.7"], ["ctsec", "5.2"]],
+      },
+      {
+        title: "Decide on automation for the release train",
+        task: "The bank wants monthly releases after v5. What automation do you put in place, and what stays manual?",
+        model: "Automate: API tests for payments and accounts in CI; contract tests with core banking; a small set of device-based UI journeys (login, pay, view balance) on a device cloud nightly; accessibility scans; security scans in the pipeline. Manual: exploratory sessions on new features, biometric edge cases, assistive-tech walkthroughs, store-approval checks. Track: escaped defects, pipeline time, flakiness.",
+        rubric: ["Automation mostly below the UI", "UI automation limited to critical journeys", "Explicit list of what stays manual and why", "Measures to judge whether automation works"],
+        templates: [],
+        links: [["cttas", "3.2.3"], ["ctmat", "5.1"], ["ctaltae", "5.1.1"]],
+        recipes: ["axe-accessibility", "newman-api"],
+      },
+    ],
+  },
+];

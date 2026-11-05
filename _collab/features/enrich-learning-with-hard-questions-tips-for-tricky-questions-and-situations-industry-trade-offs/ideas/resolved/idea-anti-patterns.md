@@ -20,9 +20,9 @@ Learners recognise their own team in these, which makes the syllabus advice conc
 
 ## Open Questions
 
-- [ ] How many to start with (10? 15?), and should they be grouped by area (automation, process, metrics, culture)?
-                                  > YOUR ANSWER:
+- [x] How many to start with (10? 15?), and should they be grouped by area (automation, process, metrics, culture)?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) 12 to start, grouped by area: automation, process, metrics, culture.
 
 ## Status
 
-OPEN
+RESOLVED

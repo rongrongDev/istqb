@@ -21,11 +21,11 @@ The official explanations already say why each option is wrong ("WRONG (b): …"
 
 ## Open Questions
 
-- [ ] Tag all tracks, or start with CTFL and the busiest specialist tracks?
-                                  > YOUR ANSWER:
-- [ ] Should the per-learner trap tally be stored (another localStorage key) or only shown per session?
-                                  > YOUR ANSWER:
+- [x] Tag all tracks, or start with CTFL and the busiest specialist tracks?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Start with CTFL Sample Exam A (the most-used set); the taxonomy and UI work for every track, so other sets can be tagged later.
+- [x] Should the per-learner trap tally be stored (another localStorage key) or only shown per session?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Stored: a small tally in the learning state, so the summary covers all your practice, not one session.
 
 ## Status
 
-OPEN
+RESOLVED

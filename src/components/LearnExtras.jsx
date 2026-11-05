@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, CircleCheck, Lightbulb, Eye, Wrench, FileText, Siren, PencilRuler } from "lucide-react";
+import { Check, CircleCheck, Lightbulb, Eye, Wrench, FileText, Siren, PencilRuler, Scale, Shuffle, Ban, Briefcase, Building2 } from "lucide-react";
 import { useLearning, setExerciseDone } from "../lib/learning.js";
 import { exercisesFor } from "../data/learning/exercises.js";
 import { recipesFor } from "../data/learning/recipes.js";
 import { templatesFor } from "../data/learning/templates.js";
 import { casesFor } from "../data/learning/cases.js";
+import { realworldFor } from "../data/learning/realworld.js";
+import { pairs } from "../data/learning/pairs.js";
+import { antipatterns } from "../data/learning/antipatterns.js";
+import { tradeoffs } from "../data/learning/tradeoffs.js";
+import { situations } from "../data/learning/situations.js";
+import { questions as interview } from "../data/learning/interview.js";
+
+const linked = (list, track, section) => list.filter((x) => x.links.some(([t, s]) => t === track && s === section));
 
 // Parse "0, 1; 30 31" → [0, 1, 30, 31]
 const numbers = (s) => (s.match(/-?\d+(?:\.\d+)?/g) || []).map(Number);
@@ -79,14 +87,27 @@ export function Exercise({ ex, showSource }) {
 export function SectionExtras({ trackId, sectionId }) {
   if (!trackId) return null;
   const ex = exercisesFor(trackId, sectionId);
+  const notes = realworldFor(trackId, sectionId);
   const links = [
     ...recipesFor(trackId, sectionId).map((r) => ({ to: `/toolbox?r=${r.id}`, icon: Wrench, kind: "Try it with a tool", title: `${r.tool}: ${r.title}` })),
     ...templatesFor(trackId, sectionId).map((t) => ({ to: `/templates?t=${t.id}`, icon: FileText, kind: "Template", title: t.title })),
     ...casesFor(trackId, sectionId).map((c) => ({ to: `/case-studies?c=${c.id}`, icon: Siren, kind: "Seen in the wild", title: `${c.title} (${c.when})` })),
+    ...linked(pairs, trackId, sectionId).map((p) => ({ to: `/pairs?p=${p.id}`, icon: Shuffle, kind: "Easily confused", title: `${p.a} vs ${p.b}` })),
+    ...linked(tradeoffs, trackId, sectionId).map((t) => ({ to: `/tradeoffs?t=${t.id}`, icon: Scale, kind: "Trade-off guide", title: t.title })),
+    ...linked(antipatterns, trackId, sectionId).map((a) => ({ to: `/anti-patterns#${a.id}`, icon: Ban, kind: "Anti-pattern", title: a.title })),
+    ...linked(situations, trackId, sectionId).map((x) => ({ to: `/situations?s=${x.id}`, icon: Building2, kind: "Tricky situation", title: x.title })),
+    ...linked(interview, trackId, sectionId).map((q) => ({ to: `/interview?q=${q.id}`, icon: Briefcase, kind: "Interview question", title: q.q })),
   ];
-  if (!ex.length && !links.length) return null;
+  if (!ex.length && !links.length && !notes.length) return null;
   return (
     <div className="stack" style={{ gap: 10 }}>
+      {notes.map((n, i) => (
+        <div key={i} className="callout rw">
+          <span className="lbl">In the real world</span>
+          <p><b>For the exam:</b> {n.exam}</p>
+          <p><b>In practice:</b> {n.reality}</p>
+        </div>
+      ))}
       {ex.map((e) => <Exercise key={e.id} ex={e} />)}
       {links.length > 0 && (
         <div className="boxc">

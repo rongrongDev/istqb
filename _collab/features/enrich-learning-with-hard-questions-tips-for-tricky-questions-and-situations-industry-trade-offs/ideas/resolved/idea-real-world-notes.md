@@ -20,9 +20,9 @@ Practitioners notice the gap and lose trust if it's ignored; exam candidates nee
 
 ## Open Questions
 
-- [ ] Show these in Exam mode too, or only in Learning mode?
-                                  > YOUR ANSWER:
+- [x] Show these in Exam mode too, or only in Learning mode?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Both modes; the note always states what the exam expects first.
 
 ## Status
 
-OPEN
+RESOLVED

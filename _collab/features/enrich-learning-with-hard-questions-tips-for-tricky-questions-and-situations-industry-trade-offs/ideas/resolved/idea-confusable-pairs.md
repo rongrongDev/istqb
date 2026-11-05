@@ -20,9 +20,9 @@ The Insights quick references already list "definition swaps" per track, but onl
 
 ## Open Questions
 
-- [ ] Start from the existing per-track definition swaps only, or also add new pairs?
-                                  > YOUR ANSWER:
+- [x] Start from the existing per-track definition swaps only, or also add new pairs?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Both: the recurring per-track swaps plus new pairs.
 
 ## Status
 
-OPEN
+RESOLVED
