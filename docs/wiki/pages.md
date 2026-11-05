@@ -6,14 +6,16 @@ sources:
   - src/components/NotesPage.jsx
   - src/components/GlossaryPage.jsx
   - src/components/QuizPage.jsx
-pinned_commit: 70b2e7a
-updated: 2026-10-25
+  - src/components/Blocks.jsx
+  - src/components/LearnExtras.jsx
+pinned_commit: 47192d8
+updated: 2026-11-05
 confidence: observed
 ---
 
 # Study pages
 
-29 page files in `src/pages/`, each one a route by filename ([architecture](architecture.md)).
+78 page files in `src/pages/`, each one a route by filename ([architecture](architecture.md)): 13 tracks × 5 steps, the CT-AI v1 legacy pages, and 9 pages of the [learning](learning.md) area.
 Each is a thin wrapper that passes its track's data, progress functions and original
 wording to one of four shared components, so **a fix in a component reaches every
 track**. Each track has five pages, registered as steps in [tracks](tracks.md).
@@ -41,7 +43,13 @@ headers, legends, K-level notes, exam format, quick-reference lines (e.g.
 - "Mark studied & next" calls the track's `setSectionStudied(id, true)` and advances
   (`LearnPage.jsx:134-135`); the studied button still toggles off (`LearnPage.jsx:95`).
 - Chapter intro, objectives and keywords show above the first section; sections
-  without learn content fall back to `summary` / `deepPoints`.
+  without learn content fall back to `summary` / `deepPoints`. Learning mode hides the
+  objectives box ([learning](learning.md)).
+- Body blocks render through `Block` in `src/components/Blocks.jsx`; inside a
+  `TermsProvider` (the current track's glossary) the first mention of each glossary term per
+  paragraph or list item becomes a tooltip with its definition.
+- Under each section, `SectionExtras` (`src/components/LearnExtras.jsx`) shows that
+  section's exercises and links to related tool recipes, templates and case studies, if any.
 
 ## Insights classification
 
@@ -50,8 +58,9 @@ PATTERN, MEMORY AID → key; else plain insight (`src/components/NotesPage.jsx:6
 
 ## Quiz rules
 
-- Exam simulation: `EXAM_MINUTES = 60`, optional +25% (75 min), pass mark
-  `Math.ceil(total × 0.65)` (`src/components/QuizPage.jsx:7,65`, `ui.jsx:9`).
+- Exam simulation: `EXAM_MINUTES = 60` unless the wrapper passes `examMinutes` (CTAL-TAE 90,
+  CT-SEC 120), optional +25%, pass mark `Math.ceil(total × 0.65)`
+  (`src/components/QuizPage.jsx:7,41,67`, `ui.jsx:9`).
 - Answer is correct only if the selected set equals `correct` exactly (`QuizPage.jsx:68-71`).
 - Finish with unanswered questions shows a confirm bar (bottom sheet on phones) with
   "Go to first unanswered"; at 0:00 the exam finishes without it (`QuizPage.jsx:82-96`).
@@ -67,5 +76,5 @@ PATTERN, MEMORY AID → key; else plain insight (`src/components/NotesPage.jsx:6
 ## Pages outside the standard set
 
 `ctai.jsx`, `ctai-quiz.jsx`, `ctaiv1-learn.jsx`, `ctaiv1-glossary.jsx` are the CT-AI v1
-legacy pages (no v1 guide page). Any new `.jsx` not in [tracks](tracks.md) shows up in
-the dashboard's "More pages" list.
+legacy pages (no v1 guide page). Any new `.jsx` not in [tracks](tracks.md) or the learning area shows up in
+the dashboard's "More pages" list. The learning-area pages are described in [learning](learning.md).

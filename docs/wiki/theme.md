@@ -4,8 +4,8 @@ sources:
   - src/styles.css
   - src/lib/theme.js
   - index.html
-pinned_commit: 70b2e7a
-updated: 2026-10-25
+pinned_commit: 47192d8
+updated: 2026-11-05
 confidence: observed
 ---
 
@@ -37,4 +37,8 @@ exam) in the same file. Pages use class names, not inline colour values — see
 - Don't hard-code colours in components; use the classes or `T`.
 - Track colours (`accent` in [tracks](tracks.md)) appear only as small dots.
 - Breakpoints: 900px (step tabs become the icon strip, grids collapse) and 640px
-  (phone layout, exam grid/confirm become bottom sheets) — `styles.css:291,304`.
+  (phone layout, exam grid/confirm become bottom sheets) — `@media` blocks near the end of `styles.css`.
+- The [learning](learning.md) pages add `.g2`, `.seg` (segmented control), `.callout.plain`
+  ("In plain words"), `.codeb` (code/template block), `.term`/`.tip` (glossary tooltip — `position:
+  fixed`, placed by `Blocks.jsx`, because `.boxc` clips overflow) and `.chip.lvl-*` level colours,
+  all on the same tokens (`styles.css`, "Learn without an exam" block).
