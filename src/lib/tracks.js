@@ -168,6 +168,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsGenAI, getBestExam: getBestExamScoreGenAI },
     loadData: () => import("../data/ctgenai/index.js"),
+    loadGlossary: () => import("../data/ctgenai/glossary.js"),
+    exam: { questions: 40, points: 46, note: "ISTQB Sample Exam A + ASTQB sample exam · 60 min with +25% for non-native speakers" },
   },
   {
     id: "ctaltae",
@@ -189,6 +191,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsTAE, getBestExam: getBestExamScoreTAE },
     loadData: () => import("../data/ctaltae/index.js"),
+    loadGlossary: () => import("../data/ctaltae/glossary.js"),
+    exam: { questions: 40, points: 66, note: "ISTQB Sample Exam A (66 pts) + ASTQB exam (64 pts) · 90 min with +25% for non-native speakers" },
   },
   {
     id: "cttas",
@@ -210,6 +214,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsTAS, getBestExam: getBestExamScoreTAS },
     loadData: () => import("../data/cttas/index.js"),
+    loadGlossary: () => import("../data/cttas/glossary.js"),
+    exam: { questions: 40, points: 49, note: "ISTQB Sample Exam A + ASTQB sample exam · 60 min with +25% for non-native speakers" },
   },
   {
     id: "ctpt",
@@ -231,6 +237,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsPT, getBestExam: getBestExamScorePT },
     loadData: () => import("../data/ctpt/index.js"),
+    loadGlossary: () => import("../data/ctpt/glossary.js"),
+    exam: { questions: 40, points: 40, note: "ISTQB Sample Exam A + ASTQB exam (39 q) · 60 min with +25% for non-native speakers" },
   },
   {
     id: "ctsec",
@@ -252,6 +260,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsSEC, getBestExam: getBestExamScoreSEC },
     loadData: () => import("../data/ctsec/index.js"),
+    loadGlossary: () => import("../data/ctsec/glossary.js"),
+    exam: { questions: 45, points: 80, note: "ISTQB Sample Exam A · 120 min with +25% for non-native speakers" },
   },
   {
     id: "ctft",
@@ -273,6 +283,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsFT, getBestExam: getBestExamScoreFT },
     loadData: () => import("../data/ctft/index.js"),
+    loadGlossary: () => import("../data/ctft/glossary.js"),
+    exam: { questions: 40, points: 45, note: "ASTQB sample exam · 30 points to pass · 60 min assumed" },
   },
   {
     id: "ctact",
@@ -294,6 +306,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsACT, getBestExam: getBestExamScoreACT },
     loadData: () => import("../data/ctact/index.js"),
+    loadGlossary: () => import("../data/ctact/glossary.js"),
+    exam: { questions: 40, points: 40, note: "ISTQB Sample Exam A · 60 min with +25% for non-native speakers" },
   },
   {
     id: "ctut",
@@ -315,6 +329,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsUT, getBestExam: getBestExamScoreUT },
     loadData: () => import("../data/ctut/index.js"),
+    loadGlossary: () => import("../data/ctut/glossary.js"),
+    exam: { questions: 40, points: 40, note: "ISTQB Sample Exam A · 60 min with +25% for non-native speakers" },
   },
 ];
 

@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Timer, Play, Flag, X, Check, Grid3x3, ChevronUp, ChevronLeft, ChevronRight, ListChecks, RotateCcw, BookOpen, Info, Trophy } from "lucide-react";
 import { KChip, Meter, Hint, pct, passMark } from "./ui.jsx";
 
-// Official rules shared by every track: 60 min (+25% non-native), pass = 65% of points rounded up.
+// Official rules shared by every track: 60 min by default (examMinutes overrides, e.g. advanced-level 120 min),
+// +25% non-native, pass = 65% of points rounded up.
 const EXAM_MINUTES = 60;
 const fmtTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 const sumPoints = (qs) => qs.reduce((s, q) => s + q.points, 0);
@@ -37,6 +38,7 @@ function Ticket({ label, title, sub, nums }) {
 // the main questions only), practicePools, and `record` (omitted = practice only, CT-AI v1.x).
 export default function QuizPage({
   questions, label, subtitle, record, getBest, examSets = [], practicePools, rules, rulesNote, examNote, learnPath,
+  examMinutes = EXAM_MINUTES,
 }) {
   const pools = practicePools || [{ key: "all", label: "All", questions }];
   const practiceOnly = !record;
@@ -62,7 +64,7 @@ export default function QuizPage({
   const practiceQs = pool.questions.filter((q) => filter === 0 || q.chapter === filter);
   const list = kind === "practice" ? practiceQs : examQs;
   const q = list[current];
-  const minutes = Math.round(EXAM_MINUTES * (extraTime ? 1.25 : 1));
+  const minutes = Math.round(examMinutes * (extraTime ? 1.25 : 1));
   const best = getBest?.();
 
   const isCorrect = (qq) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { List, ChevronDown, ChevronLeft, ChevronRight, ArrowRight, Check, Circle, CircleCheck, CircleDashed, X, Info } from "lucide-react";
 import { KChip, Meter, Hint, keywordList, pct } from "./ui.jsx";
 
@@ -35,6 +35,13 @@ function Block({ block }) {
         <div className="callout nt">
           <span className="lbl">{block.title || "Remember"}</span>
           <p>{block.text}</p>
+        </div>
+      );
+    case "seealso":
+      return (
+        <div className="callout nt">
+          <span className="lbl">See also</span>
+          <p><Link to={block.href}>{block.label}</Link>{block.text ? ` — ${block.text}` : ""}</p>
         </div>
       );
     default:
