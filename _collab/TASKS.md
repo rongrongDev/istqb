@@ -25,13 +25,13 @@ Numbered task files live in `_collab/tasks/<status>/task-<NNN>-<slug>.md`, creat
 | 019 | Concept of the day | DONE | `tasks/done/task-019-concept-of-the-day.md` |
 | 020 | Where do I start? Skill self-check | DONE | `tasks/done/task-020-skill-self-check.md` |
 | 021 | Personal learning record | DONE | `tasks/done/task-021-learning-record.md` |
-| 022 | Step-by-step worked solutions for K3/K4 questions | TODO | `tasks/backlog/task-022-worked-solutions.md` |
-| 023 | Distractor anatomy | TODO | `tasks/backlog/task-023-distractor-anatomy.md` |
-| 024 | Exam technique playbook | TODO | `tasks/backlog/task-024-exam-technique-playbook.md` |
-| 025 | Confusable pairs library | TODO | `tasks/backlog/task-025-confusable-pairs.md` |
-| 026 | Tricky situations: what would you do? | TODO | `tasks/backlog/task-026-situational-judgement.md` |
-| 027 | Trade-off decision guides | TODO | `tasks/backlog/task-027-trade-off-guides.md` |
-| 028 | Testing anti-patterns and fixes | TODO | `tasks/backlog/task-028-anti-patterns.md` |
-| 029 | "In the real world" notes | TODO | `tasks/backlog/task-029-real-world-notes.md` |
-| 030 | QA interview prep | TODO | `tasks/backlog/task-030-interview-prep.md` |
-| 031 | Capstone projects | TODO | `tasks/backlog/task-031-capstone-projects.md` |
+| 022 | Step-by-step worked solutions for K3/K4 questions | DONE | `tasks/done/task-022-worked-solutions.md` |
+| 023 | Distractor anatomy | DONE | `tasks/done/task-023-distractor-anatomy.md` |
+| 024 | Exam technique playbook | DONE | `tasks/done/task-024-exam-technique-playbook.md` |
+| 025 | Confusable pairs library | DONE | `tasks/done/task-025-confusable-pairs.md` |
+| 026 | Tricky situations: what would you do? | DONE | `tasks/done/task-026-situational-judgement.md` |
+| 027 | Trade-off decision guides | DONE | `tasks/done/task-027-trade-off-guides.md` |
+| 028 | Testing anti-patterns and fixes | DONE | `tasks/done/task-028-anti-patterns.md` |
+| 029 | "In the real world" notes | DONE | `tasks/done/task-029-real-world-notes.md` |
+| 030 | QA interview prep | DONE | `tasks/done/task-030-interview-prep.md` |
+| 031 | Capstone projects | DONE | `tasks/done/task-031-capstone-projects.md` |

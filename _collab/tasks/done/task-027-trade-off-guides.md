@@ -6,11 +6,11 @@ Guides to common team decisions with options, pros and cons, when each wins, bot
 
 ## Acceptance Criteria
 
-- [ ] `src/data/learning/tradeoffs.js` with 8 guides
-- [ ] Trade-offs page and guide view with a decision table
-- [ ] Links to related sections and toolbox recipes
-- [ ] `npm run build` and `npm run check:learning` pass; new screens checked in a browser at desktop and phone width, light and dark
-- [ ] `_collab/TASKS.md` updated when finished
+- [x] `src/data/learning/tradeoffs.js` with 8 guides
+- [x] Trade-offs page and guide view with a decision table
+- [x] Links to related sections and toolbox recipes
+- [x] `npm run build` and `npm run check:learning` pass; new screens checked in a browser at desktop and phone width, light and dark — no console errors or horizontal overflow
+- [x] `_collab/TASKS.md` updated when finished
 
 ## Depends on
 
@@ -22,4 +22,4 @@ Resolved from `_collab/features/enrich-learning-with-hard-questions-tips-for-tri
 
 ## Status
 
-TODO
+DONE
