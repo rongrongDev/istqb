@@ -1,0 +1,1210 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Exam Room Blueprint</title>
+<!--
+  Starter for the stage-2 blueprint page. Copy it next to the stage-1 page
+  (e.g. design/<slug>-blueprint.html) and replace the "BLUEPRINT DATA" block
+  in the script: page text, the chosen palette(s), global switches, the
+  decision ledger, mockups and one SECTIONS entry per section.
+
+  Section bodies are built from the helpers in the shell: pair (desktop +
+  phone per theme), desk (desktop only), options (A/B/C cards with a
+  recommendation), local (a switch inside a section), note, rules, answer,
+  ledger, table, flow, paletteCards and tokenTable.
+
+  Keep window.DESIGN / window.setDesignState; ../design-directions/scripts/
+  render.cjs uses them to screenshot every section. Mark decorative elements
+  that deliberately bleed past a frame edge with data-bleed.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Figtree:wght@400;500;600;700;800&family=Literata:opsz,wght@7..72,400;7..72,600&family=IBM+Plex+Mono:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Lexend:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;600&display=swap">
+<style>
+/* Page: section index, sticky control bar (palette · theme · device · global switches), then one section per area: question and answer boxes, mockups, notes. */
+:root {
+  --bg: #f3f4f6; --card: #ffffff; --fg: #14161b; --muted: #5c6270; --line: #dde0e6;
+  --accent: #2f4fd1; --accent-soft: #e6ebfc; --ok-ink: #2c9a5d; --q-ink: #b7791f;
+  --font-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d0e11; --card: #15171c; --fg: #e8e9ed; --muted: #969bab; --line: #2a2d35;
+    --accent: #8ea4ff; --accent-soft: #1f2540; --ok-ink: #4cc38a; --q-ink: #e6a94e; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d0e11; --card: #15171c; --fg: #e8e9ed; --muted: #969bab; --line: #2a2d35;
+  --accent: #8ea4ff; --accent-soft: #1f2540; --ok-ink: #4cc38a; --q-ink: #e6a94e; color-scheme: dark;
+}
+html, body { background: var(--bg); color: var(--fg); }
+body { margin: 0; font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1 { font-size: clamp(28px, 4vw, 40px); line-height: 1.12; letter-spacing: -.02em; margin: 6px 0 10px; text-wrap: balance; }
+h2 { font-size: 22px; letter-spacing: -.01em; margin: 0 0 12px; text-wrap: balance; }
+h3 { font-size: 16px; margin: 0 0 8px; }
+p { margin: 0 0 10px; }
+a { color: var(--accent); }
+.lede { color: var(--muted); max-width: 72ch; font-size: 16px; }
+header.top { padding-block: 40px 20px; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13.5px; margin-top: 14px; }
+nav.toc a { color: var(--muted); text-decoration: none; border-bottom: 1px dotted var(--line); }
+nav.toc a:hover { color: var(--accent); }
+
+.controls { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.controls .wrap { display: flex; flex-wrap: wrap; gap: 10px 20px; padding-block: 10px; align-items: center; }
+.ctl, .local { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ctl > span, .local > span { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.local { margin: 0 0 12px; }
+.segc { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 8px; background: var(--card); padding: 2px; gap: 2px; }
+.segc button { font: inherit; font-size: 13.5px; font-weight: 500; border: 0; background: transparent; color: var(--muted); padding: 5px 10px; border-radius: 6px; cursor: pointer; }
+.segc button:hover { color: var(--fg); }
+.segc button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+section.sec { padding-block: 44px 8px; border-top: 1px solid var(--line); margin-top: 28px; scroll-margin-top: 120px; }
+section.sec:first-child { border-top: 0; margin-top: 0; }
+.sec-h { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; margin-bottom: 18px; }
+.sec-h h2 { font-size: 26px; margin: 2px 0 8px; }
+.sec-h p { color: var(--muted); max-width: 66ch; }
+.answer { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font-size: 14px; }
+.answer b.q { display: block; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 500; margin-bottom: 4px; }
+.answer + .answer { margin-top: 10px; }
+.answer ul { margin: 6px 0 0; padding-left: 18px; }
+.answer li { margin: 3px 0; }
+.rec-tag { display: inline-block; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: 1px 7px; margin-right: 6px; }
+.st-ok { color: var(--ok-ink); font-weight: 600; }
+.st-q { color: var(--q-ink); font-weight: 600; }
+code.c { font-family: var(--font-mono); font-size: .88em; background: var(--accent-soft); color: var(--fg); padding: 0 5px; border-radius: 4px; white-space: nowrap; }
+
+.frames { display: grid; gap: 16px; }
+.fcap { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 8px; }
+.frame { position: relative; overflow: hidden; border-radius: 10px; border: 1px solid var(--line); background: var(--card); }
+.frame.ph { border: 0; background: transparent; border-radius: 38px; }
+.drow { display: grid; gap: 16px; align-items: start; }
+.drow.both { grid-template-columns: minmax(0, 3.3fr) minmax(0, 1fr); }
+.drow + .drow { margin-top: 18px; }
+.phones { display: flex; flex-wrap: wrap; gap: 20px; }
+.phones > div { width: min(290px, 100%); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+.card.chosen { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.small { font-size: 13.5px; color: var(--muted); }
+.notes { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin: 14px 0 0; }
+.note { font-size: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin: 0; }
+.note b { display: block; font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 500; margin-bottom: 4px; }
+.opt3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+.opt3 .card h3 { margin-bottom: 4px; }
+.opt3 .card .small { margin: 0 0 8px; }
+.cols2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.flow { display: grid; grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); gap: 10px; align-items: stretch; margin: 6px 0 16px; }
+.flow > div { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 13px; position: relative; }
+.flow > div b { display: block; margin-bottom: 4px; }
+.flow > div span { color: var(--muted); font-size: 12.5px; }
+.flow > div:not(:last-child)::after { content: "→"; position: absolute; right: -10px; top: 50%; transform: translate(50%, -50%); color: var(--muted); font-size: 16px; z-index: 1; }
+.flow > div.hl { border-color: var(--accent); }
+.palgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 18px; }
+.palcard { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.palcard.on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.palcard .top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.palcard h3 { margin: 0; font-size: 18px; }
+.palcard .chips { display: flex; gap: 4px; }
+.palcard .chips i { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--line); display: block; }
+.linkbtn { font: inherit; font-size: 13px; border: 1px solid var(--line); background: var(--card); color: var(--accent); border-radius: 6px; padding: 3px 10px; cursor: pointer; white-space: nowrap; align-self: flex-start; }
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line); vertical-align: -2px; margin-right: 6px; }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 13.5px; }
+th, td { text-align: left; vertical-align: top; padding: 11px 14px; border-top: 1px solid var(--line); }
+thead th { border-top: 0; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 500; }
+tbody th { font-size: 15px; white-space: nowrap; }
+footer { padding-block: 32px 48px; color: var(--muted); font-size: 13.5px; }
+
+@media (max-width: 900px) { .sec-h, .opt3, .cols2 { grid-template-columns: 1fr; } .flow { grid-template-columns: 1fr; } .flow > div::after { display: none; } }
+@media (max-width: 700px) { .drow.both { grid-template-columns: minmax(0, 1fr); } .drow.both > div:last-child { max-width: 290px; } }
+
+/* ───────── Mockups. Palette tokens come from generated .p-<palette>.t-<theme> rules ───────── */
+.mock { position: absolute; top: 0; left: 0; transform-origin: 0 0; font-family: var(--font-ui); font-size: var(--fs); line-height: 1.4; color: var(--text); background: var(--backdrop); overflow: hidden; -webkit-font-smoothing: antialiased; text-align: left; }
+.mock * { box-sizing: border-box; }
+.mock svg, .mock i[data-lucide] { width: var(--ic, 16px); height: var(--ic, 16px); flex: none; stroke-width: 1.75; display: inline-block; }
+.mock h1, .mock h2, .mock h3, .mock p { margin: 0; }
+.mock h2 { font-size: 22px; letter-spacing: -.015em; }
+.mock .mu { color: var(--muted); }
+.mock .ok { color: var(--ok); }
+.ib { width: 30px; height: 30px; display: grid; place-items: center; background: transparent; color: var(--muted); border-radius: var(--r-sm); flex: none; }
+.ib.on { background: var(--accent-soft); color: var(--accent); }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: var(--r-sm); border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: 12.5px; font-weight: 600; white-space: nowrap; --ic: 14px; }
+.btn.pri { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.lbl { font-size: 11px; font-weight: 650; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.inp { height: 34px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); color: var(--muted); min-width: 0; --ic: 15px; }
+.inp.filled { color: var(--text); }
+.chip { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 99px; font-size: 11.5px; background: var(--chip); color: var(--muted); border: 1px solid var(--line); white-space: nowrap; --ic: 12px; }
+.chip.acc { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.chip.ok { color: var(--ok); }
+.chip.warn { color: var(--warn); }
+.meter { display: block; height: 5px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 11px; font-weight: 700; display: grid; place-items: center; flex: none; }
+.avatar.sm { width: 22px; height: 22px; font-size: 9.5px; }
+.avs { display: flex; }
+.avs .avatar { border: 2px solid var(--surface); margin-left: -6px; }
+.avs .avatar:first-child { margin-left: 0; }
+kbd.k { font-family: var(--font-mono); font-size: 11px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; color: var(--muted); background: var(--surface); white-space: nowrap; }
+.logo { width: 24px; height: 24px; border-radius: var(--r-sm); background: var(--accent); color: var(--accent-fg); display: grid; place-items: center; font-weight: 800; font-size: 12.5px; flex: none; }
+.logo.lg { width: 38px; height: 38px; font-size: 18px; border-radius: var(--r); }
+.wm { font-weight: 750; font-size: 17px; letter-spacing: -.015em; }
+.dot { width: 10px; height: 10px; border-radius: 3px; background: var(--h); flex: none; }
+.crow { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.crow .meter { flex: 1; max-width: 220px; }
+/* lists, tables, cards */
+.nv { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: var(--r); font-weight: 550; white-space: nowrap; --ic: 16px; }
+.nv svg { color: var(--muted); }
+.nv.on { background: var(--sel); color: var(--sel-fg); font-weight: 650; }
+.nv.on svg { color: currentColor; }
+.nv .n { margin-left: auto; font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.nv-h { margin: 14px 10px 4px; }
+.tbl { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--surface); }
+.trow { display: grid; grid-template-columns: minmax(0, 2fr) .8fr 1fr .6fr 1.1fr .9fr; gap: 12px; align-items: center; padding: 10px 14px; font-size: 12.5px; }
+.trow + .trow { border-top: 1px solid var(--line); }
+.trow.th { background: var(--surface-2); font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.trow.sel { background: var(--sel); color: var(--sel-fg); }
+.trow.sel .mu, .trow.sel .num { color: inherit; opacity: .75; }
+.trow.sel .meter { background: color-mix(in srgb, currentColor 22%, transparent); }
+.trow.sel .meter > span { background: currentColor; }
+.trow .nm { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 13px; min-width: 0; }
+.trow .num { font-family: var(--font-mono); color: var(--muted); }
+.cgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.ccard { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); overflow: hidden; box-shadow: var(--shadow); }
+.ccard.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.ccard .cov { height: 92px; background: linear-gradient(135deg, var(--h), color-mix(in oklab, var(--h) 45%, var(--surface))); }
+.ccard .cap { padding: 12px 14px; display: flex; flex-direction: column; gap: 9px; }
+.ccard .cap b { font-size: 14px; }
+.ccard .crow { font-size: 12px; color: var(--muted); }
+.cgrid.m2 { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; }
+.m2 .ccard .cov { height: 54px; }
+.m2 .ccard .cap { padding: 9px 10px; gap: 6px; }
+.m2 .ccard .cap b { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m2 .ccard .crow > span:not(.chip) { display: none; }
+.tasks { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+.task { display: flex; align-items: center; gap: 10px; padding: 10px 14px; font-size: 13px; }
+.task + .task { border-top: 1px solid var(--line); }
+.task.done span { color: var(--muted); text-decoration: line-through; }
+.task svg { color: var(--muted); }
+.task.done svg { color: var(--ok); }
+/* details panel */
+.isec { padding: 14px 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+.prop { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 8px; font-size: 12.5px; margin: 0; }
+.prop dt { color: var(--muted); }
+.prop dd { margin: 0; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.act { display: flex; gap: 10px; font-size: 12.5px; }
+.act b { font-weight: 650; }
+/* forms */
+.form { display: flex; flex-direction: column; gap: 14px; max-width: 560px; }
+.fgroup { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; font-weight: 600; }
+.tg { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.tgl { width: 34px; height: 20px; border-radius: 99px; background: color-mix(in srgb, var(--muted) 40%, transparent); position: relative; flex: none; }
+.tgl::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow); }
+.tgl.on { background: var(--accent); }
+.tgl.on::after { left: 16px; }
+.auth { height: 100%; display: grid; place-items: center; position: relative; overflow: hidden; }
+.auth-card { width: 380px; border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 32px 30px 26px; display: flex; flex-direction: column; gap: 14px; position: relative; background: var(--panel-strong); backdrop-filter: var(--blur); }
+.auth-card h1 { font-size: 22px; letter-spacing: -.015em; }
+.auth-card .btn.pri { height: 40px; justify-content: center; font-size: 14px; }
+/* shells */
+.side { display: flex; flex-direction: column; gap: 2px; padding: 14px 10px; border-right: 1px solid var(--line); background: var(--panel); backdrop-filter: var(--blur); min-height: 0; }
+.side .brand { display: flex; align-items: center; gap: 10px; padding: 2px 8px 14px; }
+.side .foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 8px 0; border-top: 1px solid var(--line); font-size: 12.5px; }
+.main { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--surface); }
+.hd { display: flex; align-items: center; gap: 12px; height: 60px; padding: 0 24px; border-bottom: 1px solid var(--line); flex: none; --ic: 14px; }
+.hd .crumb { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 650; }
+.hd .r { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.pad { padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; min-height: 0; overflow: hidden; flex: 1; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+.stack { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.boxc { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); overflow: hidden; }
+.boxc .isec:last-child { border-bottom: 0; }
+.rail { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; border-right: 1px solid var(--line); background: var(--panel); backdrop-filter: var(--blur); }
+.rail .logo { margin-bottom: 10px; width: 30px; height: 30px; }
+.rail .ib { width: 38px; height: 38px; --ic: 19px; border-radius: var(--r); }
+.rail .grow { flex: 1; }
+.col { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; background: var(--panel); backdrop-filter: var(--blur); }
+.col.l { border-right: 1px solid var(--line); }
+.col.r { border-left: 1px solid var(--line); }
+.col-h { display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 10px 0 16px; flex: none; }
+.lrow { display: flex; align-items: center; gap: 10px; padding: 9px 12px; margin: 0 8px; border-radius: var(--r-sm); font-size: 13px; }
+.lrow .tx { min-width: 0; flex: 1; }
+.lrow .tx b { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lrow .tx span { font-size: 11.5px; color: var(--muted); }
+.lrow.sel { background: var(--sel); color: var(--sel-fg); }
+.lrow.sel .tx span { color: inherit; opacity: .75; }
+.tmain { padding: 26px 30px; display: flex; flex-direction: column; gap: 16px; overflow: hidden; min-width: 0; background: var(--surface); }
+.tb { display: flex; align-items: center; gap: 18px; padding: 0 24px; border-bottom: 1px solid var(--line); background: var(--panel); backdrop-filter: var(--blur); }
+.tb .brand { display: flex; align-items: center; gap: 10px; }
+.tabs { display: flex; gap: 4px; align-self: stretch; }
+.tabs span { display: flex; align-items: center; padding: 0 12px; color: var(--muted); font-weight: 600; border-bottom: 2px solid transparent; }
+.tabs span.on { color: var(--text); border-bottom-color: var(--accent); }
+.search { flex: 0 1 340px; height: 36px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; color: var(--muted); margin-left: auto; --ic: 15px; }
+.search kbd { margin-left: auto; }
+.dim { position: absolute; inset: 60px 0 0; background: var(--scrim); z-index: 3; }
+.drawer { position: absolute; top: 60px; right: 0; bottom: 0; width: 440px; background: var(--panel-strong); backdrop-filter: var(--blur); border-left: 1px solid var(--line); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; z-index: 4; }
+.drawer .pad { padding-top: 6px; }
+.brand-side { background: var(--accent); color: var(--accent-fg); padding: 56px; display: flex; flex-direction: column; gap: 20px; }
+.brand-side .wm { display: flex; align-items: center; gap: 10px; font-size: 22px; }
+.brand-side .logo { background: var(--accent-fg); color: var(--accent); width: 32px; height: 32px; }
+.brand-side h2 { font-size: 34px; line-height: 1.12; letter-spacing: -.025em; margin-top: 40px; max-width: 14ch; }
+/* phones */
+.phone { width: 100%; height: 100%; border-radius: 40px; border: 9px solid #0c0d0f; background: var(--backdrop); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.sbar { height: 34px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; font-size: 12.5px; font-weight: 700; }
+.sbar .isl { width: 86px; height: 22px; border-radius: 20px; background: #0c0d0f; }
+.mh { display: flex; align-items: center; gap: 8px; padding: 6px 12px 10px; --ic: 18px; flex: none; }
+.mh .t { font-weight: 750; font-size: 17px; letter-spacing: -.01em; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mh .t small { display: block; font-size: 11.5px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.mh .ib { width: 34px; height: 34px; }
+.mbody { flex: 1; min-height: 0; overflow: hidden; background: var(--surface); border-top: 1px solid var(--line); }
+.mpad { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.mrow { display: flex; align-items: center; gap: 12px; padding: 0 14px; height: 56px; border-bottom: 1px solid var(--line); }
+.mrow .tx { min-width: 0; flex: 1; }
+.mrow .tx b { display: block; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mrow .tx span { font-size: 11.5px; color: var(--muted); }
+.mtabs { height: 64px; flex: none; display: flex; justify-content: space-around; padding-top: 8px; border-top: 1px solid var(--line); background: var(--panel); backdrop-filter: var(--blur); --ic: 21px; }
+.mtabs span { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 600; color: var(--muted); }
+.mtabs span.on { color: var(--accent); }
+.fab { position: absolute; right: 16px; bottom: 84px; width: 52px; height: 52px; border-radius: 16px; background: var(--accent); color: var(--accent-fg); display: grid; place-items: center; box-shadow: var(--shadow-lg); --ic: 22px; }
+.scrim { position: absolute; inset: 0; background: var(--scrim); z-index: 3; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; border-radius: var(--r-lg) var(--r-lg) 0 0; padding: 8px 0 20px; box-shadow: var(--shadow-lg); background: var(--panel-strong); backdrop-filter: var(--blur); }
+.sheet .isec:last-child { border-bottom: 0; }
+.grab { width: 38px; height: 5px; border-radius: 9px; background: var(--line); margin: 2px auto 6px; }
+.phone .form { gap: 10px; }
+.phone .fgroup { padding: 12px 14px; }
+.phone .auth { padding: 14px; }
+.phone .auth-card { width: 100%; padding: 24px 20px; box-shadow: none; }
+.phone .tasks .task { padding: 9px 12px; }
+.mbrand { background: var(--accent); color: var(--accent-fg); padding: 26px 22px; display: flex; flex-direction: column; gap: 10px; }
+.mbrand .logo { background: var(--accent-fg); color: var(--accent); }
+.mbrand b { font-size: 22px; line-height: 1.15; letter-spacing: -.02em; }
+/* blueprint-only mock states */
+.empty { margin: 60px auto 0; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; --ic: 30px; max-width: 320px; }
+.empty svg { color: var(--muted); }
+.empty b { font-size: 16px; }
+.skel { display: block; height: 10px; border-radius: 6px; background: var(--line); }
+.hint { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); --ic: 14px; }
+/* ISTQB study mockup parts */
+.mock .sm { font-size: 12px; }
+.mock .bad { color: var(--danger); }
+.mock .ell { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.mock .h1 { font-size: 30px; letter-spacing: -.02em; font-weight: 750; }
+.chip.bad { color: var(--danger); }
+.btn.okb { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+.trk { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.trk .crow .meter { max-width: 160px; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.stats > div { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stats b { font-size: 20px; font-variant-numeric: tabular-nums; }
+.stats span { font-size: 11px; }
+.phone .stats b { font-size: 16px; }
+.phone .stats span { font-size: 10px; }
+.stp { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); min-width: 0; }
+.stp.on { background: var(--sel); color: var(--sel-fg); }
+.stp .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.stp .tx span { font-size: 11.5px; color: var(--muted); }
+.num { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; background: var(--accent); color: var(--accent-fg); flex: none; font-family: var(--font-mono); }
+.thead { display: flex; gap: 14px; align-items: flex-start; }
+.thead .dot { width: 14px; height: 14px; border-radius: 4px; margin-top: 4px; }
+.lo { display: flex; gap: 8px; align-items: center; font-size: 12.5px; min-width: 0; }
+.lo code, .sid { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.sech { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); min-width: 0; }
+.sech > b { font-size: 14.5px; flex: 1; }
+.prose { display: flex; flex-direction: column; gap: 10px; }
+.prose p { font-family: var(--font-read); font-size: 14.5px; line-height: 1.7; max-width: 66ch; }
+.phone .prose p { font-size: 13.5px; line-height: 1.6; }
+.callout { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface-2); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+.callout p { font-size: 12.5px; line-height: 1.55; }
+.callout.ex .lbl { color: var(--ok); }
+.callout.nt .lbl { color: var(--warn); }
+.callout.bad .lbl { color: var(--danger); }
+.pts { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; line-height: 1.5; }
+.gl { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.gl + .gl { border-top: 1px solid var(--line); }
+.gl p { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.qt { font-size: 14.5px; line-height: 1.6; font-weight: 550; }
+.qt.big { font-size: 17px; }
+.phone .qt { font-size: 13.5px; }
+.opt { display: flex; gap: 12px; align-items: flex-start; padding: 11px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); font-size: 13px; line-height: 1.45; }
+.opt.sel { border-color: var(--accent); background: var(--sel); color: var(--sel-fg); }
+.opt .key { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-weight: 700; font-size: 11.5px; flex: none; background: var(--surface); color: var(--text); }
+.opt.sel .key { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.phone .opt { padding: 9px 10px; font-size: 12px; gap: 9px; }
+.qdots { display: grid; gap: 4px; }
+.qd { height: 22px; border-radius: 5px; border: 1px solid var(--line); font-size: 10px; display: grid; place-items: center; color: var(--muted); font-family: var(--font-mono); background: var(--surface); }
+.qd.a { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.qd.c { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.timer { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-weight: 600; font-variant-numeric: tabular-nums; font-size: 13px; border: 1px solid var(--line); border-radius: var(--r-sm); padding: 3px 9px; background: var(--surface); --ic: 14px; }
+.timer.big { font-size: 22px; padding: 4px 12px; --ic: 18px; }
+.meter.pm { position: relative; overflow: visible; }
+.meter.pm::after { content: ""; position: absolute; left: 65%; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: var(--text); }
+.verdict-c { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.verdict-c .big { font-size: 34px; font-weight: 800; letter-spacing: -.02em; }
+.verdict-c .score { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.verdict-c .meter { flex: 1; }
+.phone .verdict-c .big { font-size: 26px; }
+.phone .verdict-c .score { font-size: 12.5px; }
+.bk2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tb.nb { height: 52px; }
+.crumb2 { display: flex; align-items: center; gap: 6px; font-size: 13px; --ic: 13px; min-width: 0; }
+.tb .r { margin-left: auto; }
+.pips { display: flex; gap: 4px; }
+.pips i { width: 18px; height: 5px; border-radius: 3px; background: var(--line); }
+.pips i.d { background: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.pips i.c { background: var(--accent); }
+.nx { font-size: 12.5px; white-space: nowrap; }
+.nbm { display: flex; justify-content: center; padding: 26px 24px; overflow: hidden; background: var(--app); }
+.mnext { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px 22px; border-top: 1px solid var(--line); background: var(--raised); font-size: 12.5px; --ic: 14px; }
+.mnext span { display: inline-flex; gap: 4px; align-items: center; }
+.sw2 { margin: 0 4px 6px; gap: 8px; color: var(--text); }
+.sw2 i:last-child, .sw2 svg:last-child { margin-left: auto; }
+.side .foot .meter { flex: 1; }
+.ol { display: flex; flex-direction: column; gap: 1px; padding: 0 2px; }
+.olr { display: flex; align-items: center; gap: 7px; padding: 5px 8px; border-radius: var(--r-sm); font-size: 12px; min-width: 0; --ic: 13px; }
+.olr.on { background: var(--sel); color: var(--sel-fg); font-weight: 600; }
+.olr .sid { font-size: 10.5px; }
+.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.g2a { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.pill { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 10px; border: 1px solid var(--line); border-radius: 99px; font-weight: 650; font-size: 12.5px; background: var(--surface); --ic: 13px; white-space: nowrap; }
+.next { display: flex; align-items: center; gap: 16px; padding: 18px 20px; border-radius: var(--r-lg); background: var(--sel); color: var(--sel-fg); border: 1px solid var(--line); }
+.next .mu { color: inherit; opacity: .75; }
+.next .lbl { color: inherit; opacity: .7; }
+.next .btn { margin-left: auto; }
+.nt2 { font-size: 19px; letter-spacing: -.01em; }
+.phone .next { flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px; }
+.phone .next .btn { margin-left: 0; }
+.phone .nt2 { font-size: 15px; }
+.tile { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; box-shadow: var(--shadow); }
+.stepper { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.sc { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); padding: 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.sc .crow { justify-content: space-between; }
+.sc.on { background: var(--sel); color: var(--sel-fg); }
+.sc.on .mu { color: inherit; opacity: .75; }
+.cmdk { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); width: 600px; z-index: 4; background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+.cr { padding: 10px 12px; border-radius: var(--r); display: flex; flex-direction: column; gap: 4px; }
+.cr.on { background: var(--sel); color: var(--sel-fg); }
+.cr p { font-size: 12px; line-height: 1.5; opacity: .8; }
+.exf { display: flex; align-items: center; gap: 14px; padding: 0 24px; border-top: 1px solid var(--line); background: var(--surface); }
+.mchips { display: flex; gap: 4px; padding: 0 10px 10px; overflow: hidden; flex: none; }
+.mdots { flex: none; padding: 10px 12px 20px; border-top: 1px solid var(--line); background: var(--raised); overflow: hidden; }
+.mdots .qdots { width: 860px; }
+.phone .mbody { position: relative; }
+.phone .boxc .sech { flex-wrap: wrap; padding: 10px 12px; }
+.phone .boxc .isec { padding: 12px; }
+.phone .trk { padding: 12px; }
+.phone .sech > b, .phone .trk .crow > b { white-space: normal; flex-basis: 100%; order: -1; }
+.phone .trk .crow { flex-wrap: wrap; }
+.phone .tile { padding: 12px; box-shadow: none; }
+.rules { display: grid; gap: 8px; }
+.rules > div { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rules span { font-size: 11px; }
+.rules b { font-size: 13.5px; }
+.ticket { display: flex; align-items: center; gap: 18px; padding: 16px 20px; border: 1px dashed var(--muted); border-radius: var(--r-lg); background: var(--surface); flex-wrap: wrap; }
+.ticket .btn { margin-left: auto; }
+.tk { display: grid; grid-template-columns: repeat(4, auto); gap: 18px; margin-left: auto; }
+.tk > div { display: flex; flex-direction: column; align-items: center; }
+.tk b { font-size: 24px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.tk span { font-size: 11px; }
+.phone .ticket { padding: 12px; gap: 10px; }
+.phone .tk { margin-left: 0; gap: 14px; }
+.phone .tk b { font-size: 18px; }
+.sets { display: grid; gap: 10px; }
+.setc { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); padding: 14px; display: flex; flex-direction: column; gap: 4px; }
+.setc b { font-size: 16px; }
+.setc.on { border-color: var(--accent); background: var(--sel); color: var(--sel-fg); box-shadow: 0 0 0 2px var(--accent-soft); }
+.setc.on .mu { color: inherit; opacity: .75; }
+.startbig { display: flex; align-items: center; gap: 14px; }
+.startbig .btn { height: 44px; padding: 0 20px; font-size: 14px; }
+.qd.r { background: color-mix(in srgb, var(--ok) 16%, var(--surface)); color: var(--ok); border-color: transparent; }
+.qd.w { background: color-mix(in srgb, var(--danger) 16%, var(--surface)); color: var(--danger); border-color: transparent; }
+.qd.r.c, .qd.w.c { outline: 2px solid var(--text); outline-offset: 1px; }
+.opt.right { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, var(--surface)); }
+.opt.right .key { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+.opt.wrong { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 10%, var(--surface)); }
+.opt.wrong .key { background: var(--danger); border-color: var(--danger); color: var(--surface); }
+.mk { margin-left: auto; display: inline-flex; --ic: 15px; flex: none; }
+.callout p + p { margin-top: 2px; }
+
+
+/* blueprint additions */
+.hintbar { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; border-radius: var(--r); border: 1px solid var(--line); background: var(--surface-2); font-size: 12.5px; line-height: 1.5; --ic: 15px; }
+.hintbar svg { flex: none; margin-top: 1px; color: var(--muted); }
+.hintbar.warn svg { color: var(--warn); }
+.hintbar.ok svg { color: var(--ok); }
+.g4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.phone .g4 { grid-template-columns: 1fr; }
+.olbtn { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px; background: var(--surface); --ic: 13px; white-space: nowrap; align-self: flex-start; }
+.olp { position: absolute; top: 60px; left: 0; bottom: 0; width: 380px; z-index: 4; background: var(--raised); border-right: 1px solid var(--line); box-shadow: var(--shadow-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+.olp.m { position: static; width: auto; box-shadow: none; border: 0; padding: 14px; }
+.olp .ol { gap: 2px; }
+.chr { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.chr + .chr { border-top: 1px solid var(--line); }
+.chr .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.chr .tx span { font-size: 11.5px; color: var(--muted); }
+.chr .meter { width: 140px; flex: none; }
+.phone .chr .meter { display: none; }
+.seg2 { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; font-size: 12px; margin-left: auto; }
+.seg2 > * { padding: 4px 10px; }
+.seg2 b { background: var(--sel); color: var(--sel-fg); }
+.timer.low { color: var(--danger); border-color: var(--danger); }
+.key.sq { border-radius: 5px; }
+.confirm { position: absolute; left: 50%; bottom: 84px; transform: translateX(-50%); width: 760px; z-index: 4; display: flex; align-items: center; gap: 16px; padding: 14px 18px; border-radius: var(--r-lg); background: var(--raised); border: 1px solid var(--line); box-shadow: var(--shadow-lg); }
+.toast { position: absolute; left: 50%; top: 72px; transform: translateX(-50%); display: flex; gap: 8px; align-items: center; padding: 8px 14px; border-radius: 99px; background: var(--accent); color: var(--accent-fg); font-size: 12.5px; font-weight: 600; z-index: 4; --ic: 14px; }
+.menu { position: absolute; top: 52px; left: 150px; width: 340px; z-index: 4; background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 8px; display: flex; flex-direction: column; gap: 2px; }
+.mi { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: var(--r-sm); font-size: 12.5px; min-width: 0; --ic: 14px; }
+.mi.on { background: var(--sel); color: var(--sel-fg); }
+.mi .ell { flex: 1; }
+.sep { height: 1px; background: var(--line); margin: 4px 0; }
+.empty .btn { margin-top: 4px; }
+
+/* round 2: compact options, phone step strip, logo */
+.optg { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; }
+.optg .opt { border: 0; border-radius: 0; background: transparent; padding: 9px 12px; gap: 10px; align-items: center; }
+.optg .opt + .opt { border-top: 1px solid var(--line); }
+.optg .opt.sel { background: var(--sel); }
+.optg .opt.right { background: color-mix(in srgb, var(--ok) 12%, var(--surface)); }
+.optg .opt.wrong { background: color-mix(in srgb, var(--danger) 12%, var(--surface)); }
+.optg .opt .key { width: 20px; height: 20px; font-size: 11px; }
+.phone .optg .opt { padding: 7px 10px; font-size: 11.5px; line-height: 1.35; gap: 8px; }
+.phone .optg .opt .key { width: 18px; height: 18px; font-size: 10px; }
+.phone .qt { font-size: 12.5px; line-height: 1.45; }
+.qline { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); white-space: nowrap; }
+.qline > span:first-child { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.qline .chip { height: 18px; font-size: 10px; font-family: var(--font-ui); }
+.mseg { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); flex: none; border-bottom: 1px solid var(--line); margin-top: -4px; }
+.mseg span { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; font-weight: 600; color: var(--muted); padding: 6px 0 7px; white-space: nowrap; --ic: 16px; }
+.mseg span.on { color: var(--text); box-shadow: inset 0 -2px 0 var(--accent); }
+.phone .mseg + .mbody { border-top: 0; }
+.logo { --ic: 17px; --cut: var(--accent); }
+.logo svg { stroke-width: unset; }
+.lgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+.lcard { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.lcard.chosen { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.lcard h3 { margin: 0; }
+.lstage { display: grid; grid-template-columns: 1fr 1fr; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.lstage > div { padding: 18px 14px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.ltile { display: grid; place-items: center; flex: none; }
+.lsizes { display: flex; align-items: flex-end; gap: 10px; }
+.llock { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; letter-spacing: -.01em; white-space: nowrap; }
+.llock small { display: block; font-size: 10.5px; font-weight: 500; letter-spacing: 0; opacity: .7; }
+.ltab { display: flex; align-items: center; gap: 6px; font-size: 11.5px; padding: 6px 10px; border-radius: 8px 8px 0 0; align-self: stretch; }
+@media (max-width: 900px) { .lgrid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .lstage { grid-template-columns: 1fr; } }
+
+/* round 3: navigator */
+.segbar { display: flex; gap: 2px; align-items: center; height: 14px; }
+.segbar i { flex: 1; height: 6px; border-radius: 2px; background: var(--line); }
+.segbar i.a { background: var(--accent); opacity: .55; }
+.segbar i.r { background: var(--ok); opacity: .75; }
+.segbar i.w { background: var(--danger); opacity: .8; }
+.segbar i.c { height: 14px; opacity: 1; background: var(--text); }
+.qcount { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; --ic: 14px; }
+.qpop { position: absolute; left: 50%; bottom: 76px; transform: translateX(-50%); width: 420px; z-index: 4; background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.qpop.m { position: static; transform: none; width: auto; box-shadow: none; border: 0; padding: 0; }
+.qpop .qd { height: 28px; font-size: 11px; }
+.lg { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface); }
+.lg.a { background: var(--accent-soft); border-color: transparent; }
+.lg.c { background: var(--accent); border-color: var(--accent); }
+.lg.r { background: color-mix(in srgb, var(--ok) 25%, var(--surface)); border-color: transparent; }
+.lg.w { background: color-mix(in srgb, var(--danger) 25%, var(--surface)); border-color: transparent; }
+.mnav { flex: none; padding: 8px 12px 18px; border-top: 1px solid var(--line); background: var(--raised); display: flex; flex-direction: column; gap: 8px; }
+.mnav .crow { justify-content: space-between; }
+.mnav .segbar { height: 10px; }
+.mnav .segbar i { height: 4px; }
+.mnav .segbar i.c { height: 10px; }
+.pager { display: flex; align-items: center; gap: 4px; }
+.pager .qd { width: 28px; height: 28px; font-size: 11px; }
+</style>
+
+<header class="top wrap">
+  <div class="eyebrow" id="eyebrow"></div>
+  <h1 id="title"></h1>
+  <div id="lede"></div>
+  <nav class="toc" id="toc" aria-label="Sections"></nav>
+</header>
+
+<nav class="controls" aria-label="Mockup controls">
+  <div class="wrap" id="controls"></div>
+</nav>
+
+<main class="wrap" id="stage"></main>
+
+<footer class="wrap" id="footer"></footer>
+
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script>
+(function () {
+  /* ═══════════════════ BLUEPRINT DATA ═══════════════════ */
+  const PAGE = {
+    eyebrow: 'ISTQB Learning Hub · Design blueprint · round 2',
+    title: 'Exam Room Blueprint',
+    lede: [
+      'Your pick from the three-layout comparison, worked out in detail: <b>Exam Room</b> as the whole app, with <b>Study Desk</b>’s chapter outline added to Learn. It shows every screen and state on desktop and phone, in light and dark, and asks the questions still open.',
+      'Round 2 focuses on <b>Chalkboard</b> (default below), tightens the exam options and the phone step tabs, and adds a <a href="#logo">logo</a>. Parchment and Answer Sheet are still on the Palette switch. Content is real CTFL v4.0, CT-AI v2.0 and CT-QDO material; learner progress is an example.'
+    ],
+    footer: 'ISTQB Learning Hub · Exam Room Blueprint. The mockups are the design reference; see As built for what shipped and where it differs.'
+  };
+
+  const PALETTES = {
+    chalkboard: {
+      name: 'Chalkboard', note: 'Focus (round 2). The lecture room: green-grey board surfaces with a chalk-yellow accent. Dark is its natural state; light reads as a pale board with a mustard accent. Lexend was designed to reduce reading effort, which helps with long syllabus text and long exam questions.',
+      fontLabel: 'Lexend · Spline Sans Mono', ui: "'Lexend', ui-sans-serif, system-ui, sans-serif", read: "'Lexend', ui-sans-serif, system-ui, sans-serif", mono: "'Spline Sans Mono', ui-monospace, monospace",
+      fs: 12.5, r: 8, rsm: 6, rlg: 12, blur: 'none',
+      light: { app: '#EDF2EE', surface: '#FBFDFB', surface2: '#F1F5F2', raised: '#FFFFFF', line: '#D3DDD6', text: '#18241E', muted: '#566A5F', accent: '#7A5E00', accentFg: '#FFFFFF', accentSoft: '#F5ECCB', sel: '#F5ECCB', selFg: '#18241E', danger: '#B3261E', ok: '#1F7A4A', warn: '#A15C07', chip: '#F1F5F2' },
+      dark: { app: '#17211D', surface: '#1D2924', surface2: '#1A251F', raised: '#23302A', line: '#31413A', text: '#E7EEE9', muted: '#9DB0A6', accent: '#F2D16B', accentFg: '#1A1A0E', accentSoft: '#3A3520', sel: '#2C3A33', selFg: '#F4F8F5', danger: '#F28B82', ok: '#7FD1A0', warn: '#F2B45C', chip: '#23302A' }
+    },
+    parchment: {
+      name: 'Parchment', note: 'Previous lead. Today’s beige and dark grey, made deliberate: warm paper, ink-dark accent, a reading serif for teaching text. Calm for long reading; the exam screens feel like a printed paper.',
+      fontLabel: 'Figtree · Literata · IBM Plex Mono', ui: "'Figtree', ui-sans-serif, system-ui, sans-serif", read: "'Literata', Georgia, serif", mono: "'IBM Plex Mono', ui-monospace, monospace",
+      fs: 13, r: 10, rsm: 6, rlg: 14, blur: 'none',
+      light: { app: '#F5F0E6', surface: '#FFFDF8', surface2: '#F5F0E6', raised: '#FFFFFF', line: '#E3DCCB', text: '#1F2937', muted: '#6B6457', accent: '#1F2937', accentFg: '#F5F0E6', accentSoft: '#EDE6D8', sel: '#EDE6D8', selFg: '#111827', danger: '#B91C1C', ok: '#047857', warn: '#B45309', chip: '#F5F0E6' },
+      dark: { app: '#16140F', surface: '#1E1B16', surface2: '#1A1813', raised: '#25221C', line: '#35302A', text: '#ECE6DA', muted: '#A69F92', accent: '#E9DFC9', accentFg: '#1A1712', accentSoft: '#2E2A22', sel: '#2E2A22', selFg: '#F5EFE3', danger: '#F08A7E', ok: '#5CC79A', warn: '#E3A857', chip: '#25221C' }
+    },
+    answersheet: {
+      name: 'Answer Sheet', note: 'Challenger. A filled-in exam form: pale pink rules, indigo pen accent, pink highlight for the selected answer. Atkinson Hyperlegible was designed for legibility, which suits long questions under time pressure.',
+      fontLabel: 'Atkinson Hyperlegible · JetBrains Mono', ui: "'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif", read: "'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif", mono: "'JetBrains Mono', ui-monospace, monospace",
+      fs: 13, r: 6, rsm: 4, rlg: 10, blur: 'none',
+      light: { app: '#F7F3EE', surface: '#FFFEFC', surface2: '#F8F1EB', raised: '#FFFFFF', line: '#EBD3CA', text: '#2A2320', muted: '#76655E', accent: '#2D3A8C', accentFg: '#FFFFFF', accentSoft: '#E7E9F6', sel: '#FBE4DC', selFg: '#2A2320', danger: '#B42318', ok: '#2F7D4F', warn: '#A15C07', chip: '#F8F1EB' },
+      dark: { app: '#171312', surface: '#1F1A18', surface2: '#1B1715', raised: '#27211E', line: '#3A2E29', text: '#F1E8E3', muted: '#B09F97', accent: '#9AA6F2', accentFg: '#141626', accentSoft: '#23284A', sel: '#3A2620', selFg: '#FFE7DF', danger: '#F38B80', ok: '#6CCB95', warn: '#E7AA59', chip: '#27211E' }
+    }
+  };
+
+  const SWITCHES = {};
+
+  const LEDGER = [
+    ['Whole app', 'Exam Room', 'Top bar with track pill, 5 step tabs and ⌘K glossary; the hub becomes a readiness dashboard.', 'ok'],
+    ['Learn', 'Exam Room + Study Desk outline', 'One section at a time, with a chapter outline panel showing a tick per studied section.', 'q', '#learn'],
+    ['Exam start', 'Exam Room', 'Check-in page: exam ticket, Sample Exam cards, +25% toggle, one Start.', 'ok'],
+    ['Exam & review', 'Exam Room', 'Full-screen exam; split review. Round 2: options are one compact grouped list, and phones show a one-line question header, so all four options fit without scrolling.', 'ok'],
+    ['Question numbers 1–40', 'Exam Room', 'Round 3: the 40 numbered boxes become a thin progress bar plus a “Q4 / 40” button that opens the numbered grid.', 'q', '#exam'],
+    ['Finishing early', '—', 'Today Finish ends the exam at once, even with questions unanswered.', 'q', '#exam'],
+    ['Phone steps', 'Exam Room', 'Round 2: chips replaced by a full-width tab strip under the header.', 'q', '#shell'],
+    ['Palette', 'Chalkboard (focus)', 'Round 2: you asked to focus on Chalkboard; it is now the default here. Parchment and Answer Sheet remain on the switch.', 'q', '#theme'],
+    ['Logo', '—', 'Round 3: six new concepts; Test brackets [✓] recommended and shown in every mockup.', 'q', '#logo'],
+    ['Theme', '—', 'Follow the system, with a toggle remembered in this browser.', 'ok'],
+    ['Future ideas', '—', 'Not in scope; pick any you want in the first build.', 'q', '#later'],
+    ['Groundwork', '—', '29 page files become 5 shared pages before any visual work.', 'ok']
+  ];
+
+  /* ─────── Mockups ─────── */
+  // Logo concepts (stroke = currentColor, 32×32 grid)
+  const SV = (inner, size) => `<svg viewBox="0 0 32 32"${size ? ` width="${size}" height="${size}"` : ''} fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+  const MARKS = {
+    bracket: '<path d="M10.5 6H6v20h4.5M21.5 6H26v20h-4.5" stroke-width="3"/><path d="m11.5 16.5 3.2 3.2 6.3-7" stroke-width="3.2"/>',
+    checkbox: '<rect x="5" y="8" width="18" height="18" rx="3.5" stroke-width="2.6"/><path d="m10 16 4.2 4.2L27.5 6" stroke-width="3.2"/>',
+    seal: '<path d="M16 2.8l2.6 2.3 3.4-.7 1.1 3.3 3.3 1.1-.7 3.4 2.3 2.6-2.3 2.6.7 3.4-3.3 1.1-1.1 3.3-3.4-.7L16 29.2l-2.6-2.3-3.4.7-1.1-3.3-3.3-1.1.7-3.4L4 16.8l2.3-2.6-.7-3.4 3.3-1.1 1.1-3.3 3.4.7z" fill="currentColor" stroke="none"/><path d="m11 16 3.5 3.5L21 13" stroke="var(--cut)" stroke-width="3"/>',
+    cards: '<rect x="10" y="4" width="17" height="21" rx="3" stroke-width="2.4"/><rect x="5" y="8" width="17" height="20" rx="3" fill="currentColor" stroke="none"/><path d="m9.5 18 3 3 6-6.5" stroke="var(--cut)" stroke-width="2.8"/>',
+    bubble: '<circle cx="16" cy="16" r="12.5" fill="currentColor" stroke="none"/><path d="m10.5 16.5 3.8 3.8 7.5-8" stroke="var(--cut)" stroke-width="3.4"/>',
+    hex: '<path d="M16 3.5 27 9.8v12.4L16 28.5 5 22.2V9.8z" stroke-width="2.6"/><path d="m11 16.2 3.5 3.5 6.5-7" stroke-width="3"/>'
+  };
+  const MARK = SV(MARKS.bracket);
+
+  const I = (n, cls) => `<i data-lucide="${n}"${cls ? ` class="${cls}"` : ''}></i>`;
+  const ib = (n, on) => `<span class="ib${on ? ' on' : ''}">${I(n)}</span>`;
+  const btn = (label, icon, cls) => `<span class="btn ${cls || ''}">${icon ? I(icon) : ''}${label}</span>`;
+  const chip = (t, cls) => `<span class="chip ${cls || ''}">${t}</span>`;
+  const dot = h => `<span class="dot" style="--h:${h}"></span>`;
+  const meter = (p, pm) => `<span class="meter${pm ? ' pm' : ''}"><span style="width:${p}%"></span></span>`;
+  const KL = { K1: ['K1 Remember', ''], K2: ['K2 Understand', 'acc'], K3: ['K3 Apply', 'warn'], K4: ['K4 Analyze', 'bad'] };
+  const kb = k => chip(KL[k][0], KL[k][1]);
+  const pct = (a, b) => Math.round(a / b * 100);
+
+  // Real track facts from src/lib/tracks.js and src/data; st/best are example learner progress.
+  const TRACKS = [
+    { s: 'CTFL v4.0', t: 'Foundation Level', org: 'ISTQB · Foundation', h: '#0F766E', ch: 6, sec: 64, q: '160 questions, Exams A–D', gl: 97, st: 23, best: [29, 40], badge: 'START HERE' },
+    { s: 'CT-AI v2.0', t: 'AI Testing', org: 'ISTQB · Specialist', h: '#4F46E5', ch: 7, sec: 44, q: '40 questions', gl: 63, st: 8, best: [23, 40], badge: 'CURRENT SYLLABUS' },
+    { s: 'CT-QDO v1.0', t: 'Quality in DevOps', org: 'ISTQB · Specialist', h: '#C2410C', ch: 4, sec: 43, q: '48 questions', gl: 87, st: 0, best: null, badge: 'NEW 2026' },
+    { s: 'CT-MAT 2019', t: 'Mobile Application Testing', org: 'ISTQB · Specialist', h: '#A21CAF', ch: 5, sec: 49, q: '40 questions', gl: 118, st: 0, best: null, badge: 'SPECIALIST' },
+    { s: 'CT-SS v1.0', t: 'Soft Skills for Testers', org: 'ASTQB · Specialist', h: '#E11D48', ch: 4, sec: 45, q: '40 questions, 45 pts', gl: 25, st: 0, best: null, badge: 'NO PREREQUISITE' }
+  ];
+  const TF = TRACKS[0];
+  const STEPS = [
+    ['Learn', 'Full teaching content for all 6 chapters — start here', 'book-open'],
+    ['Chapter Summaries', 'Skim vs deep-dive per section', 'list'],
+    ['Exam Insights', 'Traps and key facts from Sample Exams A–D', 'lightbulb'],
+    ['Glossary', '97 syllabus keywords with definitions', 'book-a'],
+    ['Quiz & Exam Simulation', '160 questions: practice, or a timed 60-min mock', 'timer']
+  ];
+  const SHORT = ['Learn', 'Summary', 'Insights', 'Glossary', 'Quiz'];
+  // [id, title, time, sections, studied]
+  const CHS = [[1, 'Fundamentals of Testing', '180 min', 14, 14], [2, 'Testing Throughout the SDLC', '130 min', 10, 7], [3, 'Static Testing', '80 min', 8, 0], [4, 'Test Analysis and Design', '390 min', 14, 2], [5, 'Managing the Test Activities', '335 min', 16, 0], [6, 'Test Tools', '20 min', 2, 0]];
+  const CH4 = [['4.1', 'Test Techniques Overview', 1], ['4.2.1', 'Equivalence Partitioning', 1], ['4.2.2', 'Boundary Value Analysis', 0], ['4.2.3', 'Decision Table Testing', 0], ['4.2.4', 'State Transition Testing', 0], ['4.3.1', 'Statement Testing and Statement Coverage', 0], ['4.3.2', 'Branch Testing and Branch Coverage', 0], ['4.3.3', 'The Value of White-Box Testing', 0], ['4.4.1', 'Error Guessing', 0], ['4.4.2', 'Exploratory Testing', 0], ['4.4.3', 'Checklist-Based Testing', 0], ['4.5.1', 'Collaborative User Story Writing', 0], ['4.5.2', 'Acceptance Criteria', 0], ['4.5.3', 'Acceptance Test-Driven Development (ATDD)', 0]];
+  const KEYWORDS = ['boundary value analysis', 'equivalence partitioning', 'coverage', 'black-box test technique'];
+
+  // shared content blocks
+  const trackRow = t => `<div class="trk"><div class="crow" style="gap:8px">${dot(t.h)}<b class="ell">${t.t} <span class="mu">(${t.s})</span></b><span style="margin-left:auto">${chip(t.badge)}</span></div>
+    <div class="mu sm">${t.org} · ${t.ch} chapters · ${t.sec} sections · ${t.q}</div>
+    ${t.st ? `<div class="crow sm"><span>${t.st}/${t.sec} sections studied</span>${meter(pct(t.st, t.sec))}<span class="${t.best[0] / t.best[1] >= .65 ? 'ok' : 'bad'}"><b>best mock ${pct(...t.best)}%</b></span></div>` : `<div class="mu sm">Not started</div>`}</div>`;
+  const stats = () => `<div class="stats"><div><b>23<span class="mu">/64</span></b><span class="mu">sections studied</span></div><div><b class="ok">72%</b><span class="mu">best mock exam (29/40 pts)</span></div><div><b>26<span class="mu">/40</span></b><span class="mu">points to pass (65%)</span></div></div>`;
+  const pathRows = (cur, steps = STEPS) => `<div class="stack" style="gap:8px">${steps.map(([t, d], i) => `<div class="stp${i === cur ? ' on' : ''}"><span class="num">${i + 1}</span><div class="tx"><b>${t}</b><span>${d}</span></div>${I('chevron-right', 'mu')}</div>`).join('')}</div>`;
+  const chHead = () => `<div class="stack" style="gap:6px"><div class="lbl">CTFL v4.0 · Chapter 4 · 390 min · 14 sections</div><h2>Test Analysis and Design</h2></div>`;
+  const objectives = () => `<div class="boxc"><div class="isec"><span class="lbl">Learning objectives — what the exam tests</span>${[['FL-4.2.1', 'K3', 'Use equivalence partitioning to derive test cases'], ['FL-4.2.2', 'K3', 'Use boundary value analysis to derive test cases'], ['FL-4.2.3', 'K3', 'Use decision table testing to derive test cases']].map(([id, k, tx]) => `<div class="lo"><code>${id}</code>${kb(k)}<span>${tx}</span></div>`).join('')}</div></div>`;
+  const studiedBtn = on => on ? btn('Studied', 'check', 'okb') : btn('Mark studied', 'circle');
+  const secHead = (id, t, k, deep, on) => `<div class="sech"><span class="sid">${id}</span><b class="ell">${t}</b>${kb(k)}${deep ? chip('deep', 'bad') : chip('skim')}${studiedBtn(on)}</div>`;
+  const prose = (full) => `<div class="prose"><p>Boundary value analysis (BVA) exercises the boundaries of equivalence partitions, so it only works for ordered partitions. The minimum and maximum of each partition are its boundary values. Developers are more likely to make mistakes there: a boundary placed above or below its intended position, or left out.</p>
+    <p>In 2-value BVA each boundary gives two coverage items: the boundary value and its closest neighbour in the adjacent partition. For a partition [a..b] you test a−1, a, b and b+1.</p>
+    ${full ? `<p>3-value BVA adds the other neighbour too: a−1, a, a+1, b−1, b, b+1. Some of those coverage items are not boundary values themselves.</p>` : ''}</div>
+    <div class="callout ex"><span class="lbl">Example — 3-value catches what 2-value misses</span><p>The rule “x ≤ 10” is implemented as “x = 10”. 2-value BVA tests 10 and 11 and both pass. 3-value BVA also tests 9, which fails.</p></div>
+    <div class="callout nt"><span class="lbl">Remember</span><p>Coverage = exercised coverage items ÷ total coverage items × 100%.</p></div>`;
+  const section = full => `<div class="boxc">${secHead('4.2.2', 'Boundary Value Analysis', 'K3', 1, 0)}<div class="isec" style="border:0">${prose(full)}</div></div>`;
+  const insightItems = (traps) => `
+    <div class="boxc">${secHead('1.1.1', 'Test Objectives', 'K1', 1, 1)}<div class="isec"><ul class="pts"><li>Nine typical test objectives, from evaluating work products and causing failures to validating that it works as stakeholders expect.</li><li>Objectives vary with context: work product, test level, risks, SDLC and business factors.</li></ul>
+      ${traps ? `<div class="callout bad"><span class="lbl">A-Q1 · Trap</span><p>“Prove there are no unfixed defects” is never a valid objective — testing shows presence, not absence.</p></div>` : ''}</div></div>
+    <div class="boxc">${secHead('1.1.2', 'Testing and Debugging', 'K2', 0, 1)}<div class="isec"><p class="sm">Testing finds defects or triggers failures; debugging is the separate activity of finding, analysing and removing the causes.</p>
+      ${traps ? `<div class="callout nt"><span class="lbl">C-Q2 · Key</span><p>“Testing determines that defects exist; debugging removes them.” Debugging is not a testing activity.</p></div>` : ''}</div></div>
+    <div class="boxc">${secHead('1.2.2', 'Testing and Quality Assurance (QA)', 'K1', 1, 1)}<div class="isec"><ul class="pts"><li>Testing is product-oriented and corrective, a major form of quality control.</li><li>QA is process-oriented and preventive, and everyone’s responsibility.</li></ul></div></div>`;
+  const chHead1 = mode => `<div class="crow" style="gap:10px;flex-wrap:wrap"><div class="stack" style="gap:6px"><div class="lbl">CTFL v4.0 · Chapter 1 · 180 min · ${mode}</div><h2>Fundamentals of Testing</h2></div><span style="margin-left:auto" class="crow">${chip('8 deep', 'bad')}${chip('6 skim')}${chip('14/14 studied', 'ok')}</span></div>`;
+  const GLOSS = [['Acceptance criteria', '4.5.2', 'The conditions an implementation of a user story must meet to be accepted by stakeholders — effectively the test conditions the tests should exercise.'], ['Acceptance test-driven development (ATDD)', '4.5.3', 'A test-first approach where test cases are created before the user story is implemented, by team members with different perspectives.'], ['Black-box test technique', '4.1', 'A test technique based on an analysis of the specification of the test object, without reference to its internal structure.'], ['Boundary value analysis', '4.2.2', 'A black-box technique where test cases are designed from the boundary values of ordered equivalence partitions.'], ['Branch coverage', '4.3.2', 'The percentage of branches exercised by a test suite; 100% branch coverage implies 100% statement coverage.']];
+  const glossSearch = () => `<div class="inp filled">${I('search')}acceptance, boundary, branch…<span class="mu" style="margin-left:auto">97 terms</span></div>
+    <div class="crow" style="gap:6px;flex-wrap:wrap">${['All', 'Ch 1', 'Ch 2', 'Ch 3', 'Ch 4', 'Ch 5', 'Ch 6'].map((c, i) => chip(c, i === 4 ? 'acc' : '')).join('')}</div>`;
+  const glossList = n => `<div class="tbl">${GLOSS.slice(0, n).map(([t, r, d]) => `<div class="gl"><div class="crow"><b>${t}</b><span class="sid" style="margin-left:auto">§${r}</span></div><p>${d}</p></div>`).join('')}</div>`;
+  const Q = { meta: ['Exam A · Q4', 'Ch 1', 'K2', 'LO FL-1.4.1', '1 pt'], text: 'You work in a team that develops a mobile application for food ordering. In the current iteration the team decided to implement the payment functionality. Which of the following activities is a part of test analysis?', opts: [['a', 'Estimating that testing the integration with the payment service will take 8 person-days'], ['b', 'Deciding that the team should test if it is possible to properly share payment between many users'], ['c', 'Using boundary value analysis (BVA) to derive the test data for the minimum allowed amount to be paid'], ['d', 'Analyzing the discrepancy between actual and expected result after a credit-card payment test, and reporting a defect']] };
+  const qMeta = () => `<div class="crow" style="gap:6px;flex-wrap:wrap">${chip(Q.meta[0], 'acc')}${chip(Q.meta[1])}${kb('K2')}${chip(Q.meta[3])}${chip(Q.meta[4])}</div>`;
+  const qText = big => `<p class="qt${big ? ' big' : ''}">${Q.text}</p>`;
+  const opts = () => `<div class="optg">${Q.opts.map(([k, t]) => `<div class="opt${k === 'b' ? ' sel' : ''}"><span class="key">${k}</span><span>${t}</span></div>`).join('')}</div>`;
+  const qdots = cols => `<div class="qdots" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${Array.from({ length: 40 }, (_, i) => `<span class="qd${i < 3 ? ' a' : ''}${i === 3 ? ' c' : ''}">${i + 1}</span>`).join('')}</div>`;
+  const timer = big => `<span class="timer${big ? ' big' : ''}">${I('timer')}41:12</span>`;
+  const BRK = [[1, 7, 8], [2, 5, 6], [3, 3, 4], [4, 6, 11], [5, 6, 9], [6, 2, 2]];
+  const verdict = () => `<div class="verdict-c"><div class="lbl">Exam simulation result — Sample Exam A</div><div class="crow" style="gap:14px;align-items:baseline"><span class="big ok">Pass</span><span class="score">29 / 40 points · 72%</span></div><div class="crow sm" style="gap:10px"><span class="mu">Pass mark 26 (65%)</span>${meter(72, 1)}<span class="mu">40 of 40 answered</span></div></div>`;
+  const breakdown = grid => `<div class="boxc"><div class="isec"><span class="lbl">Breakdown by chapter</span><div class="${grid ? 'bk2' : 'stack'}" style="gap:10px">${BRK.map(([c, g, m]) => `<div class="stack" style="gap:4px"><div class="crow sm"><b>Chapter ${c}</b><span class="${g / m < .65 ? 'bad' : 'mu'}" style="margin-left:auto">${g}/${m} pts</span></div>${meter(pct(g, m))}</div>`).join('')}</div><p class="sm mu">Weakest: Chapter 4, Test Analysis and Design (6/11). Re-study it in Learn and Exam Insights.</p></div></div>`;
+  const resultBtns = () => `<div class="crow" style="gap:8px;flex-wrap:wrap">${btn('Review all answers & explanations', 'list-checks', 'pri')}${btn('Back to start', 'rotate-ccw')}</div>`;
+
+  // phone helpers
+  const phone = inner => `<div class="phone"><div class="sbar"><span>9:41</span><span class="isl"></span><span>5G</span></div>${inner}</div>`;
+  const mh = (title, sub, left, right) => `<div class="mh">${left || ''}<div class="t">${title}${sub ? `<small>${sub}</small>` : ''}</div>${right || ''}</div>`;
+  const mb = (inner, extra) => `<div class="mbody"${extra ? ` style="${extra}"` : ''}><div class="mpad">${inner}</div></div>`;
+  const mHub = () => TRACKS.map(trackRow).join('');
+  // Phone: one mono line instead of five chips, so the four options fit without scrolling.
+  const qLine = extra => `<div class="qline"><span>Exam A · Q4 · Ch 1 · K2 · 1 pt</span>${extra || ''}</div>`;
+  const mQuiz = () => `${qLine()}${qText()}${opts()}`;
+
+
+  const outline = () => `<div class="lbl nv-h">Chapter 4 · 2/14 studied</div><div class="ol">${CH4.slice(0, 9).map(([id, t, s]) => `<div class="olr${id === '4.2.2' ? ' on' : ''}">${I(s ? 'circle-check' : 'circle', s ? 'ok' : 'mu')}<span class="sid">${id}</span><span class="ell">${t}</span></div>`).join('')}<div class="olr mu">+ 5 more · Chapters 5–6</div></div>`;
+
+  // ── Exam Room: top tabs ──
+  const exBar = on => `<header class="tb"><div class="brand"><span class="logo">${MARK}</span><span class="wm">ISTQB Hub</span></div>${on != null ? `<span class="pill">${dot(TF.h)}CTFL v4.0${I('chevron-down')}</span><nav class="tabs">${SHORT.map((t, i) => `<span class="${i === on ? 'on' : ''}">${t}</span>`).join('')}</nav>` : `<nav class="tabs"><span class="on">Dashboard</span><span>All tracks</span></nav>`}<div class="search">${I('search')}Look up a term<kbd class="k">⌘K</kbd></div>${ib('moon')}</header>`;
+  const ex = (on, body, overlay, w) => `<div style="display:grid;grid-template-rows:60px minmax(0,1fr);height:100%;position:relative">${exBar(on)}<main class="nbm"><div class="stack" style="width:${w || 1100}px;gap:18px">${body}</div></main>${overlay || ''}</div>`;
+  const exChips = on => `<nav class="mseg">${SHORT.map((t, i) => `<span class="${i === on ? 'on' : ''}">${I(STEPS[i][2])}${t}</span>`).join('')}</nav>`;
+  const exPhone = (body, on, foot) => phone(`${mh('CTFL v4.0', 'Foundation Level', dot(TF.h), ib('search'))}${on != null ? exChips(on) : ''}${mb(body)}${foot || ''}`);
+  const nextCard = () => `<div class="next"><div class="stack" style="gap:6px"><span class="lbl">Next up · CTFL v4.0 · Chapter 4</span><b class="nt2">4.2.2 Boundary Value Analysis</b><span class="mu sm">K3 Apply · deep section · 2 of 14 studied in this chapter</span></div>${btn('Continue', 'arrow-right', 'pri')}</div>`;
+  const tile = t => `<div class="tile"><div class="crow" style="gap:8px">${dot(t.h)}<b class="ell">${t.s}</b><span class="mu sm" style="margin-left:auto">${t.org.split(' · ')[1]}</span></div><div class="mu sm ell">${t.t}</div>
+    <div class="stack" style="gap:4px"><div class="crow sm"><span class="mu">Studied</span><span style="margin-left:auto">${t.st}/${t.sec}</span></div>${meter(pct(t.st, t.sec))}</div>
+    <div class="stack" style="gap:4px"><div class="crow sm"><span class="mu">Best mock · pass 65%</span><span style="margin-left:auto" class="${t.best ? (t.best[0] / t.best[1] >= .65 ? 'ok' : 'bad') : 'mu'}">${t.best ? pct(...t.best) + '%' : 'No attempt'}</span></div>${meter(t.best ? pct(...t.best) : 0, 1)}</div></div>`;
+  const stepper = (steps = STEPS) => `<div class="stepper">${steps.map(([t, d, ic], i) => `<div class="sc${i === 0 ? ' on' : ''}"><div class="crow"><span class="num">${i + 1}</span>${I(ic, 'mu')}</div><b>${t}</b><span class="mu sm">${d}</span></div>`).join('')}</div>`;
+  const palette = () => `<div class="dim" style="inset:0"></div><div class="cmdk"><div class="inp filled" style="height:46px;font-size:15px">${I('search')}boundary<kbd class="k" style="margin-left:auto">esc</kbd></div><div class="lbl" style="padding:10px 4px 4px">Glossary · CTFL v4.0 · 2 matches</div>${GLOSS.slice(3, 5).map(([t, r, d], i) => `<div class="cr${i === 0 ? ' on' : ''}"><div class="crow"><b>${t}</b><span class="sid" style="margin-left:auto">§${r}</span></div><p>${d}</p></div>`).join('')}<div class="lbl" style="padding:10px 4px 4px">Sections</div><div class="cr"><div class="crow"><span class="sid">4.2.2</span><b>Boundary Value Analysis</b><span class="mu sm" style="margin-left:auto">Learn</span></div></div></div>`;
+
+
+  // exam start + review
+  const RULES = [['Questions per exam', '40'], ['Points per question', '1'], ['Duration', '60 min (+25% non-native)'], ['Pass mark (65%)', '26 of 40 points'], ['Question format', 'Multiple choice'], ['Prerequisite', 'None — entry level']];
+  const rulesGrid = cols => `<div class="rules" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${RULES.map(([l, v]) => `<div><span class="mu">${l}</span><b>${v}</b></div>`).join('')}</div>`;
+  const setChips = (on, all) => `<div class="crow" style="gap:6px;flex-wrap:wrap">${(all ? ['All'] : []).concat(['A', 'B', 'C', 'D']).map(x => chip(all ? x : 'Set ' + x, x === on ? 'acc' : '')).join('')}</div>`;
+  const practiceCard = () => `<div class="boxc"><div class="isec"><b>Practice mode</b><span class="mu sm">Pick any mix of exam sets and chapters; submit each question to see the official explanation.</span><span class="lbl">Exam set</span>${setChips('All', 1)}<span class="lbl">Chapter</span><div class="crow" style="gap:6px;flex-wrap:wrap">${['All', 'Ch 1', 'Ch 2', 'Ch 3', 'Ch 4', 'Ch 5', 'Ch 6'].map((c, i) => chip(c, i === 0 ? 'acc' : '')).join('')}</div><div>${btn('Start practice · 160 questions', 'play')}</div></div></div>`;
+  const simCard = () => `<div class="boxc"><div class="isec"><b>Exam simulation</b><span class="mu sm">One full sample exam, real timer, no feedback until you finish.</span><span class="lbl">Sample exam</span>${setChips('A')}<div class="tg"><span class="tgl"></span>+25% time for non-native speakers</div><div>${btn('Start exam simulation — Set A (60 min)', 'timer', 'pri')}</div></div></div>`;
+  const ticket = () => `<div class="ticket"><div class="stack" style="gap:4px"><span class="lbl">Exam simulation · ISTQB CTFL v4.0</span><b class="nt2">Sample Exam A</b><span class="mu sm">Best mock so far: 72% (29/40) · pass mark 26/40</span></div><div class="tk">${[['40', 'questions'], ['60', 'minutes'], ['26', 'to pass'], ['1', 'pt each']].map(([n, l]) => `<div><b>${n}</b><span class="mu">${l}</span></div>`).join('')}</div></div>`;
+  const setCards = cols => `<div class="sets" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${['A', 'B', 'C', 'D'].map(x => `<div class="setc${x === 'A' ? ' on' : ''}"><b>Set ${x}</b><span class="mu sm">40 questions · 40 pts</span></div>`).join('')}</div>`;
+  const timeToggle = () => `<div class="tg"><span class="tgl on"></span><span>+25% time for non-native speakers · <b>60 → 75 min</b></span></div>`;
+  const WRONG = [3, 6, 11, 15, 19, 20, 22, 27, 30, 33, 36];
+  const rdots = cols => `<div class="qdots" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${Array.from({ length: 40 }, (_, i) => `<span class="qd ${WRONG.includes(i) ? 'w' : 'r'}${i === 3 ? ' c' : ''}">${i + 1}</span>`).join('')}</div>`;
+  const ropts = () => `<div class="optg">${Q.opts.map(([k, t]) => `<div class="opt${k === 'b' ? ' right' : ''}${k === 'c' ? ' wrong' : ''}"><span class="key">${k}</span><span>${t}</span>${k === 'b' ? `<span class="mk ok">${I('check')}</span>` : ''}${k === 'c' ? `<span class="mk bad">${I('x')}</span>` : ''}</div>`).join('')}</div>`;
+  const rMeta = () => `<div class="crow" style="gap:6px;flex-wrap:wrap">${chip(Q.meta[0], 'acc')}${chip(Q.meta[1])}${kb('K2')}${chip(Q.meta[3])}${chip('Incorrect', 'bad')}</div>`;
+  const expl = () => `<div class="callout"><span class="lbl">Official explanation</span><p>a) Not correct. Estimating the test effort is part of test planning.</p><p>b) Correct. Defining test conditions is part of test analysis.</p><p>c) Not correct. Using test techniques to derive coverage items is part of test design.</p><p>d) Not correct. Reporting defects found during dynamic testing is part of test execution.</p></div>`;
+  const examFacts = () => `<div class="ticket"><div class="stack" style="gap:4px"><span class="lbl">The exam</span><b class="nt2">40 questions · 60 min · pass at 26</b><span class="mu sm">Sample Exams A–D · 75 min with +25% for non-native speakers</span></div>${btn('Take a mock exam', 'timer', 'pri')}</div>`;
+  const readiness = () => `<div class="boxc"><div class="isec"><span class="lbl">CTFL v4.0 · exam readiness</span><div class="crow sm"><span class="mk ok">${I('circle-check')}</span><span>Best mock passes: 72% against the 65% line</span></div><div class="crow sm"><span class="mk bad">${I('circle-alert')}</span><span>41 of 64 sections not studied yet, 12 of them in Chapter 4 (the K3 techniques)</span></div></div></div>`;
+
+
+  const RENDER_REVIEW = {
+        d: () => `<div style="display:grid;grid-template-rows:56px minmax(0,1fr) 64px;height:100%">
+          <header class="tb"><b>Review · Sample Exam A</b><span class="crow" style="margin:0 auto;gap:8px"><b>29 / 40</b>${chip('Pass', 'ok')}<span class="mu sm">11 wrong</span></span>${btn('Back to result', 'x')}</header>
+          <main class="nbm"><div class="g2a" style="width:1120px"><div class="stack" style="gap:16px">${rMeta()}${qText(1)}${ropts()}</div><div class="stack" style="gap:12px">${expl()}<div class="callout nt"><span class="lbl">Learn it again</span><p>Test analysis vs test design — Chapter 1, 1.4.1 Test Activities and Tasks.</p></div></div></div></main>
+          <footer class="exf">${navFoot(1)}</footer></div>`,
+        m: () => phone(`<div class="mh"><b class="sm">Review · Q4 / 40</b><span style="margin-left:auto" class="crow sm"><b>29/40</b>${chip('Pass', 'ok')}</span></div>${mb(`${qLine(chip('Incorrect', 'bad'))}${qText()}${ropts()}${expl()}`)}${mnav(1)}`)
+  };
+
+  // ── blueprint-only mockups ──
+  const tileZ = t => tile({ ...t, st: 0, best: null });
+  const hintBar = (icon, text, cls) => `<div class="hintbar ${cls || ''}">${I(icon)}<span>${text}</span></div>`;
+  const firstCard = () => `<div class="next"><div class="stack" style="gap:6px"><span class="lbl">Start here · CTFL v4.0 · no prerequisite</span><b class="nt2">1.1.1 Test Objectives</b><span class="mu sm">Most learners start with Foundation Level. 6 chapters, 64 sections, 1,105 min of study time.</span></div>${btn('Start learning', 'arrow-right', 'pri')}</div>`;
+  const howItWorks = () => `<div class="boxc"><div class="isec"><span class="lbl">How each track works</span>${STEPS.map(([t, , ic], i) => `<div class="crow sm"><span class="num">${i + 1}</span>${t}</div>`).join('')}</div></div>`;
+  const moreList = () => `<div class="crow sm mu" style="gap:8px">${I('folder')}More pages: <span class="sid">any page file not in a track appears here</span></div>`;
+  const hubDesk = v => ex(null, `${v === 'nostorage' ? hintBar('triangle-alert', 'This browser isn’t saving progress (private window or blocked storage). You can still study, but ticks and scores are lost when you close the tab.', 'warn') : ''}
+    <div class="g2a">${v === 'first' ? firstCard() + howItWorks() : nextCard() + readiness()}</div>
+    <div class="crow"><h2>Your tracks</h2><span class="mu sm" style="margin-left:auto">Progress stays in this browser</span></div>
+    <div class="g3">${TRACKS.map(v === 'returning' ? tile : tileZ).join('')}</div>${moreList()}`);
+  const hubPhone = v => phone(`${mh('ISTQB Hub', 'Dashboard', '', ib('search'))}${mb(`${v === 'nostorage' ? hintBar('triangle-alert', 'Progress isn’t being saved in this browser.', 'warn') : ''}${v === 'first' ? firstCard() : nextCard() + readiness()}${TRACKS.slice(0, 2).map(v === 'returning' ? tile : tileZ).join('')}`)}`);
+
+  const TAI = TRACKS[1], TQ = TRACKS[2];
+  // Step descriptions per track, from src/lib/tracks.js
+  const stepsFor = d => STEPS.map((s, i) => [s[0], d[i], s[2]]);
+  const STEPS_AI = stepsFor(['Full teaching content for all 7 chapters — start here', 'Skim vs deep-dive per section', 'Traps and key facts from the official sample exam', '63 syllabus keywords with definitions', '40 questions: practice, or a timed 60-min mock']);
+  const STEPS_QDO = stepsFor(['Full teaching content for all 4 chapters — start here', 'Skim vs deep-dive per section', 'Traps and key facts from the official sample exam', '87 keywords and DevOps terms with definitions', '48 questions (main + appendix): practice, or a timed 60-min mock']);
+  const recolor = (html, t) => html.replace(/--h:#0F766E/g, '--h:' + t.h);
+  const tHead = (t, sub) => `<div class="thead">${dot(t.h)}<div class="stack" style="gap:4px"><span class="lbl">${t.org} · ${t.badge}</span><h2>${t.t} (${t.s})</h2><span class="mu sm">${sub}</span></div></div>`;
+  const statsFor = (st, sec, best, pass) => `<div class="stats"><div><b>${st}<span class="mu">/${sec}</span></b><span class="mu">sections studied</span></div><div>${best ? `<b class="${best[0] >= pass[0] ? 'ok' : 'bad'}">${pct(...best)}%</b><span class="mu">best mock exam (${best[0]}/${best[1]} pts)</span>` : `<b class="mu">—</b><span class="mu">no mock exam yet</span>`}</div><div><b>${pass[0]}<span class="mu">/${pass[1]}</span></b><span class="mu">points to pass (65%)</span></div></div>`;
+  const factsFor = (big, small) => `<div class="ticket"><div class="stack" style="gap:4px"><span class="lbl">The exam</span><b class="nt2">${big}</b><span class="mu sm">${small}</span></div>${btn('Take a mock exam', 'timer', 'pri')}</div>`;
+  const LEGACY = [['Learn (v1.0)', 'All 11 chapters of the v1.0 syllabus'], ['Chapter Summaries (v1.0)', 'Skim vs deep-dive per section'], ['Glossary (v1.0)', 'All v1.0 syllabus keywords'], ['Quiz (v1.x)', '67 sample questions, practice only']];
+  const legacy = () => `<div class="boxc"><div class="isec"><span class="lbl">CT-AI v1.0 — superseded syllabus</span><span class="mu sm">Some institutions still certify against v1.0 — check which version your exam uses before studying.</span><div class="g4">${LEGACY.map(([t, d]) => `<div class="stp"><div class="tx"><b>${t}</b><span>${d}</span></div></div>`).join('')}</div></div></div>`;
+  const trackDesk = v => v === 'ctai'
+    ? ex(0, `${tHead(TAI, '7 chapters · Prerequisite: CTFL certificate')}${factsFor('40 questions · 60 min · pass at 26', 'Official v2.0 sample exam · 75 min with +25% for non-native speakers')}${statsFor(8, 44, [23, 40], [26, 40])}${stepper(STEPS_AI)}${legacy()}`).replace('CTFL v4.0<i', 'CT-AI v2.0<i').replace(/--h:#0F766E/g, '--h:' + TAI.h)
+    : v === 'fresh'
+      ? ex(0, `${tHead(TQ, '4 chapters · Prerequisite: CTFL certificate')}${factsFor('40 questions · 60 min · pass at 26', 'Main exam is scored; the 8 appendix questions are practice only')}${statsFor(0, 43, null, [26, 40])}${stepper(STEPS_QDO)}`).replace('CTFL v4.0<i', 'CT-QDO v1.0<i').replace(/--h:#0F766E/g, '--h:' + TQ.h)
+      : ex(0, `${tHead(TF, '6 chapters, Sample Exams A–D · Prerequisite: none — entry level')}${examFacts()}${statsFor(23, 64, [29, 40], [26, 40])}${stepper()}`);
+  const trackPhone = v => v === 'ctai'
+    ? recolor(exPhone(`${statsFor(8, 44, [23, 40], [26, 40])}${pathRows(-1, STEPS_AI)}${legacy()}`, null).replace('CTFL v4.0<small>Foundation Level', 'CT-AI v2.0<small>AI Testing'), TAI)
+    : v === 'fresh' ? recolor(exPhone(`${statsFor(0, 43, null, [26, 40])}${pathRows(-1, STEPS_QDO)}`, null).replace('CTFL v4.0<small>Foundation Level', 'CT-QDO v1.0<small>Quality in DevOps'), TQ)
+      : exPhone(`${examFacts()}${statsFor(23, 64, [29, 40], [26, 40])}${pathRows(-1)}`, null);
+
+  // Learn
+  const secBar = (studied) => `<div class="crow" style="gap:12px"><span class="olbtn">${I('list')}Chapter 4 · Section 3 of 14${I('chevron-down')}</span>${meter(21)}<span class="mu sm" style="margin-left:auto">2/14 studied</span></div>`;
+  const studiedSection = () => section(1).replace(btn('Mark studied', 'circle'), btn('Studied', 'check', 'okb'));
+  const readerFoot = (studied) => `<div class="crow">${btn('Previous: 4.2.1', 'chevron-left')}<span style="margin-left:auto">${studied ? btn('Next: 4.2.3 Decision Table Testing', 'arrow-right', 'pri') : btn('Mark studied & next', 'check', 'pri')}</span></div>`;
+  const outlinePanel = () => `<aside class="olp"><div class="crow"><b>Chapter 4 · Test Analysis and Design</b>${ib('x')}</div><span class="mu sm">2 of 14 studied · 390 min</span>${meter(14)}<div class="ol">${CH4.map(([id, t, s]) => `<div class="olr${id === '4.2.2' ? ' on' : ''}">${I(s ? 'circle-check' : 'circle', s ? 'ok' : 'mu')}<span class="sid">${id}</span><span class="ell">${t}</span></div>`).join('')}</div><span class="lbl">Other chapters</span>${CHS.filter(c => c[0] !== 4).map(([n, t, , s, st]) => `<div class="olr">${I(st === s ? 'circle-check' : 'circle-dashed', st === s ? 'ok' : 'mu')}<span class="sid">${n}</span><span class="ell">${t}</span><span class="mu" style="margin-left:auto">${st}/${s}</span></div>`).join('')}</aside>`;
+  const chapterList = () => `<div class="stack" style="gap:6px"><span class="lbl">ISTQB CTFL v4.0 · Learn</span><h2>Learn the syllabus</h2><span class="mu sm">Full teaching content for each chapter, written from the official v4.0.1 syllabus.</span></div><div class="tbl">${CHS.map(([n, t, tm, s, st]) => `<div class="chr"><span class="num">${n}</span><div class="tx"><b>${t}</b><span>${tm} · ${s} sections${st === s ? ' · all studied' : ''}</span></div>${meter(pct(st, s))}<span class="mu sm" style="width:46px;text-align:right">${st}/${s}</span>${I('chevron-right', 'mu')}</div>`).join('')}</div>`;
+  const missing = () => `<div class="boxc">${secHead('6.1', 'Test Tools', 'K2', 1, 0)}<div class="isec" style="border:0">${hintBar('info', 'Full teaching content for this section is coming. Here is the summary text meanwhile; the Summaries step has the deep-dive points.')}<p class="sm">Test tools support and facilitate many test activities: management tools, static testing tools, test design and implementation tools, execution and coverage tools, non-functional testing tools, DevOps tools, collaboration tools and tools supporting scalability.</p></div></div>`;
+  const learnDesk = v => {
+    if (v === 'chapters') return ex(0, chapterList(), '', 820);
+    if (v === 'outline') return `<div style="position:relative;height:100%">${ex(0, `${secBar()}${section(1)}${readerFoot()}`, '', 760)}<div class="dim"></div>${outlinePanel()}</div>`;
+    if (v === 'studied') return ex(0, `${secBar(1)}${studiedSection()}${readerFoot(1)}`, '', 760);
+    if (v === 'missing') return ex(0, `<div class="crow" style="gap:12px"><span class="olbtn">${I('list')}Chapter 6 · Section 1 of 2${I('chevron-down')}</span></div>${missing()}`, '', 760);
+    return ex(0, `${secBar()}${section(1)}${readerFoot()}`, '', 760);
+  };
+  const learnPhone = v => {
+    const foot = s => `<div class="mnext">${btn('', 'chevron-left')}${s ? btn('Next: 4.2.3', 'arrow-right', 'pri') : btn('Mark studied & next', 'check', 'pri')}</div>`;
+    if (v === 'chapters') return exPhone(chapterList(), 0);
+    if (v === 'outline') return phone(`${mh('Chapter 4', '2 of 14 studied', ib('x'), '')}<div class="mbody">${outlinePanel().replace('class="olp"', 'class="olp m"')}</div>`);
+    if (v === 'studied') return exPhone(`<span class="olbtn">${I('list')}Ch 4 · 3 of 14</span>${studiedSection()}`, 0, foot(1));
+    if (v === 'missing') return exPhone(missing(), 0);
+    return exPhone(`<span class="olbtn">${I('list')}Ch 4 · 3 of 14</span>${section(0)}`, 0, foot());
+  };
+  // Reader options (A/B/C)
+  const readerB = () => ex(0, `<div class="g2a" style="grid-template-columns:260px minmax(0,1fr)"><div class="boxc" style="padding:12px">${outline()}</div><div class="stack" style="gap:14px">${chHead()}${section(1)}<div class="boxc">${secHead('4.2.3', 'Decision Table Testing', 'K3', 1, 0)}</div></div></div>`, '', 1100);
+  const readerC = () => ex(0, `<div class="crow" style="gap:12px"><span class="olbtn">${I('list')}Chapter 4 · whole chapter</span><span class="seg2"><b>Focus</b><span>Whole chapter</span></span></div>${chHead()}${objectives()}${section(0)}`, '', 760);
+
+  // Summaries & insights
+  const sumItem = (id, t, k, deep, body, open) => `<div class="boxc"><div class="sech"><span class="sid">${id}</span><b class="ell">${t}</b>${kb(k)}${deep ? chip('deep', 'bad') : chip('skim')}${I(open ? 'chevron-up' : 'chevron-down', 'mu')}</div>${open ? `<div class="isec" style="border:0">${body}</div>` : ''}</div>`;
+  const summaries = () => `${chHead1('Chapter summaries')}<div class="crow" style="gap:6px">${chip('All 14', 'acc')}${chip('Deep only · 8')}${chip('Skim only · 6')}</div>
+    ${sumItem('1.1.1', 'Test Objectives', 'K1', 1, '<ul class="pts"><li>Nine typical test objectives, from evaluating work products and causing failures to validating that it works as stakeholders expect.</li><li>Objectives vary with context: work product, test level, risks, SDLC and business factors.</li></ul>', 1)}
+    ${sumItem('1.1.2', 'Testing and Debugging', 'K2', 0, '<p class="sm">Testing finds defects or triggers failures; debugging finds, analyses and removes the causes.</p>', 1)}
+    ${sumItem('1.2.1', 'Testing’s Contributions to Success', 'K2', 0, '', 0)}${sumItem('1.2.2', 'Testing and Quality Assurance (QA)', 'K1', 1, '', 0)}${sumItem('1.3', 'Testing Principles', 'K2', 1, '', 0)}`;
+  const insightsD = () => `${chHead1('Exam insights')}<div class="g2a"><div class="stack" style="gap:14px">${insightItems(0)}</div><div class="stack" style="gap:10px"><span class="lbl">Traps in this chapter</span><div class="callout bad"><span class="lbl">A-Q1 · Trap · 1.1.1</span><p>“Prove there are no unfixed defects” is never a valid objective — testing shows presence, not absence.</p></div><div class="callout nt"><span class="lbl">C-Q2 · Key · 1.1.2</span><p>“Testing determines that defects exist; debugging removes them.”</p></div><div class="callout nt"><span class="lbl">B-Q2 · Key · 1.2.2</span><p>“Testing is performed as part of QC.” Swapping QA and QC is the standard distractor.</p></div></div></div>`;
+
+  // Glossary
+  const glNone = () => `<h2>Glossary</h2><div class="inp filled">${I('search')}regression suite<span class="mu" style="margin-left:auto">0 of 97</span></div><div class="crow" style="gap:6px;flex-wrap:wrap">${['All', 'Ch 1', 'Ch 2', 'Ch 3', 'Ch 4', 'Ch 5', 'Ch 6'].map((c, i) => chip(c, i === 4 ? 'acc' : '')).join('')}</div><div class="empty">${I('search-x')}<b>No term matches “regression suite” in Chapter 4</b><span class="mu">Try fewer words, or search all chapters.</span>${btn('Search all chapters', 'rotate-ccw')}</div>`;
+  const glossDesk = v => v === 'palette' ? ex(0, `<div class="crow" style="gap:12px"><span class="olbtn">${I('list')}Chapter 4 · Section 3 of 14</span>${meter(21)}</div>${section(1)}`, palette(), 760)
+    : v === 'none' ? ex(3, glNone(), '', 760) : ex(3, `<div class="crow"><h2>Glossary</h2><span class="mu sm" style="margin-left:auto">${I('command')} Press ⌘K on any page to look up a term</span></div>${glossSearch()}${glossList(5)}`, '', 760);
+  const glossPhone = v => v === 'palette' ? phone(`<div class="mh"><div class="inp filled" style="flex:1">${I('search')}boundary</div><b class="sm">Cancel</b></div>${mb(`<span class="lbl">Glossary · 2 matches</span><div class="tbl">${GLOSS.slice(3, 5).map(([t, r, d]) => `<div class="gl"><div class="crow"><b>${t}</b><span class="sid" style="margin-left:auto">§${r}</span></div><p>${d}</p></div>`).join('')}</div>`)}`)
+    : v === 'none' ? exPhone(glNone(), 3) : exPhone(`${glossSearch()}${glossList(3)}`, 3);
+
+  // Exam start
+  const checkIn = c => `<div style="display:grid;grid-template-rows:56px minmax(0,1fr);height:100%">
+    <header class="tb"><span class="crow mu sm">${I('chevron-left')} ${c.track}</span><b style="margin:0 auto">${c.practiceOnly ? 'Practice' : 'Exam check-in'}</b>${ib('moon')}</header>
+    <main class="nbm"><div class="g2a" style="width:1080px;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)"><div class="stack" style="gap:16px">${c.main}</div><div class="stack" style="gap:12px">${c.side}</div></div></main></div>`;
+  const ticketFor = (title, sub, nums) => `<div class="ticket"><div class="stack" style="gap:4px"><span class="lbl">${title}</span><b class="nt2">${sub[0]}</b><span class="mu sm">${sub[1]}</span></div><div class="tk">${nums.map(([n, l]) => `<div><b>${n}</b><span class="mu">${l}</span></div>`).join('')}</div></div>`;
+  const startBtn = (l, note) => `<div class="startbig">${btn(l, 'timer', 'pri')}<span class="mu sm">${note || 'No feedback until you finish. Leaving the page ends the attempt.'}</span></div>`;
+  const practiceQdo = () => `<div class="boxc"><div class="isec"><b>Practice mode</b><span class="mu sm">Submit each question to see the official explanation.</span><span class="lbl">Question set</span><div class="crow" style="gap:6px">${chip('All 48', 'acc')}${chip('Main exam · 40')}${chip('Appendix · 8')}</div><div>${btn('Start practice', 'play')}</div></div></div>`;
+  const START = {
+    ctfl: () => checkIn({ track: 'CTFL v4.0', main: `${ticket()}<span class="lbl">Choose a sample exam</span>${setCards(4)}${timeToggle()}${startBtn('Start Sample Exam A · 75 min')}`, side: `<span class="lbl">Or practise without a timer</span>${practiceCard()}` }),
+    qdo: () => checkIn({ track: 'CT-QDO v1.0', main: `${ticketFor('Exam simulation · ISTQB CT-QDO v1.0', ['Official sample exam', 'No mock yet · pass mark 26/40'], [['40', 'questions'], ['60', 'minutes'], ['26', 'to pass'], ['1', 'pt each']])}${hintBar('info', 'The exam uses the 40 main questions. The 8 appendix questions are practice only and never count towards the score.')}<div class="tg"><span class="tgl"></span><span>+25% time for non-native speakers</span></div>${startBtn('Start exam simulation · 60 min')}`, side: `<span class="lbl">Or practise without a timer</span>${practiceQdo()}` }),
+    ss: () => checkIn({ track: 'Soft Skills CT-SS', main: `${ticketFor('Exam simulation · ASTQB CT-SS v1.0', ['Official sample exam', 'Some questions are worth 2 points'], [['40', 'questions'], ['60', 'minutes'], ['30', 'to pass'], ['45', 'points'], ])}<div class="tg"><span class="tgl"></span><span>+25% time for non-native speakers</span></div>${startBtn('Start exam simulation · 60 min')}`, side: `<span class="lbl">Pass mark</span><div class="callout"><p>65% of 45 points is 29.25, rounded up to <b>30</b>. The pass mark is always 65% of the exam’s total points, rounded up.</p></div>` }),
+    v1: () => checkIn({ track: 'CT-AI v1.0 (legacy)', practiceOnly: 1, main: `${ticketFor('Practice · ISTQB CT-AI v1.x', ['67 sample questions', 'Main set + appendix, with answer rationales'], [['67', 'questions'], ['—', 'no timer']])}${hintBar('info', 'The v1.x quiz has no timed exam and no saved best score. Use it to practise; for a mock exam, use CT-AI v2.0.')}<div>${btn('Start practice · 67 questions', 'play', 'pri')}</div>`, side: '' })
+  };
+  const startPhone = v => v === 'v1' ? phone(`${mh('Practice', 'CT-AI v1.0 (legacy)', ib('chevron-left'), '')}${mb(`${hintBar('info', 'Practice only: no timer, no saved score.')}${practiceCard().replace('160 questions', '67 questions')}`)}`)
+    : v === 'qdo' ? phone(`${mh('Exam check-in', 'CT-QDO v1.0', ib('chevron-left'), '')}${mb(`${hintBar('info', 'Exam scores the 40 main questions; 8 appendix questions are practice only.')}<div class="tg"><span class="tgl"></span><span>+25% time</span></div>`)}<div class="mnext">${btn('Start · 60 min', 'timer', 'pri')}</div>`)
+      : v === 'ss' ? phone(`${mh('Exam check-in', 'Soft Skills CT-SS', ib('chevron-left'), '')}${mb(`<div class="callout"><p>40 questions · 45 points · pass at 30 (65%, rounded up).</p></div><div class="tg"><span class="tgl"></span><span>+25% time</span></div>`)}<div class="mnext">${btn('Start · 60 min', 'timer', 'pri')}</div>`)
+        : phone(`${mh('Exam check-in', 'CTFL v4.0', ib('chevron-left'), '')}${mb(`${ticket()}${setCards(2)}${timeToggle()}`)}<div class="mnext">${btn('Start Set A · 75 min', 'timer', 'pri')}</div>`);
+
+
+  // Question navigator (round 3): a thin 40-segment bar plus a counter; the numbered grid opens on demand.
+  const segbar = (review, cur) => `<div class="segbar">${Array.from({ length: 40 }, (_, i) => `<i class="${review ? (WRONG.includes(i) ? 'w' : 'r') : (i < 3 ? 'a' : '')}${i === (cur ?? 3) ? ' c' : ''}"></i>`).join('')}</div>`;
+  const qcount = (review, q, short) => `<span class="qcount">${I('grid-3x3')}<b>Q${q || 4}</b><span class="mu">/ 40</span><span class="mu">· ${review ? (short ? '11 wrong' : '29 right · 11 wrong') : (short ? '3 done' : '3 answered')}</span>${I('chevron-up', 'mu')}</span>`;
+  const navFoot = (review, q, cur) => `${btn('← Previous')}${qcount(review, q)}<div style="flex:1;min-width:0">${segbar(review, cur)}</div>${btn('Next →', '', 'pri')}`;
+  const qgridPop = review => `<div class="qpop"><div class="crow"><b>All questions</b><span class="mu sm" style="margin-left:auto">${review ? '29 right · 11 wrong' : '3 answered · 37 to go'}</span></div>${review ? rdots(10) : qdots(10)}<div class="crow sm mu" style="gap:12px">${review ? `<span class="crow" style="gap:5px"><i class="lg r"></i>Right</span><span class="crow" style="gap:5px"><i class="lg w"></i>Wrong</span>` : `<span class="crow" style="gap:5px"><i class="lg a"></i>Answered</span><span class="crow" style="gap:5px"><i class="lg"></i>Not yet</span>`}<span class="crow" style="gap:5px"><i class="lg c"></i>Current</span></div></div>`;
+  const mnav = (review, q, cur) => `<div class="mnav">${segbar(review, cur)}<div class="crow">${btn('', 'chevron-left')}${qcount(review, q, 1)}${btn('', 'chevron-right', 'pri')}</div></div>`;
+  const mgridSheet = review => `<div class="scrim"></div><div class="sheet"><div class="grab"></div><div class="mpad">${qgridPop(review).replace('class="qpop"', 'class="qpop m"')}</div></div>`;
+  // Navigator options (A/B/C)
+  const pager = () => `${btn('← Previous')}<div class="pager">${[1, 2, 3, 4, 5, 6, 7].map(n => `<span class="qd${n < 4 ? ' a' : ''}${n === 4 ? ' c' : ''}">${n}</span>`).join('')}<span class="mu">…</span><span class="qd">40</span>${ib('grid-3x3')}</div><span style="flex:1"></span>${btn('Next →', '', 'pri')}`;
+  const counterOnly = () => `${btn('← Previous')}<span style="flex:1"></span>${qcount()}<span style="flex:1"></span>${btn('Next →', '', 'pri')}`;
+
+  // Exam in progress
+  const examShell = (tm, body, foot, overlay) => `<div style="display:grid;grid-template-rows:56px minmax(0,1fr) 64px;height:100%;position:relative">
+    <header class="tb"><b>Sample Exam A · Exam simulation</b><span style="margin:0 auto">${tm}</span>${btn('Finish exam', 'flag')}</header>
+    <main class="nbm"><div class="stack" style="width:760px;gap:18px">${body}</div></main>
+    <footer class="exf">${foot || navFoot()}</footer>${overlay || ''}</div>`;
+  const timerLow = big => `<span class="timer low${big ? ' big' : ''}">${I('timer')}04:12</span>`;
+  const practiceShell = body => `<div style="display:grid;grid-template-rows:56px minmax(0,1fr) 64px;height:100%">
+    <header class="tb"><b>Practice · All sets · All chapters</b><span style="margin:0 auto" class="crow sm"><b>Q4 / 160</b><span class="mu">· score 2/3</span></span>${btn('Back to start', 'x')}</header>
+    <main class="nbm"><div class="stack" style="width:760px;gap:18px">${body}</div></main>
+    <footer class="exf">${btn('← Previous')}<span class="mu sm" style="margin:0 auto">3 answered</span>${btn('Next →', '', 'pri')}</footer></div>`;
+  const multiOpts = () => `<div class="optg">${[['a', 'Requirements review', 1], ['b', 'Equivalence partitioning', 0], ['c', 'Static analysis of the source code', 1], ['d', 'Exploratory testing', 0], ['e', 'Branch testing', 0]].map(([k, t, s]) => `<div class="opt${s ? ' sel' : ''}"><span class="key sq">${s ? '✓' : k}</span><span>${t}</span></div>`).join('')}</div>`;
+  const finishBar = () => `<div class="confirm"><div class="stack" style="gap:2px"><b>6 questions are unanswered</b><span class="mu sm">Unanswered questions score 0. You have 41:12 left.</span></div><span class="crow" style="gap:8px;margin-left:auto">${btn('Go to first unanswered')}${btn('Finish exam', 'flag', 'pri')}</span></div>`;
+  const quizDesk = v => {
+    if (v === 'practice') return practiceShell(`${qMeta()}${qText(1)}${ropts().replace(/ wrong/g, '').replace(/<span class="mk bad">[\s\S]*?<\/span>/, '')}<div class="crow">${chip('Correct', 'ok')}</div>${expl()}`);
+    if (v === 'multi') return examShell(timer(1), `<div class="crow" style="gap:6px;flex-wrap:wrap">${chip('Exam A · Q17', 'acc')}${chip('Ch 3')}${kb('K2')}${chip('Select two', 'warn')}${chip('1 pt')}</div><p class="qt big">Which TWO of the following are examples of static testing?</p>${multiOpts()}<span class="mu sm">2 of 2 selected. Both must be right to score the point.</span>`);
+    if (v === 'grid') return examShell(timer(1), `${qMeta()}${qText(1)}${opts()}`, '', qgridPop());
+    if (v === 'low') return examShell(timerLow(1), `${qMeta().replace('Exam A · Q4', 'Exam A · Q38')}${qText(1)}${opts()}`);
+    if (v === 'finish') return examShell(timer(1), `${qMeta()}${qText(1)}${opts()}`, '', `<div class="dim" style="inset:0"></div>${finishBar()}`);
+    return examShell(timer(1), `${qMeta()}${qText(1)}${opts()}`);
+  };
+  const quizPhone = v => {
+    if (v === 'practice') return phone(`${mh('Q4 / 160', 'Practice · score 2/3', ib('x'), '')}${mb(`${qLine(chip('Correct', 'ok'))}${qText()}${ropts().replace(/ wrong/g, '').replace(/<span class="mk bad">[\s\S]*?<\/span>/, '')}${expl()}`)}`);
+    if (v === 'multi') return phone(`<div class="mh"><b class="sm">Q17 / 40</b><span style="margin:0 auto">${timer()}</span>${ib('flag')}</div>${mb(`<div class="qline"><span>Exam A · Q17 · Ch 3 · K2 · 1 pt</span>${chip('Select two', 'warn')}</div><p class="qt">Which TWO of the following are examples of static testing?</p>${multiOpts()}`)}${mnav(0, 17, 16)}`);
+    if (v === 'grid') return phone(`<div class="mh"><b class="sm">Q4 / 40</b><span style="margin:0 auto">${timer()}</span>${ib('flag')}</div>${mb(mQuiz())}${mnav()}${mgridSheet()}`);
+    if (v === 'low') return phone(`<div class="mh"><b class="sm">Q38 / 40</b><span style="margin:0 auto">${timerLow()}</span>${ib('flag')}</div>${mb(mQuiz())}${mnav(0, 38, 37)}`);
+    if (v === 'finish') return phone(`<div class="mh"><b class="sm">Q4 / 40</b><span style="margin:0 auto">${timer()}</span>${ib('flag')}</div>${mb(mQuiz())}<div class="scrim"></div><div class="sheet"><div class="grab"></div><div class="mpad"><b>6 questions are unanswered</b><span class="mu sm">Unanswered questions score 0. You have 41:12 left.</span>${btn('Go to first unanswered')}${btn('Finish exam', 'flag', 'pri')}</div></div>`);
+    return phone(`<div class="mh"><b class="sm">Q4 / 40</b><span style="margin:0 auto">${timer()}</span>${ib('flag')}</div>${mb(mQuiz())}${mnav()}`);
+  };
+  const finishA = () => examShell(timer(1), `${qMeta()}${qText(1)}${opts()}`, '', `<div class="toast">${I('flag')}Exam finished — 34 of 40 answered</div>`);
+
+  // Result
+  const BRK_AI = [[1, 4, 5], [2, 3, 4], [3, 3, 7], [4, 4, 6], [5, 2, 6], [6, 3, 5], [7, 4, 7]];
+  const failVerdict = () => `<div class="verdict-c"><div class="lbl">Exam simulation result — CT-AI v2.0 sample exam</div><div class="crow" style="gap:14px;align-items:baseline"><span class="big bad">Not yet</span><span class="score">23 / 40 points · 57%</span></div><div class="crow sm" style="gap:10px"><span class="mu">Pass mark 26 (65%) · 3 points short</span>${meter(57, 1)}<span class="mu">40 of 40 answered</span></div></div>`;
+  const failBreak = grid => `<div class="boxc"><div class="isec"><span class="lbl">Breakdown by chapter</span><div class="${grid ? 'bk2' : 'stack'}" style="gap:10px">${BRK_AI.map(([c, g, m]) => `<div class="stack" style="gap:4px"><div class="crow sm"><b>Chapter ${c}</b><span class="${g / m < .65 ? 'bad' : 'mu'}" style="margin-left:auto">${g}/${m} pts</span></div>${meter(pct(g, m))}</div>`).join('')}</div><p class="sm mu">Weakest: Chapter 5 (2/6) and Chapter 3 (3/7).</p></div></div>`;
+  const resultDesk = v => v === 'fail'
+    ? ex(4, `${failVerdict()}${failBreak(1)}<div class="crow" style="gap:8px">${btn('Review all answers & explanations', 'list-checks', 'pri')}${btn('Re-study Chapter 5', 'book-open')}${btn('Back to start', 'rotate-ccw')}</div>`, '', 900).replace('CTFL v4.0<i', 'CT-AI v2.0<i').replace(/--h:#0F766E/g, '--h:' + TAI.h)
+    : ex(4, `${verdict()}${hintBar('trophy', 'New best mock for CTFL v4.0 — saved in this browser (was 65%).', 'ok')}${breakdown(1)}<div class="crow" style="gap:8px">${btn('Review all answers & explanations', 'list-checks', 'pri')}${btn('Re-study Chapter 4', 'book-open')}${btn('Back to start', 'rotate-ccw')}</div>`, '', 900);
+  const resultPhone = v => v === 'fail' ? recolor(exPhone(`${failVerdict()}${failBreak(0)}`, 4).replace('CTFL v4.0<small>Foundation Level', 'CT-AI v2.0<small>AI Testing'), TAI) : exPhone(`${verdict()}${breakdown(0)}${btn('Review answers', 'list-checks', 'pri')}`, 4);
+
+  // Shell
+  const trackMenu = () => `<div class="menu"><span class="lbl" style="padding:4px 8px">Switch track</span>${TRACKS.map((t, i) => `<div class="mi${i === 0 ? ' on' : ''}">${dot(t.h)}<b>${t.s}</b><span class="mu sm ell">${t.t}</span><span class="mu sm" style="margin-left:auto">${t.st ? pct(t.st, t.sec) + '%' : '—'}</span></div>`).join('')}<div class="sep"></div><div class="mi">${I('archive', 'mu')}<span>CT-AI v1.0 (legacy)</span></div><div class="mi">${I('layout-dashboard', 'mu')}<span>Dashboard</span></div></div>`;
+  const shellDesk = v => v === 'menu' ? ex(0, `${secBar()}${section(1)}`, trackMenu(), 760) : ex(0, `${secBar()}${section(1)}${readerFoot()}`, '', 760);
+  const shellPhone = v => v === 'menu' ? phone(`${mh('CTFL v4.0', 'Foundation Level', dot(TF.h), ib('search'))}${exChips(0)}${mb(section(0))}<div class="scrim"></div><div class="sheet"><div class="grab"></div><div class="mpad" style="gap:4px"><span class="lbl">Switch track</span>${TRACKS.map((t, i) => `<div class="mi${i === 0 ? ' on' : ''}">${dot(t.h)}<b>${t.s}</b><span class="mu sm" style="margin-left:auto">${t.st ? pct(t.st, t.sec) + '%' : '—'}</span></div>`).join('')}<div class="mi">${I('layout-dashboard', 'mu')}<span>Dashboard</span></div></div></div>`)
+    : exPhone(`<span class="olbtn">${I('list')}Ch 4 · 3 of 14</span>${section(0)}`, 0);
+  const tabsPhone = () => phone(`${mh('CTFL v4.0', 'Foundation Level', dot(TF.h), ib('search'))}${mb(`<span class="olbtn">${I('list')}Ch 4 · 3 of 14</span>${section(0)}`)}<div class="mtabs">${STEPS.map(([, , ic], i) => `<span class="${i === 0 ? 'on' : ''}">${I(ic)}${SHORT[i]}</span>`).join('')}</div>`);
+  const menuPhone = () => phone(`${mh('CTFL v4.0 · Learn', 'Step 1 of 5', dot(TF.h), ib('search'))}${mb(`<span class="olbtn">${I('list')}Ch 4 · 3 of 14</span>${section(0)}`)}<div class="scrim"></div><div class="sheet"><div class="grab"></div><div class="mpad" style="gap:6px"><span class="lbl">Study path</span>${pathRows(0)}</div></div>`);
+  const phoneOptions = list => `<div class="opt3">${list.map((o, i) => `<div class="card${o.rec ? ' chosen' : ''}"><h3>${String.fromCharCode(65 + i)} · ${o.name}${o.rec ? ' <span class="rec-tag">Recommend</span>' : ''}</h3><p class="small">${o.text}</p><div style="max-width:250px;margin:0 auto">${fP(o.html(), themesFor()[0], o.name)}</div></div>`).join('')}</div>`;
+
+  const FUTURE = [
+    ['Attempt history and score trend', 'Keep every mock, chart it against the 65% line on the dashboard', 'Dashboard, result', 'local'],
+    ['Weak-spot drill', 'Store per-chapter / per-LO results; start a practice set from the weakest chapter', 'Dashboard, result, check-in', 'local'],
+    ['Mistake deck', 'Wrong answers become a deck you clear by getting them right twice', 'Dashboard, review', 'local'],
+    ['Flag for review', 'Flag questions during the exam; flagged dots get a marker', 'Exam', 'local'],
+    ['Resume after refresh', 'Save the attempt (answers, question, deadline) so a refresh does not lose it', 'Exam', 'local'],
+    ['Exam-day countdown', 'Enter your booked date; the dashboard paces the remaining sections', 'Dashboard', 'local'],
+    ['Best score per CTFL set', 'Record which of Sample Exams A–D the best came from (today one best for all four)', 'Track, check-in', 'local (new key shape)'],
+    ['Export / import progress', 'Move progress between browsers without an account', 'Dashboard menu', 'local'],
+    ['Sync across devices', 'Sign in so phone and laptop share progress', 'Everywhere', 'backend']
+  ];
+
+
+  // Concepts drawn from common patterns in exam / learning marks (letter or abstract mark, negative space,
+  // simple geometry, certification seal); all original drawings.
+  const LOGOS = [
+    ['bracket', 'Test brackets [✓]', 'A passing check inside square brackets, the way a test runner prints a pass. Speaks to testers, nobody else uses it, and it stays sharp at 16px.', 1],
+    ['checkbox', 'Breakout checkbox', 'A test-case checkbox whose tick breaks out of the box: done, and then some. Clear at every size; checkboxes are common in to-do apps.', 0],
+    ['seal', 'Pass seal', 'A certificate rosette with the tick cut out. Says “certified”; busy edge at 16px and close to stock badge icons.', 0],
+    ['cards', 'Study cards', 'A stack of cards, the front one ticked. Says “revision”; reads as flashcards more than exams.', 0],
+    ['bubble', 'Filled answer bubble', 'One filled exam bubble with the tick cut out. Simplest of all, but a ticked circle is very common.', 0],
+    ['hex', 'Hex check', 'A hexagon (a building block, as in Khan Academy’s mark) around a tick. Calm and geometric, less specific to exams.', 0]
+  ];
+  const tileHtml = (k, size, bg, fg, r) => `<span class="ltile" style="width:${size}px;height:${size}px;border-radius:${r || Math.round(size * .24)}px;background:${bg};color:${fg};--cut:${bg}">${SV(MARKS[k], Math.round(size * .72))}</span>`;
+  const logoCards = () => {
+    const p = PALETTES[state.pal];
+    return `<div class="lgrid">${LOGOS.map(([k, n, t, rec], i) => `<div class="lcard${rec ? ' chosen' : ''}"><h3>${String.fromCharCode(65 + i)} · ${n}${rec ? ' <span class="rec-tag">Recommend</span>' : ''}</h3><p class="small" style="margin:0">${t}</p>
+      <div class="lstage">${['light', 'dark'].map(th => { const c = p[th]; return `<div style="background:${c.app};color:${c.text}">${tileHtml(k, 72, c.accent, c.accentFg)}<div class="lsizes">${[16, 24, 32, 48].map(z => tileHtml(k, z, c.accent, c.accentFg)).join('')}</div><span style="color:${c.text};--cut:${c.app}">${SV(MARKS[k], 28)}</span><div class="llock" style="font-family:${p.ui}">${tileHtml(k, 28, c.accent, c.accentFg)}<span>ISTQB Hub<small>Learning hub</small></span></div><div class="ltab" style="background:${c.surface};font-family:${p.ui}">${tileHtml(k, 16, c.accent, c.accentFg, 4)}ISTQB Hub</div></div>`; }).join('')}</div></div>`).join('')}</div>`;
+  };
+
+  const SECTIONS = [
+    {
+      id: 'decisions', name: 'Decisions so far',
+      intro: 'What you picked and what follows from it. Rows marked <span class="st-q">Open</span> link to a proposal further down that needs your call.',
+      answers: [{ q: 'The short version', text: 'Exam Room everywhere, with a chapter outline for Learn. Parchment leads two new exam-themed palettes. Before visuals, the 29 near-duplicate page files become 5 shared pages (<a href="#groundwork">Groundwork</a>). Features and rules stay exactly as they are; the few small behaviour changes on this page are marked as open questions.' }],
+      body: () => ledger()
+    },
+    {
+      id: 'shell', name: 'Shell and navigation',
+      intro: 'The frame around every page: top bar with the track pill, the five step tabs and the ⌘K term lookup. On the hub the tabs become Dashboard / All tracks. The track pill opens a switcher listing all five tracks with their progress, plus the CT-AI v1.0 legacy pages.',
+      answers: [
+        { q: 'How do you get between steps?', text: 'Desktop: the tabs. Phone: see the question below. The breadcrumb bar and “Next step” link go away; the tabs replace both.' },
+        { q: 'Phone: top strip, bottom tabs or a menu?', rec: true, text: '<b>A · A tab strip under the header</b> (round 2: replaces the cramped chips with five equal-width tabs). They keep the bottom of the screen for the reader’s “Mark studied & next” and the exam’s answer bar, which matter more on a phone.' }
+      ],
+      body: () => local('shellV', 'State', { default: 'Default', menu: 'Track switcher open' }) + pair(() => shellDesk(state.shellV), () => shellPhone(state.shellV), 'Shell')
+        + phoneOptions([
+          { name: 'Step tab strip', rec: 1, text: 'Five equal tabs (icon over label) under the header, active one underlined. Bottom stays free for the reader and exam bars.', html: () => shellPhone('default') },
+          { name: 'Bottom tabs', text: 'Familiar app pattern, but collides with “Mark studied & next” and the exam bar.', html: tabsPhone },
+          { name: 'Steps menu', text: 'Cleanest header; every step change costs an extra tap.', html: menuPhone }
+        ])
+        + rules(['Every existing URL keeps working (<code class="c">/ctflv4-learn</code>, <code class="c">/ctai-quiz</code>…); pages are still auto-routed from <code class="c">src/pages/</code> (src/App.jsx).', 'Step order and titles come from <code class="c">src/lib/tracks.js</code>; the tabs read <code class="c">track.steps</code>, and <code class="c">findPage()</code> still tells a page which track and step it belongs to.', 'Legacy CT-AI v1.0 pages stay grouped under CT-AI, never as top-level tracks.'])
+    },
+    {
+      id: 'hub', name: 'Hub dashboard',
+      intro: 'The first page. A card for the next unstudied section, a readiness card for the track you studied last, and a tile per track with two meters: sections studied and best mock against the 65% line.',
+      answers: [
+        { q: 'Where does “next up” come from?', text: 'From data the app already has: the first section in syllabus order whose id is not in the track’s studied list. No new storage. The track is the one with the most recent best-mock date, else the one with the most studied sections, else CTFL.' },
+        { q: 'What about first-time visitors?', text: 'Same layout: the card says “Start here · CTFL v4.0 · 1.1.1”, the readiness card explains the five steps, every tile reads “Not started / No attempt”.' }
+      ],
+      body: () => local('hubV', 'State', { returning: 'Returning learner', first: 'First visit', nostorage: 'Storage blocked' }) + pair(() => hubDesk(state.hubV), () => hubPhone(state.hubV), 'Hub')
+        + note('Hub', { returning: 'CTFL is mid-way: 23/64 studied, best mock 72% (passes). CT-AI v2.0 has a 57% best mock, shown in the danger colour.', first: 'No progress anywhere. Nothing pretends to know the learner; the card picks CTFL because it has no prerequisite.', nostorage: 'localStorage throws (private window, blocked site data). The app already keeps working without it; this banner says so instead of silently dropping ticks.' }[state.hubV])
+        + rules(['Progress is read per track from <code class="c">track.progress.getStudied()</code> / <code class="c">getBestExam()</code> (src/lib/progress.js); keys and shapes unchanged.', 'Pass colour is score / total ≥ 0.65 (src/App.jsx, TrackPage.jsx).', 'Pages not registered in a track still appear in a “More” list (src/App.jsx <code class="c">registeredPaths()</code>).', 'The dashboard must lazy-load each track’s chapter data to compute “next up”, as TrackPage does today (<code class="c">track.loadData()</code>); quizzes and glossaries are not loaded.'])
+    },
+    {
+      id: 'track', name: 'Track page',
+      intro: 'One per track. Exam facts first, then progress, then the five steps as a stepper. CT-AI shows its v1.0 legacy pages underneath.',
+      answers: [{ q: 'Why exam facts first?', text: 'You said the syllabus is exam prep. The card states what the exam is (questions, minutes, pass mark) and gives a direct “Take a mock exam”, so the goal is visible from the first visit.' }],
+      body: () => local('trackV', 'State', { ctfl: 'CTFL (in progress)', ctai: 'CT-AI v2.0 + legacy', fresh: 'CT-QDO (not started)' }) + pair(() => trackDesk(state.trackV), () => trackPhone(state.trackV), 'Track', 820)
+        + rules(['Prerequisite, badge, blurb and step descriptions come from <code class="c">tracks.js</code>.', 'Sections studied counts only ids present in the loaded chapters (TrackPage.jsx).', 'The legacy note text is <code class="c">track.legacy.note</code>; v1 best mock line only shows if a v1 score exists (it currently never does — see Exam start).'])
+    },
+    {
+      id: 'learn', name: 'Learn',
+      intro: 'The chapter list, then one section per view with “Mark studied & next”. The outline panel (from Study Desk) answers the risk raised in the proposal: it shows the whole chapter with a tick per studied section, opened from the section title.',
+      answers: [
+        { q: 'One section at a time or the whole chapter?', rec: true, text: '<b>A · One section with the outline panel.</b> It is your pick and suits short focused sessions; the outline fixes the “lost the chapter’s shape” risk. B costs width on laptops; C doubles the reading UI to build and test.' },
+        { q: 'What does “Mark studied & next” do?', text: 'Exactly what Mark studied does today (adds the section id), then moves to the next section. Studied sections show “Studied” and a plain “Next”. Untoggling stays possible.' }
+      ],
+      body: () => local('learnV', 'State', { reader: 'Section', studied: 'Section studied', outline: 'Outline open', chapters: 'Chapter list', missing: 'No learn content yet' }) + pair(() => learnDesk(state.learnV), () => learnPhone(state.learnV), 'Learn', 820)
+        + options([
+          { name: 'One section + outline', rec: 1, text: 'Focused; the outline panel shows the whole chapter on demand.', html: () => learnDesk('outline') },
+          { name: 'Whole chapter, outline beside', text: 'Study Desk style. Easy skimming; less room on laptops.', html: readerB },
+          { name: 'Toggle: focus or whole chapter', text: 'Both, remembered per browser. Twice the reading UI to build.', html: readerC }
+        ])
+        + rules(['Studied toggles call the track’s <code class="c">setSectionStudied(id, bool)</code> and save at once.', 'A chapter without <code class="c">learn</code> content falls back to the section summary or deep points, as today.', 'K-level labels: K1 Remember, K2 Understand, K3 Apply, K4 Analyze; learning objectives keep their ids (e.g. FL-4.2.2).', 'Objectives and keywords stay on the chapter: shown at the top of the first section and in the outline panel.'])
+    },
+    {
+      id: 'review-notes', name: 'Summaries and Exam Insights',
+      intro: 'Steps 2 and 3 stay separate pages built from one component. Summaries keep today’s collapsible sections; Insights put each chapter’s traps beside the summary.',
+      answers: [{ q: 'What is new?', text: 'Only the arrangement: a deep / skim filter (from the counts the page already shows) and traps in a side column. The content and the deep / skim split are unchanged.' }],
+      body: () => local('insV', 'Page', { summaries: 'Chapter Summaries', insights: 'Exam Insights' }) + pair(() => ex(state.insV === 'summaries' ? 1 : 2, state.insV === 'summaries' ? summaries() : insightsD(), '', state.insV === 'summaries' ? 860 : 1100), () => exPhone(state.insV === 'summaries' ? summaries() : insightItems(1), state.insV === 'summaries' ? 1 : 2), 'Notes', 820)
+        + rules(['Deep sections show <code class="c">deepPoints</code>; skim sections show <code class="c">summary</code>; insights come from <code class="c">examInsights</code> (src/data/&lt;track&gt;/chapterN.js).'])
+    },
+    {
+      id: 'glossary', name: 'Glossary and ⌘K lookup',
+      intro: 'Step 4 stays a full page. The same search also opens as a palette over any page with ⌘K (or the search icon on phones), and also finds section titles.',
+      answers: [{ q: 'Does ⌘K change the glossary?', text: 'No. It runs the same search over the same <code class="c">glossary.js</code> of the current track, and adds section titles from the loaded chapters. Enter on a term opens it on the glossary page; on a section, opens it in Learn.' }],
+      body: () => local('glV', 'State', { page: 'Glossary page', palette: '⌘K palette', none: 'No matches' }) + pair(() => glossDesk(state.glV), () => glossPhone(state.glV), 'Glossary')
+        + rules(['Search matches term or definition, case-insensitive; results sort alphabetically; the chapter filter keeps terms whose <code class="c">chapters</code> include it (src/pages/*-glossary.jsx).', 'Each track searches only its own glossary (97 CTFL, 63 CT-AI v2.0, 87 CT-QDO, 118 CT-MAT, 25 CT-SS terms).'])
+    },
+    {
+      id: 'start', name: 'Exam start (check-in)',
+      intro: 'The quiz page’s start state, as a check-in. It differs per track because the exams differ: CTFL has four sample exams, CT-QDO scores only its main questions, Soft Skills has 45 points, CT-AI v1.x is practice only.',
+      answers: [{ q: 'Why a separate check-in?', text: 'Starting a timed exam is a commitment. One screen with the rules, the set, the time and a single Start makes that clear, and practice sits beside it for when you just want to drill.' }],
+      body: () => local('stV', 'Track', { ctfl: 'CTFL (Sets A–D)', qdo: 'CT-QDO (main + appendix)', ss: 'Soft Skills (45 pts)', v1: 'CT-AI v1.x (practice only)' }) + pair(() => START[state.stV](), () => startPhone(state.stV), 'Check-in', 800)
+        + rules(['Exam length <code class="c">EXAM_MINUTES = 60</code>; +25% for non-native speakers gives 75 (src/pages/*-quiz.jsx).', 'Pass mark is <code class="c">Math.ceil(totalPoints × 0.65)</code>: 26 of 40, 30 of 45.', 'CTFL exam simulation uses one sample exam (A–D); practice can mix sets and chapters.', 'CT-QDO exam scores <code class="c">mainQuestions</code> only; appendix questions are practice.', 'CT-AI v1.x (<code class="c">ctai-quiz.jsx</code>) has no exam mode and records no score.'])
+    },
+    {
+      id: 'exam', name: 'Exam in progress',
+      intro: 'Full screen: track and set, the timer, Finish exam. Big options; at the bottom a thin progress bar and “Q4 / 40”, which opens the numbered grid, with Previous / Next. Practice mode uses the same frame with a score instead of a timer and the explanation after Submit.',
+      answers: [
+        { q: 'Finishing with questions unanswered', rec: true, text: '<b>B · A confirm bar.</b> Today Finish ends the exam at once. A bar that says how many are unanswered, with “Go to first unanswered”, prevents losing points by a slip. This is a small behaviour addition, so it needs your OK; A keeps today’s behaviour.' },
+        { q: 'What happens at 0:00?', text: 'As today: the exam finishes automatically. Under 5 minutes the timer turns to the danger colour.' },
+        { q: 'The 1–40 question numbers', rec: true, text: '<b>A · Progress bar + grid on demand.</b> Round 3: the row of 40 numbered boxes is gone. A thin 40-segment bar shows answered and current at a glance; tapping “Q4 / 40” opens the numbered grid (10 × 4) to jump. Same jump-to-question feature as today, a fraction of the space.' }
+      ],
+      body: () => local('qV', 'State', { exam: 'Exam', grid: 'All questions open', multi: 'Select two', low: 'Under 5 min', practice: 'Practice, answered', finish: 'Finish, unanswered' }) + pair(() => quizDesk(state.qV), () => quizPhone(state.qV), 'Exam', 780)
+        + options([
+          { name: 'Progress bar + grid on demand', rec: 1, text: 'Thin 40-segment bar and a “Q4 / 40” button that opens the numbered grid.', html: () => quizDesk('grid'), h: 780 },
+          { name: 'Pager window', text: 'Seven numbers around the current one, then …40 and a grid button. Familiar, but hides overall progress.', html: () => examShell(timer(1), `${qMeta()}${qText(1)}${opts()}`, pager()), h: 780 },
+          { name: 'Counter only', text: 'Just “Q4 / 40 · 3 answered”; the grid opens on tap. Cleanest, but no progress at a glance.', html: () => examShell(timer(1), `${qMeta()}${qText(1)}${opts()}`, counterOnly()), h: 780 }
+        ])
+        + phoneOptions([
+          { name: 'Bar + grid sheet', rec: 1, text: 'Bar above Previous / Q4 of 40 / Next; the grid opens as a sheet.', html: () => quizPhone('grid') },
+          { name: 'Pager window', text: 'Five numbers fit; the rest behind the grid button.', html: () => phone(`<div class="mh"><b class="sm">Q4 / 40</b><span style="margin:0 auto">${timer()}</span>${ib('flag')}</div>${mb(mQuiz())}<div class="mnav"><div class="pager" style="justify-content:center">${btn('', 'chevron-left')}${[2, 3, 4, 5, 6].map(n => `<span class="qd${n < 4 ? ' a' : ''}${n === 4 ? ' c' : ''}">${n}</span>`).join('')}${ib('grid-3x3')}${btn('', 'chevron-right', 'pri')}</div></div>`) },
+          { name: 'Counter only', text: 'Previous / Q4 of 40 / Next; nothing else.', html: () => phone(`<div class="mh"><b class="sm">Q4 / 40</b><span style="margin:0 auto">${timer()}</span>${ib('flag')}</div>${mb(mQuiz())}<div class="mnav"><div class="crow">${btn('', 'chevron-left')}${qcount()}${btn('', 'chevron-right', 'pri')}</div></div>`) }
+        ])
+        + options([
+          { name: 'Finish at once (today)', text: 'No interruption. A slip of the finger ends the attempt.', html: finishA, h: 780 },
+          { name: 'Confirm bar', rec: 1, text: 'Says how many are unanswered and jumps to the first. One extra click.', html: () => quizDesk('finish'), h: 780 },
+          { name: 'Block until all answered', text: 'Never finishes early. Unlike the real exam, where you may hand in early.', html: () => examShell(timer(1), `${qMeta()}${qText(1)}${opts()}`, `${btn('← Previous')}${qcount()}<div style="flex:1;min-width:0">${segbar()}</div><span class="btn" style="opacity:.5">${I('flag')}Finish (34/40)</span>`), h: 780 }
+        ])
+        + rules(['An answer is correct only if the selected set equals <code class="c">correct</code> exactly; “Select two” questions need both (src/pages/ctflv4-quiz.jsx).', 'Exam mode gives no per-question feedback; practice reveals the official <code class="c">explanation</code> after Submit.', 'Time ≤ 0 calls <code class="c">finishExam()</code>; the timer warns under 300 seconds.', 'Leaving the page or refreshing loses the attempt (state is not stored) — unchanged unless you pick “Resume after refresh” in <a href="#later">Later</a>.'])
+    },
+    {
+      id: 'result', name: 'Exam result',
+      intro: 'Score against the pass line, a new-best notice when the score is saved, chapter bars, and buttons to review answers or re-study the weakest chapter.',
+      answers: [{ q: 'Fail wording', text: '“Not yet” with the points still needed (“3 points short”) instead of a red FAIL ✗. The score, pass mark and colours are unchanged.' }],
+      body: () => local('rsV', 'State', { pass: 'Pass, new best', fail: 'Below pass mark' }) + pair(() => resultDesk(state.rsV), () => resultPhone(state.rsV), 'Result')
+        + rules(['<code class="c">recordExamScore(score, total)</code> keeps only the highest score in points; the notice shows only when it replaced the old best.', 'Breakdown per chapter sums points of that chapter’s questions in the exam.', '“Re-study Chapter N” links to Learn for the lowest-ratio chapter — a link only, nothing stored.'])
+    },
+    {
+      id: 'review', name: 'Answer review',
+      intro: 'After the result: the question and options on the left with your answer and the correct one marked, the official explanation on the right, and a green / red progress bar along the bottom that opens the numbered grid.',
+      answers: [{ q: 'Why split?', text: 'The explanation is what you came for. Beside the question, you read both without scrolling, which matters for long CTFL questions.' }],
+      body: () => pair(() => RENDER_REVIEW.d(), () => RENDER_REVIEW.m(), 'Review', 800)
+        + rules(['Review walks the same exam questions in order with <code class="c">revealed</code> set for all; explanations are the official text from <code class="c">quiz.js</code>.'])
+    },
+    {
+      id: 'theme', name: 'Palette and theme',
+      intro: 'Round 2 focuses on <b>Chalkboard</b>, now the default for every mockup. Parchment and Answer Sheet stay on the <b>Palette</b> switch until you settle.',
+      answers: [
+        { q: 'Which palette?', text: '<b>Chalkboard</b>, as you asked. Its dark board is calm for long sessions and the chalk-yellow accent marks the one thing to act on (selected answer, Continue, Start). Watch-out: in light mode the accent is a darker mustard so text on it stays readable (5.9:1 on white).' },
+        { q: 'Light or dark?', text: 'Chalkboard is designed dark-first, but still follow the system by default; a moon / sun toggle in the top bar overrides it and is remembered in this browser (<code class="c">localStorage["theme"]</code>).' }
+      ],
+      body: () => paletteCards()
+    },
+    {
+      id: 'logo', name: 'Logo',
+      intro: 'Round 3: six new concepts replace the first three. They follow patterns that recur in exam and learning marks (a letter or abstract mark, shapes cut out of a solid tile, simple geometry, a certification seal) and avoid the graduation cap. All are original drawings. The site has no mark today (the hub only shows a text title). Six concepts, each shown large, at 16 / 24 / 32 / 48px, as a plain mark, as a lockup with the name and as a browser-tab favicon, in light and dark. Colours follow the Palette switch. The recommended one is already in every mockup above.',
+      answers: [
+        { q: 'Which mark?', rec: true, text: '<b>A · Test brackets [✓].</b> It is the one only testers would recognise (a passing test in a runner’s output), it matches the mono type used for LO codes and timers, and it stays crisp at 16px. Runner-up: B, the breakout checkbox.' },
+        { q: 'Name and trademark', text: 'Wordmark “ISTQB Hub”, with “Learning hub” as the second line where there is room. ISTQB® is the board’s registered mark: the logo is original and must not borrow the official ISTQB logo or colours, and the footer should say the site is an unofficial study aid.' }
+      ],
+      body: () => logoCards() + rules(['Mark ships as one SVG (stroke = currentColor) plus a 32×32 favicon and a 180×180 apple-touch icon in the accent colour.', 'Minimum size 16px; below 24px use the tile version, never the bare strokes.'])
+    },
+    {
+      id: 'later', name: 'Later (not in scope)',
+      intro: 'The exam-prep ideas from the proposal. None is in the first build unless you pick it; each says where it would live in this design and what it needs.',
+      answers: [{ q: 'Recommendation', text: 'Ship the redesign first. If you want one idea in the first build, take <b>Resume after refresh</b>: it is the only one that fixes a real loss today (a refresh mid-exam wipes the attempt).' }],
+      body: () => table(['Idea', 'What it does', 'Lives in', 'Needs'], FUTURE.map(r => [r[0], r[1], r[2], r[3]]))
+    },
+    {
+      id: 'groundwork', name: 'Groundwork',
+      intro: 'What the code needs before any visual work, so every track gets each change once and nothing regresses.',
+      answers: [{ q: 'Rules that keep it safe', text: '<ul><li>Every existing URL resolves.</li><li>Progress keys and data shapes do not change.</li><li>Content data files are not edited.</li><li>Each phase is checked on all 5 tracks plus CT-AI v1.0.</li></ul>' }],
+      body: () => flow([['Shared pages', '29 files → 5 components fed by track config', 1], ['Tokens', '<code class="c">T</code> values become CSS variables'], ['Shell', 'Top bar, track pill, tabs, ⌘K'], ['Screens', 'Dashboard, track, learn, notes, glossary'], ['Exam flow', 'Check-in, exam, result, review']])
+        + table(['Phase', 'What ships', 'How you check it'], [
+          ['0 · Shared pages', 'One Learn, Summaries, Insights, Glossary and Quiz component; each track passes its data, progress functions and quiz rules (sets, appendix, points). Old page files become one-line wrappers so URLs stay.', 'Every route renders the same content as before on all tracks; a fix in one component shows in every track.'],
+          ['1 · Tokens and theme', '<code class="c">T</code> in src/lib/theme.js points at CSS variables; Parchment light and dark; system default + toggle; fonts.', 'Every page readable in both themes; no literal neutrals left (grep).'],
+          ['2 · Shell', 'Top bar with track pill and switcher, step tabs, phone chips, ⌘K palette; PageChrome replaced.', 'Every page reachable from the hub and back; ⌘K finds a term on every track.'],
+          ['3 · Dashboard and track', 'Next-up card, readiness, track tiles, exam-facts card, legacy block.', 'First-visit, returning and storage-blocked states match the mockups.'],
+          ['4 · Learn, notes, glossary', 'Section reader with outline panel, chapter list, summaries, insights, glossary page.', 'Mark studied & next saves and advances; outline ticks match the studied count.'],
+          ['5 · Exam flow', 'Check-in per track, full-screen exam, result with new-best notice, split review.', 'Pass marks 26/40 and 30/45; CT-QDO scores main questions only; 0:00 auto-finishes.'],
+          ['6 · Phone pass', 'Every screen at 390px.', 'No sideways scroll; bottom bars clear the home indicator.']
+        ])
+        + rules(['Routes are still generated by <code class="c">import.meta.glob("./pages/*.jsx")</code>; <code class="c">/track/:id</code> stays.', 'Renaming a progress key wipes learners’ progress — keys stay exactly: <code class="c">ctfl-v4-progress</code>, <code class="c">ctai-v2-progress</code>, <code class="c">ctai-v1-progress</code>, <code class="c">ct-qdo-progress</code>, <code class="c">ct-mat-progress</code>, <code class="c">ct-ss-progress</code>.'])
+    },
+    {
+      id: 'foundations', name: 'Foundations',
+      intro: 'The tokens for the palette selected at the top, light and dark, as CSS variables. Track colours stay as data in tracks.js and appear only as dots and chips.',
+      answers: [
+        { q: 'Type', text: 'Chalkboard: Lexend for the interface (12.5px base) and teaching text (14.5px, 1.7 line height, about 66 characters wide); Spline Sans Mono for LO codes, section ids, timers and scores. (Parchment: Figtree, Literata, IBM Plex Mono.)' },
+        { q: 'Icons and mark', text: 'lucide-react, 16px in the interface, 20px in phone bars. The mark is the Test brackets [✓] from the <a href="#logo">Logo</a> section, on an accent tile.' }
+      ],
+      body: () => tokenTable()
+    },
+    {
+      id: 'built', name: 'As built',
+      intro: 'Built on 2026-10-25 (task: tasks/in-progress/task-exam-room-redesign.md). Each decision as implemented, deviations and why, and follow-ups.',
+      answers: [
+        { q: 'Where does it live?', text: '<code class="c">src/styles.css</code> (tokens + component classes), <code class="c">src/components/Shell.jsx</code> (top bar, track switcher, tabs, ⌘K, theme toggle, phone strip, footer), <code class="c">LearnPage</code>, <code class="c">NotesPage</code>, <code class="c">GlossaryPage</code>, <code class="c">QuizPage</code>, <code class="c">TrackPage</code>, hub in <code class="c">src/App.jsx</code>, small parts in <code class="c">ui.jsx</code>. The 29 files in <code class="c">src/pages/</code> are thin wrappers passing data, progress functions and their original text.' },
+        { q: 'What did not change?', text: 'Routes (still auto-generated), progress keys and shapes, content data files, and every exam rule (60/75 min, 65% rounded up, exact-set matching, CT-QDO main questions only, CT-AI v1.x practice only, highest score kept).' }
+      ],
+      body: () => table(['Area', 'As built', 'Why'], [
+        ['Shared pages', '5 shared components; one Notes component serves Summaries and Exam Insights (mode prop). Chapter colours dropped; track colour only as dots.', 'Phase 0 and the visual work were done in one pass, so no throwaway intermediate refactor.'],
+        ['Tokens', 'Chalkboard light on <code class="c">:root</code>, dark via <code class="c">prefers-color-scheme</code> or <code class="c">data-theme</code>; <code class="c">T</code> maps to the CSS variables. Theme applied before first paint from <code class="c">localStorage["theme"]</code>.', 'Classes instead of inline styles: hover, focus and the 640/900px breakpoints need CSS.'],
+        ['Type', 'Interface 14px (13.5px on phones), teaching text 15px / 1.7.', 'Deviation: the mockups’ 12.5px reads too small at real size.'],
+        ['Shell', 'Top bar as designed; tabs collapse to the icon-over-label strip under 900px (not 640px) so tablets don’t overflow. ⌘K searches the current track, or every track on the dashboard; terms open the glossary with <code class="c">?q=</code>, sections open Learn at <code class="c">?ch=&amp;s=</code>.', 'Five tabs plus the search bar don’t fit between 640 and 900px.'],
+        ['Dashboard', 'Next-up uses the started track with the most studied sections; readiness names the chapter with the most unstudied sections. First-visit and storage-blocked states as designed.', 'No new storage: derived from studied ids and chapter order only.'],
+        ['Track page', 'Exam facts come from a new <code class="c">exam</code> field in tracks.js. CT-AI v2.0 shows 44 points, pass at 29.', 'Deviation: the mockup said 26/40; the real sample exam is 44 points.'],
+        ['Learn', 'Reader A, with chapter intro, objectives and keywords shown above the first section. URL keeps the place (<code class="c">?ch=&amp;s=</code>); the old v1 <code class="c">?ch=N</code> link still works.', 'Keeps all chapter content from the old pages.'],
+        ['Insights', 'All insights of the chapter in the side column, labelled Trap / Key / Insight by keyword.', 'Union of the per-track keyword rules from the old pages.'],
+        ['Exam', 'Navigator A and finish confirm B as designed; grid and confirm become bottom sheets under 640px. Practice and review use the same bar (right/wrong).', '—'],
+        ['Practice reveal', 'Correct options green for every track.', 'Deviation: CT-AI v1 used to show a missed correct option in yellow.'],
+        ['Icons and mark', 'lucide-react 0.460; Test brackets mark in the top bar, <code class="c">favicon.svg</code>, 32px PNG and 180px apple-touch icon.', '—'],
+        ['Follow-ups', 'Phone Learn footer is not sticky; Parchment / Answer Sheet palettes not built; the CT-SS quiz rules still say “Prerequisite: CTFL certificate” (track page says none) — copied as-is.', 'Out of scope; content unchanged on purpose.']
+      ])
+    }
+  ];
+
+  /* ═══════════════════ END OF DATA — page shell below ═══════════════════ */
+
+  const DW = 1280, PW = 310, PH = 650;
+  const first = o => Object.keys(o)[0];
+  const state = { pal: first(PALETTES), theme: 'light', dev: 'both' };
+  try { if (matchMedia('(prefers-color-scheme: dark)').matches) state.theme = 'dark'; } catch (e) {}
+  for (const [k, s] of Object.entries(SWITCHES)) state[k] = first(s.options);
+
+  // Palette tokens: one rule per palette × theme.
+  const SH = {
+    light: { shadow: '0 1px 2px rgba(16,20,28,.06), 0 4px 14px rgba(16,20,28,.06)', shadowLg: '0 14px 36px rgba(16,20,28,.16), 0 2px 6px rgba(16,20,28,.06)', scrim: 'rgba(14,17,22,.34)' },
+    dark: { shadow: '0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.32)', shadowLg: '0 18px 44px rgba(0,0,0,.6), 0 2px 6px rgba(0,0,0,.4)', scrim: 'rgba(0,0,0,.58)' }
+  };
+  const tokensOf = (p, t) => {
+    const c = p[t];
+    return {
+      app: c.app, surface: c.surface, 'surface-2': c.surface2, raised: c.raised, line: c.line, text: c.text, muted: c.muted,
+      accent: c.accent, 'accent-fg': c.accentFg, 'accent-soft': c.accentSoft, sel: c.sel, 'sel-fg': c.selFg,
+      danger: c.danger, ok: c.ok, warn: c.warn || c.muted, chip: c.chip,
+      panel: c.glass || c.surface2, 'panel-strong': c.glassStrong || c.raised, blur: p.blur,
+      backdrop: p.blur !== 'none' ? `radial-gradient(900px 520px at 8% -8%, ${c.glow1 || c.app}, transparent 62%), radial-gradient(800px 520px at 105% 110%, ${c.glow2 || c.app}, transparent 60%), ${c.app}` : c.app,
+      shadow: SH[t].shadow, 'shadow-lg': SH[t].shadowLg, scrim: SH[t].scrim,
+      'font-ui': p.ui, 'font-read': p.read || p.ui, 'font-mono': p.mono, fs: p.fs + 'px', r: p.r + 'px', 'r-sm': p.rsm + 'px', 'r-lg': p.rlg + 'px'
+    };
+  };
+  let css = '';
+  for (const [k, p] of Object.entries(PALETTES)) for (const t of ['light', 'dark']) {
+    css += `.p-${k}.t-${t}{${Object.entries(tokensOf(p, t)).map(([n, x]) => `--${n}:${x}`).join(';')};color-scheme:${t}}\n`;
+  }
+  const tokenStyle = document.createElement('style'); tokenStyle.textContent = css; document.head.appendChild(tokenStyle);
+
+  // ───── helpers for section bodies ─────
+  let where = '';
+  const themesFor = () => state.theme === 'both' ? ['light', 'dark'] : [state.theme];
+  const mk = (html, t, w, h, pal, bg) => `<div class="mock p-${pal || state.pal} t-${t}" style="width:${w}px;height:${h}px${bg ? ';background:transparent' : ''}">${html}</div>`;
+  const fD = (html, t, cap, h = 760, pal) => `<div><div class="fcap"><span>${cap} · Desktop</span><span>${PALETTES[pal || state.pal].name} · ${t}</span></div><div class="frame" data-w="${DW}" data-h="${h}" data-device="desktop" data-where="${where}">${mk(html, t, DW, h, pal)}</div></div>`;
+  const fP = (html, t, cap) => `<div><div class="fcap"><span>${cap} · Phone</span><span>${t}</span></div><div class="frame ph" data-w="${PW}" data-h="${PH}" data-device="phone" data-where="${where}">${mk(html, t, PW, PH, '', 1)}</div></div>`;
+  // Desktop and phone side by side, once per theme; follows the Device switch.
+  function pair(d, m, cap, h) {
+    const ts = themesFor();
+    if (state.dev === 'mobile') return `<div class="phones">${ts.map(t => fP(m(), t, cap)).join('')}</div>`;
+    return `<div class="frames">${ts.map(t => `<div class="drow${state.dev === 'both' ? ' both' : ''}">${fD(d(), t, cap, h)}${state.dev === 'both' ? fP(m(), t, cap) : ''}</div>`).join('')}</div>`;
+  }
+  const desk = (d, cap, h) => `<div class="frames">${themesFor().map(t => fD(d(), t, cap, h)).join('')}</div>`;
+  const note = (title, text) => text ? `<div class="notes"><p class="note"><b>${title}</b>${text}</p></div>` : '';
+  const answer = (q, text, rec) => `<div class="answer"><b class="q">${q}</b>${rec ? '<span class="rec-tag">Recommend</span>' : ''}${text}</div>`;
+  const rules = items => `<div class="notes"><div class="answer"><b class="q">Rules carried over</b><ul>${items.map(i => `<li>${i}</li>`).join('')}</ul></div></div>`;
+  // A switch inside a section; its value is state[key] (defaults to the first option).
+  function local(key, label, opts) {
+    if (!(key in state)) state[key] = first(opts);
+    return `<div class="local"><span>${label}</span><div class="segc">${Object.entries(opts).map(([k, l]) => `<button type="button" data-k="${key}" data-v="${k}" aria-pressed="${state[key] === k}">${l}</button>`).join('')}</div></div>`;
+  }
+  // A/B/C proposals side by side, each with a desktop mockup in the first theme shown.
+  const options = list => `<div class="opt3">${list.map((o, i) => `<div class="card${o.rec ? ' chosen' : ''}"><h3>${String.fromCharCode(65 + i)} · ${o.name}${o.rec ? ' <span class="rec-tag">Recommend</span>' : ''}</h3><p class="small">${o.text}</p><div class="frame" data-w="${DW}" data-h="${o.h || 760}" data-device="desktop" data-where="${where}/${String.fromCharCode(97 + i)}">${mk(o.html(), themesFor()[0], DW, o.h || 760)}</div></div>`).join('')}</div>`;
+  const table = (head, rows) => `<div class="tablewrap"><table><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((c, i) => i ? `<td>${c}</td>` : `<th>${c}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  const ledger = () => table(['Screen', 'Pick', 'What changes', 'Status'], LEDGER.map(r => [r[0], r[1], r[2], r[3] === 'ok' ? '<span class="st-ok">Decided</span>' : `<a class="st-q" href="${r[4]}">Open</a>`]));
+  const flow = steps => `<div class="flow" style="--n:${steps.length}">${steps.map(([b, s, hl]) => `<div${hl ? ' class="hl"' : ''}><b>${b}</b><span>${s}</span></div>`).join('')}</div>`;
+  const paletteCards = () => `<div class="palgrid">${Object.entries(PALETTES).map(([k, p]) => `<div class="palcard${k === state.pal ? ' on' : ''}"><div class="top"><h3>${p.name}</h3><span class="small" style="font-family:${p.ui}">${p.fontLabel}</span></div><div class="small">${p.note}</div>
+    ${['light', 'dark'].map(t => `<div class="chips">${['app', 'surface', 'line', 'text', 'muted', 'accent', 'accentSoft'].map(c => `<i style="background:${p[t][c]}"></i>`).join('')}</div>`).join('')}
+    <div class="frame" data-w="${DW}" data-h="760" data-device="desktop" data-where="${where}/${k}">${mk(hubDesk('returning'), themesFor()[0], DW, 760, k)}</div>
+    ${Object.keys(PALETTES).length > 1 ? `<button type="button" class="linkbtn" data-k="pal" data-v="${k}">${k === state.pal ? 'In use on this page' : 'Use this palette'}</button>` : ''}</div>`).join('')}</div>`;
+  const tokenTable = () => {
+    const p = PALETTES[state.pal], L = tokensOf(p, 'light'), D = tokensOf(p, 'dark');
+    const cell = v => `${/^#|^rgba?\(/.test(v) ? `<span class="swatch" style="background:${v}"></span>` : ''}<code class="c">${v}</code>`;
+    return table(['Token', 'Light', 'Dark'], Object.keys(L).filter(k => !/^(shadow|backdrop|font|blur)/.test(k)).map(k => [`<code class="c">--${k}</code>`, cell(L[k]), cell(D[k])]));
+  };
+
+  // ───── controls + render ─────
+  function seg(label, key, opts) {
+    return `<div class="ctl"><span>${label}</span><div class="segc">${Object.entries(opts).map(([k, l]) => `<button type="button" data-k="${key}" data-v="${k}" aria-pressed="${state[key] === k}">${l}</button>`).join('')}</div></div>`;
+  }
+  function fit() {
+    document.querySelectorAll('.frame').forEach(f => {
+      const W = +f.dataset.w, H = +f.dataset.h, s = f.clientWidth / W;
+      f.style.height = (H * s) + 'px';
+      f.firstElementChild.style.transform = `scale(${s})`;
+    });
+  }
+  function renderAll() {
+    document.getElementById('controls').innerHTML = [
+      Object.keys(PALETTES).length > 1 ? seg('Palette', 'pal', Object.fromEntries(Object.entries(PALETTES).map(([k, p]) => [k, p.name]))) : '',
+      seg('Theme', 'theme', { light: 'Light', dark: 'Dark', both: 'Both' }),
+      seg('Device', 'dev', { both: 'Both', desktop: 'Desktop', mobile: 'Phone' }),
+      ...Object.entries(SWITCHES).map(([k, s]) => seg(s.label, k, s.options))
+    ].join('');
+    document.getElementById('stage').innerHTML = SECTIONS.map(s => {
+      where = s.id;
+      return `<section class="sec" id="${s.id}" data-section="${s.id}"><div class="sec-h"><div><h2>${s.name}</h2><p>${s.intro || ''}</p></div><div>${(s.answers || []).map(a => answer(a.q, a.text, a.rec)).join('')}</div></div>${s.body()}</section>`;
+    }).join('');
+    if (window.lucide) { try { lucide.createIcons({ icons: lucide.icons }); } catch (e) {} }
+    fit();
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('button[data-k]'); if (!b) return;
+    state[b.dataset.k] = b.dataset.v; renderAll();
+  });
+  window.addEventListener('resize', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+
+  document.getElementById('eyebrow').textContent = PAGE.eyebrow;
+  document.getElementById('title').textContent = PAGE.title;
+  document.getElementById('lede').innerHTML = PAGE.lede.map(x => `<p class="lede">${x}</p>`).join('');
+  document.getElementById('toc').innerHTML = SECTIONS.map(s => `<a href="#${s.id}">${s.name}</a>`).join('');
+  document.getElementById('footer').textContent = PAGE.footer;
+
+  // Used by ../design-directions/scripts/render.cjs to screenshot every section.
+  window.DESIGN = { kind: 'blueprint', sections: SECTIONS.map(s => s.id) };
+  window.setDesignState = partial => { Object.assign(state, partial); renderAll(); };
+  renderAll();
+})();
+</script>

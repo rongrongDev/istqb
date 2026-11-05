@@ -5,6 +5,16 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 
 ## Backlog
 
+- [Site-wide design revamp — directions → blueprint](tasks/backlog/task-design-revamp.md) — picked Exam Room + Chalkboard; blueprint in `design/site-revamp-blueprint.html` (design history per round)
+- [Resume an exam after refresh](tasks/backlog/task-resume-exam-after-refresh.md) — save the in-progress attempt with its deadline; resume or discard (after the redesign)
+- [Mock exam attempt history and score trend](tasks/backlog/task-attempt-history.md) — keep every attempt incl. per-chapter points; trend vs 65% line
+- [Weak-spot drill](tasks/backlog/task-weak-spot-drill.md) — name the weakest chapter and start a filtered practice set (needs attempt history)
+- [Mistake deck](tasks/backlog/task-mistake-deck.md) — wrong answers become a deck cleared by two right answers in a row
+- [Flag questions for review](tasks/backlog/task-flag-for-review.md) — flag during the exam; markers in the bar/grid and finish bar
+- [Exam-day countdown](tasks/backlog/task-exam-day-countdown.md) — booked date per track; days left and daily section target
+- [Best score per CTFL sample exam](tasks/backlog/task-best-score-per-ctfl-set.md) — `bestBySet` for Sets A–D alongside the overall best
+- [Export and import progress](tasks/backlog/task-export-import-progress.md) — JSON backup/restore of all track keys, validated
+- [Sync across devices](tasks/backlog/task-sync-across-devices.md) — OPEN: needs a backend; 4 questions to answer
 
 ## In progress
 
@@ -27,6 +37,7 @@ Tasks are generated from resolved brainstorm ideas in `features/<topic>/ideas/re
 - [CTAL-TAE v2.0 study content — Advanced Test Automation Engineering](_collab/tasks/done/task-002-ctal-tae-v2-track.md) — built the CTAL-TAE track: `src/data/ctaltae/` (8 chapters with full learn content and CT-QDO cross-links, 80-question quiz from ISTQB Sample Exam v2.4 + the ASTQB TAE sample exam with 1–3-point K2–K4 items, cross-checked against both answer keys, 43-term glossary), `/ctaltae` + `/ctaltae-learn` + `/ctaltae-guide` + `/ctaltae-glossary` + `/ctaltae-quiz` pages with per-set 90-min exam simulation, `ctal-tae-progress` key, and a hub card
 
 - [CT-GenAI v1.1 study content — Testing with Generative AI](_collab/tasks/done/task-001-ct-genai-track.md) — built the CT-GenAI track: `src/data/ctgenai/` (5 chapters with full learn content and CT-AI v2 cross-links, 80-question quiz from ISTQB Sample Exam A v1.1 + the ASTQB v1.1 sample exam, cross-checked against both answer keys, 50-term glossary from chapter keywords + Appendix D), `/ctgenai` + `/ctgenai-learn` + `/ctgenai-guide` + `/ctgenai-glossary` + `/ctgenai-quiz` pages with per-set 60-min exam simulation, `ct-genai-progress` key, and a hub card
+- [Exam Room redesign — implementation](tasks/done/task-exam-room-redesign.md) — rebuilt the UI as the Exam Room design with the Chalkboard palette (light/dark, remembered toggle) and the Test brackets logo: the 29 page files are now thin wrappers over shared `LearnPage`, `NotesPage`, `GlossaryPage` and `QuizPage` components; `Shell.jsx` (track switcher, step tabs, ⌘K lookup, phone tab strip) replaces PageChrome; readiness dashboard, exam-facts track page, full-screen exam with segment navigator and finish confirm bar; checked in headless Chrome at 1280px and 390px
 
 - [ISTQB learning hub main page + sitewide end-to-end navigation](tasks/done/task-learning-hub-and-navigation.md) — rebuilt `src/App.jsx` Home as a multi-track ISTQB hub driven by a new `src/lib/tracks.js` registry (5 tracks, config-only to extend), added `/track/:id` landing pages (`src/components/TrackPage.jsx`: study path, progress stats, exam readiness, CT-AI v1 legacy pages grouped under the CT-AI track), and wrapped every routed page in `src/components/PageChrome.jsx` — a breadcrumb bar (Hub › Track › Step) with next-step / back-to-track links on all 29 leaf routes
 

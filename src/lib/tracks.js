@@ -1,6 +1,6 @@
 // Central registry of certification tracks. The hub (src/App.jsx), the track landing
-// pages (src/components/TrackPage.jsx), and the sitewide breadcrumb/next-step bar
-// (src/components/PageChrome.jsx) are all driven by this config — adding a future
+// pages (src/components/TrackPage.jsx), and the site shell (track switcher, step tabs, ⌘K lookup)
+// (src/components/Shell.jsx) are all driven by this config — adding a future
 // track is a new entry here, not a page rewrite. Tracks without pages yet can set
 // `comingSoon: true` to appear on the hub as a disabled card.
 import {
@@ -43,14 +43,18 @@ export const tracks = [
       label: "CT-AI v1.0 — superseded syllabus",
       note: "Some institutions still certify against v1.0 — check which version your exam uses before studying.",
       pages: [
-        { path: "ctaiv1-learn", title: "Learn (v1.0)", desc: "Teaching content for all 11 chapters of the v1.0 syllabus, with objectives and keywords" },
-        { path: "ctai", title: "Chapter Summaries (v1.0)", desc: "Condensed revision notes: skim vs deep-dive per section" },
-        { path: "ctaiv1-glossary", title: "Glossary (v1.0)", desc: "All v1.0 syllabus keywords with definitions" },
-        { path: "ctai-quiz", title: "Quiz (v1.x)", desc: "67 sample exam questions (main set + appendix) with answer rationales" },
+        { path: "ctaiv1-learn", short: "Learn", title: "Learn (v1.0)", desc: "Teaching content for all 11 chapters of the v1.0 syllabus, with objectives and keywords" },
+        { path: "ctai", short: "Summary", title: "Chapter Summaries (v1.0)", desc: "Condensed revision notes: skim vs deep-dive per section" },
+        { path: "ctaiv1-glossary", short: "Glossary", title: "Glossary (v1.0)", desc: "All v1.0 syllabus keywords with definitions" },
+        { path: "ctai-quiz", short: "Quiz", title: "Quiz (v1.x)", desc: "67 sample exam questions (main set + appendix) with answer rationales" },
       ],
+      loadData: () => import("../data/ctaiv1/index.js"),
+      loadGlossary: () => import("../data/ctaiv1/glossary.js"),
     },
     progress: { getStudied: getStudiedSections, getBestExam: getBestExamScore },
     loadData: () => import("../data/ctaiv2/index.js"),
+    loadGlossary: () => import("../data/ctaiv2/glossary.js"),
+    exam: { questions: 40, points: 44, note: "Official v2.0 sample exam · 75 min with +25% for non-native speakers" },
   },
   {
     id: "ctfl",
@@ -72,6 +76,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsCTFL, getBestExam: getBestExamScoreCTFL },
     loadData: () => import("../data/ctflv4/index.js"),
+    loadGlossary: () => import("../data/ctflv4/glossary.js"),
+    exam: { questions: 40, points: 40, note: "Sample Exams A–D · 75 min with +25% for non-native speakers" },
   },
   {
     id: "ctqdo",
@@ -93,6 +99,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsQDO, getBestExam: getBestExamScoreQDO },
     loadData: () => import("../data/ctqdo/index.js"),
+    loadGlossary: () => import("../data/ctqdo/glossary.js"),
+    exam: { questions: 40, points: 45, note: "Main exam is scored; the 8 appendix questions are practice only" },
   },
   {
     id: "ctmat",
@@ -114,6 +122,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsMAT, getBestExam: getBestExamScoreMAT },
     loadData: () => import("../data/ctmat/index.js"),
+    loadGlossary: () => import("../data/ctmat/glossary.js"),
+    exam: { questions: 40, points: 40, note: "Official Sample Exam A · 75 min with +25% for non-native speakers" },
   },
   {
     id: "softskills",
@@ -135,6 +145,8 @@ export const tracks = [
     ],
     progress: { getStudied: getStudiedSectionsSS, getBestExam: getBestExamScoreSS },
     loadData: () => import("../data/softskills/index.js"),
+    loadGlossary: () => import("../data/softskills/glossary.js"),
+    exam: { questions: 40, points: 45, note: "Official ASTQB sample exam · some questions are worth 2 points" },
   },
   {
     id: "ctgenai",
