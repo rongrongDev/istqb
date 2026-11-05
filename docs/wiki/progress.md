@@ -5,7 +5,7 @@ sources:
   - src/lib/tracks.js
   - src/pages/
   - src/components/
-pinned_commit: 47192d8
+pinned_commit: aa5da0b
 updated: 2026-11-05
 confidence: observed
 ---
@@ -61,7 +61,7 @@ Source: `src/lib/progress.js:49-148`. Renaming a key wipes existing learners' pr
 - The dashboard probes `localStorage` and shows a banner when writes throw (`src/App.jsx:19-27`).
 - The topic-path reader writes through `track.progress.setStudied`, so a section studied in a path counts in its track and vice versa; path progress is derived, not stored (`src/lib/learning.js:130-138`, [learning](learning.md)).
 - The theme choice uses its own key, `theme` ([theme](theme.md)).
-- Learning features use one more key, `learning-state`: `{mode, level, role, exercisesDone[], selfCheck}` (`src/lib/learning.js:9-10`).
+- Learning features use one more key, `learning-state`: `{mode, level, role, exercisesDone[], selfCheck, trapTally}` (`src/lib/learning.js:9-10`); capstone rubric ticks use `capstone-progress` (`src/pages/capstones.jsx`).
 
 ## Known gaps
 
