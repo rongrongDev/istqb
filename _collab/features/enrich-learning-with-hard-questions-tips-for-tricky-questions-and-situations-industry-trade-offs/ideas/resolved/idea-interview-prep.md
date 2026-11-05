@@ -20,9 +20,9 @@ Many visitors learning without a certificate want a job or a promotion. The cont
 
 ## Open Questions
 
-- [ ] Include role-specific sets (SDET, performance, security, test lead) from the start, or general QA first?
-                                  > YOUR ANSWER:
+- [x] Include role-specific sets (SDET, performance, security, test lead) from the start, or general QA first?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) General QA first, tagged junior / mid / senior, plus a few automation, performance and lead questions.
 
 ## Status
 
-OPEN
+RESOLVED

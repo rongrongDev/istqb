@@ -20,9 +20,9 @@ The official explanations state the answer and why options are wrong but rarely 
 
 ## Open Questions
 
-- [ ] All K3/K4 questions across tracks, or only calculation and technique questions?
-                                  > YOUR ANSWER:
+- [x] All K3/K4 questions across tracks, or only calculation and technique questions?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Only calculation and technique questions (boundary values, decision tables, state transitions, coverage, BPMN paths, throughput).
 
 ## Status
 
-OPEN
+RESOLVED

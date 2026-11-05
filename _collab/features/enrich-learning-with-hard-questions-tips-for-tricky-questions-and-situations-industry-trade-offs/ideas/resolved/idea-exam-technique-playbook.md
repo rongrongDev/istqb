@@ -20,9 +20,9 @@ Learners currently get content and questions but no method for the exam itself. 
 
 ## Open Questions
 
-- [ ] One cross-track playbook, or a short track-specific addendum per track too (e.g. CT-PT calculations, CT-AcT diagrams)?
-                                  > YOUR ANSWER:
+- [x] One cross-track playbook, or a short track-specific addendum per track too (e.g. CT-PT calculations, CT-AcT diagrams)?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) One cross-track playbook, with a short "track notes" section for calculation and diagram questions (CTFL chapter 4, CT-PT, CT-AcT).
 
 ## Status
 
-OPEN
+RESOLVED

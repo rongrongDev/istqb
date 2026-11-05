@@ -20,11 +20,11 @@ The syllabi state principles but rarely compare options head-on; engineers who a
 
 ## Open Questions
 
-- [ ] Include contested opinions (e.g. pyramid vs trophy) with both sides, or stick to settled trade-offs?
-                                  > YOUR ANSWER:
-- [ ] Cite external sources (books, well-known articles) or only the syllabi?
-                                  > YOUR ANSWER:
+- [x] Include contested opinions (e.g. pyramid vs trophy) with both sides, or stick to settled trade-offs?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Include contested ones and present both sides.
+- [x] Cite external sources (books, well-known articles) or only the syllabi?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build all of these — change it and I'll adjust) Name well-known books and articles as sources (no copied text).
 
 ## Status
 
-OPEN
+RESOLVED
