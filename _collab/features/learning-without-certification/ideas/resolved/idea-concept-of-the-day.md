@@ -20,9 +20,9 @@ Glossaries and Learn sections provide an endless pool; the dashboard is the natu
 
 ## Open Questions
 
-- [ ] Pick from all tracks, or only from the learner's chosen paths/level?
-                                  > YOUR ANSWER:
+- [x] Pick from all tracks, or only from the learner's chosen paths/level?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) From the learner's chosen level and paths when set, otherwise from all tracks.
 
 ## Status
 
-OPEN
+RESOLVED

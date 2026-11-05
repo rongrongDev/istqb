@@ -20,9 +20,9 @@ Glossaries exist for every track, and ⌘K lookup already resolves terms; toolti
 
 ## Open Questions
 
-- [ ] Auto-link every glossary term, or only a curated list per track?
-                                  > YOUR ANSWER:
+- [x] Auto-link every glossary term, or only a curated list per track?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Auto-link the current track's glossary terms, first occurrence per paragraph, skipping very short or very common words (test, testing, defect, quality…).
 
 ## Status
 
-OPEN
+RESOLVED

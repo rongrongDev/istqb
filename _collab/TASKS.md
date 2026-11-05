@@ -13,3 +13,15 @@ Numbered task files live in `_collab/tasks/<status>/task-<NNN>-<slug>.md`, creat
 | 007 | Acceptance Testing (CT-AcT) study track | DONE | `tasks/done/task-007-acceptance-testing-track.md` |
 | 008 | Usability Testing (ISTQB CT-UT) study track | DONE | `tasks/done/task-008-usability-testing-track.md` |
 | 009 | Accessibility Testing (ASTQB) study track | TODO | `tasks/backlog/task-009-accessibility-testing-track.md` |
+| 010 | Topic paths across tracks | TODO | `tasks/backlog/task-010-topic-paths.md` |
+| 011 | Learning paths by role | TODO | `tasks/backlog/task-011-role-paths.md` |
+| 012 | Learning mode without exam framing | TODO | `tasks/backlog/task-012-learning-mode.md` |
+| 013 | Beginner / practitioner / expert levels | TODO | `tasks/backlog/task-013-level-picker.md` |
+| 014 | Plain-language explainers and jargon tooltips | TODO | `tasks/backlog/task-014-plain-language-explainers.md` |
+| 015 | Hands-on exercises | TODO | `tasks/backlog/task-015-hands-on-exercises.md` |
+| 016 | Tool recipes (Toolbox) | TODO | `tasks/backlog/task-016-tool-recipes.md` |
+| 017 | Templates and checklists library | TODO | `tasks/backlog/task-017-templates-library.md` |
+| 018 | Real-world failure case studies | TODO | `tasks/backlog/task-018-case-studies.md` |
+| 019 | Concept of the day | TODO | `tasks/backlog/task-019-concept-of-the-day.md` |
+| 020 | Where do I start? Skill self-check | TODO | `tasks/backlog/task-020-skill-self-check.md` |
+| 021 | Personal learning record | TODO | `tasks/backlog/task-021-learning-record.md` |

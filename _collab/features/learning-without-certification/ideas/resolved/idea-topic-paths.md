@@ -20,11 +20,11 @@ Curated paths such as "Get started with performance testing", "Security testing 
 
 ## Open Questions
 
-- [ ] Which 3–5 paths should come first?
-                                  > YOUR ANSWER:
-- [ ] Should paths reuse track progress (a section studied once counts everywhere)?
-                                  > YOUR ANSWER:
+- [x] Which 3–5 paths should come first?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Start with 6: Testing fundamentals, Test design techniques, Test automation, Performance testing, Security testing, Usability & accessibility.
+- [x] Should paths reuse track progress (a section studied once counts everywhere)?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Yes. A path step marks the section studied in its track, so progress counts everywhere.
 
 ## Status
 
-OPEN
+RESOLVED

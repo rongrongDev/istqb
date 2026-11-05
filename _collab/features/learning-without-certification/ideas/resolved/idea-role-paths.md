@@ -20,9 +20,9 @@ The open "Which certification next?" picker recommends certificates; this recomm
 
 ## Open Questions
 
-- [ ] Should role paths be built from topic paths, or be separate curated lists?
-                                  > YOUR ANSWER:
+- [x] Should role paths be built from topic paths, or be separate curated lists?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Built from topic paths plus a few role-specific sections, so there is one source of truth.
 
 ## Status
 
-OPEN
+RESOLVED

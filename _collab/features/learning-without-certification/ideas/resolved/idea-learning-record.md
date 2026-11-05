@@ -19,9 +19,9 @@ Progress already lives per track in localStorage; this aggregates it and adds pa
 
 ## Open Questions
 
-- [ ] Is a shareable summary useful, or is a private overview enough?
-                                  > YOUR ANSWER:
+- [x] Is a shareable summary useful, or is a private overview enough?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) A private overview plus a Copy summary button (counts only).
 
 ## Status
 
-OPEN
+RESOLVED

@@ -20,11 +20,11 @@ Learn already has `example` blocks; exercises extend them with a task and a hidd
 
 ## Open Questions
 
-- [ ] Which tracks or techniques first?
-                                  > YOUR ANSWER:
-- [ ] Self-checked only, or some auto-checked (e.g. boundary values typed into fields)?
-                                  > YOUR ANSWER:
+- [x] Which tracks or techniques first?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Start with K3/K4 techniques: equivalence partitioning, boundary values, decision tables, state transitions (CTFL), acceptance criteria and Gherkin (CT-AcT), heuristic evaluation and test tasks (CT-UT), load and throughput (CT-PT).
+- [x] Self-checked only, or some auto-checked (e.g. boundary values typed into fields)?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Self-checked with a reveal, plus auto-checking where the answer is a set of values (boundary values, partitions).
 
 ## Status
 
-OPEN
+RESOLVED

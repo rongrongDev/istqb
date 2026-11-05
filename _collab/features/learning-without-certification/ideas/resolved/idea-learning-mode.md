@@ -20,9 +20,9 @@ Exam framing is everywhere (KChips, LO ids, quiz-first CTAs). The data separates
 
 ## Open Questions
 
-- [ ] Should Learning mode be the default for first-time visitors?
-                                  > YOUR ANSWER:
+- [x] Should Learning mode be the default for first-time visitors?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) No. Exam mode stays the default; the switch is remembered per browser.
 
 ## Status
 
-OPEN
+RESOLVED

@@ -19,9 +19,9 @@ CT-FT and CT-UT already cite consequences (fines, injury, lost trust); case stud
 
 ## Open Questions
 
-- [ ] How many to start with, and should each cite its public sources?
-                                  > YOUR ANSWER:
+- [x] How many to start with, and should each cite its public sources?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Start with 6, each citing the public investigation or report it is based on.
 
 ## Status
 
-OPEN
+RESOLVED

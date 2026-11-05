@@ -20,9 +20,9 @@ The syllabi describe these artefacts in detail (e.g. CT-UT 5.3.1 test plan conte
 
 ## Open Questions
 
-- [ ] Copy as Markdown only, or also offer .docx/.xlsx downloads?
-                                  > YOUR ANSWER:
+- [x] Copy as Markdown only, or also offer .docx/.xlsx downloads?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Copy as Markdown only.
 
 ## Status
 
-OPEN
+RESOLVED
