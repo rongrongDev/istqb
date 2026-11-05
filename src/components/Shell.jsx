@@ -1,9 +1,11 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronDown, Search, Moon, Sun, Archive, LayoutDashboard, X } from "lucide-react";
+import { ChevronDown, Search, Moon, Sun, Archive, LayoutDashboard, X, GraduationCap, Compass } from "lucide-react";
 import { tracks, findPage, getTrack } from "../lib/tracks.js";
 import { isDark, setThemeChoice } from "../lib/theme.js";
 import { Logo, STEP_SHORT, STEP_ICON } from "./ui.jsx";
+import { learnTabs, learnPagePaths } from "../lib/learnNav.js";
+import { useLearning, updateLearning, isLearningMode } from "../lib/learning.js";
 
 // Lookup sources for ⌘K: the current track (or its legacy pages), else every track.
 function sourcesFor(track, legacy) {
@@ -122,12 +124,23 @@ export default function Shell({ path, trackId, children }) {
   }, []);
   useEffect(() => { setMenu(false); setPalette(false); }, [path, trackId]);
 
-  const tabs = !track ? [] : legacy
-    ? track.legacy.pages.map((p) => ({ path: p.path, short: p.short, title: p.title }))
-    : track.steps.map((s, i) => ({ path: s.path, short: STEP_SHORT[i], title: s.title }));
-  const pillLabel = legacy ? "CT-AI v1.0 (legacy)" : track ? track.shortName : "Choose a track";
+  const learning = isLearningMode(useLearning());
+  const inLearnArea = !track && learnPagePaths.has(path);
+  // Learning mode drops the exam-only step (Insights) and calls the quiz "Practice".
+  const tabs = inLearnArea
+    ? learnTabs.map((p) => ({ path: p.path, short: p.short, title: p.title, icon: p.icon }))
+    : !track ? [] : legacy
+      ? track.legacy.pages.map((p) => ({ path: p.path, short: p.short, title: p.title, icon: STEP_ICON[p.short] }))
+      : track.steps
+        .map((s, i) => ({ path: s.path, short: STEP_SHORT[i], title: s.title, icon: STEP_ICON[STEP_SHORT[i]] }))
+        .filter((t) => !(learning && t.short === "Insights"))
+        .map((t) => (learning && t.short === "Quiz" ? { ...t, short: "Practice" } : t));
+  // Pages without their own tab (path reader, roles, self-check) highlight Explore.
+  const activeTab = tabs.some((t) => t.path === path) ? path : inLearnArea ? "explore" : path;
+  const pillLabel = legacy ? "CT-AI v1.0 (legacy)" : track ? track.shortName : inLearnArea ? "Learn without an exam" : "Choose a track";
 
   const toggleTheme = () => { setThemeChoice(dark ? "light" : "dark"); setDark(!dark); };
+  const toggleMode = () => updateLearning({ mode: learning ? "exam" : "learning" });
 
   return (
     <>
@@ -152,30 +165,36 @@ export default function Shell({ path, trackId, children }) {
                 ))}
                 <div className="sep" />
                 <Link role="menuitem" to="/ctaiv1-learn" className={`mi${legacy ? " on" : ""}`}><Archive className="i mu" /><span>CT-AI v1.0 (legacy)</span></Link>
+                <Link role="menuitem" to="/explore" className={`mi${inLearnArea ? " on" : ""}`}><Compass className="i mu" /><span>Learn without an exam</span></Link>
                 <Link role="menuitem" to="/" className="mi"><LayoutDashboard className="i mu" /><span>Dashboard</span></Link>
               </div>
             </>
           )}
         </div>
         <nav className="tabs" aria-label="Study steps">
-          {track ? tabs.map((t) => (
-            <Link key={t.path} to={`/${t.path}`} className={t.path === path ? "on" : ""} aria-current={t.path === path ? "page" : undefined}>{t.short}</Link>
+          {tabs.length ? tabs.map((t) => (
+            <Link key={t.path} to={`/${t.path}`} className={t.path === activeTab ? "on" : ""} aria-current={t.path === activeTab ? "page" : undefined}>{t.short}</Link>
           )) : <Link to="/" className="on" aria-current="page">Dashboard</Link>}
         </nav>
         <button className="search" onClick={() => setPalette(true)} aria-label="Look up a term (⌘K)">
           <Search className="i" /><span className="lbl-t">Look up a term</span><kbd className="k">⌘K</kbd>
         </button>
+        <button className={`ib modeb${learning ? " on" : ""}`} onClick={toggleMode} aria-pressed={learning}
+          aria-label={learning ? "Learning mode is on — switch to exam mode" : "Switch to learning mode (hide exam details)"}
+          title={learning ? "Learning mode: exam details hidden. Click for exam mode." : "Exam mode. Click for learning mode (hides K-levels, objectives and pass marks)."}>
+          {learning ? <Compass className="i" /> : <GraduationCap className="i" />}
+        </button>
         <button className="ib" onClick={toggleTheme} aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}>
           {dark ? <Sun className="i" /> : <Moon className="i" />}
         </button>
       </header>
-      {track && (
-        <nav className="mseg" style={{ "--n": tabs.length }} aria-label="Study steps">
+      {tabs.length > 0 && (
+        <nav className="mseg" style={{ "--n": tabs.length }} aria-label={inLearnArea ? "Learning pages" : "Study steps"}>
           {tabs.map((t) => {
-            const Icon = STEP_ICON[t.short];
+            const Icon = t.icon;
             return (
-              <Link key={t.path} to={`/${t.path}`} className={t.path === path ? "on" : ""} aria-current={t.path === path ? "page" : undefined}>
-                <Icon className="i" />{t.short}
+              <Link key={t.path} to={`/${t.path}`} className={t.path === activeTab ? "on" : ""} aria-current={t.path === activeTab ? "page" : undefined}>
+                {Icon && <Icon className="i" />}{t.short}
               </Link>
             );
           })}

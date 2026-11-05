@@ -2,8 +2,8 @@
 title: Content Data
 sources:
   - src/data/
-pinned_commit: 7e14a2d
-updated: 2026-10-25
+pinned_commit: 47192d8
+updated: 2026-11-05
 confidence: observed
 ---
 
@@ -37,9 +37,9 @@ The Summaries and Exam Insights [pages](pages.md) render these.
 
 Default export `{intro, keywords[], objectives[], sections: {"<id>": {objective, body[]}}}`.
 `body` is a list of blocks: `p`, `list` (`{intro?, items}`), `table` (`{headers, rows}`),
-`example` (`{title, text}`), `note` (`{title?, text}`) —
-documented at `src/data/ctmat/learn/chapter1.js:1-4`, rendered by the switch at
-`src/components/LearnPage.jsx:6-43`.
+`example` (`{title, text}`), `note` (`{title?, text}`), `seealso` (`{label, href, text}`, a link to another track) —
+documented at `src/data/ctmat/learn/chapter1.js:1-4`, rendered by `Block` in
+`src/components/Blocks.jsx:108-153`, which also turns glossary terms into tooltips ([pages](pages.md)).
 
 ## index.js — attachLearn
 
@@ -60,7 +60,8 @@ Question shape: `{id, lo, level, points, chapter, multi, text, options[{id,text}
   `totalPoints` over main questions only (`src/data/ctqdo/quiz.js:848-849`).
 - CT-AI v1: no `lo` field on any question, and marks extra questions with `isAppendix` instead of `appendix`
   (`src/data/ctaiv1/quiz.js:4-10`).
-- `totalPoints` = sum of `points` for ctaiv2, ctmat, softskills (e.g. `src/data/ctmat/quiz.js:691`).
+- `totalPoints` = sum of `points` for ctaiv2, ctmat, softskills, ctqdo (e.g. `src/data/ctmat/quiz.js:691`).
+- The 2026 tracks (ctgenai, ctaltae, cttas, ctpt, ctsec, ctft, ctact, ctut) carry `exam` (`"A"` or `"ASTQB"`) and `num` on every question and export no `totalPoints`. Each `quiz.js` header comment records its sources and deviations: omitted image-only questions (CT-PT ASTQB Q27), diagrams written as text (CT-AcT Q17–Q20), LOs mapped by topic where the official key has none (CT-SEC, CT-UT Q35–Q40), the excluded CT-FT ISTQB set — e.g. `src/data/ctft/quiz.js:1-7`.
 
 Source-data corrections are documented inline — e.g. CT-MAT Q31 follows the official
 rationale over the answer-key table (`src/data/ctmat/quiz.js:3-5`).
@@ -70,3 +71,7 @@ rationale over the answer-key table (`src/data/ctmat/quiz.js:3-5`).
 `export const glossary = [{term, chapters[], ref, definition}]` —
 `src/data/ctmat/glossary.js:5-8`. ctaiv2 also exports `glossaryByLetter()`
 (`src/data/ctaiv2/glossary.js:71`), which no page imports.
+
+## Learning content
+
+`src/data/learning/` holds the cross-track material for people learning without an exam — paths, roles, exercises, recipes, templates, case studies, self-check. It references track sections by id; see [learning](learning.md).

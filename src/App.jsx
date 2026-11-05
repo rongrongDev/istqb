@@ -1,10 +1,13 @@
 import { Routes, Route, Link } from "react-router-dom";
 import { lazy, useEffect, useState } from "react";
-import { ArrowRight, CircleCheck, CircleAlert, Circle, TriangleAlert, Folder } from "lucide-react";
+import { ArrowRight, CircleCheck, CircleAlert, Circle, TriangleAlert, Folder, Compass } from "lucide-react";
 import { tracks, registeredPaths } from "./lib/tracks.js";
 import TrackPage from "./components/TrackPage.jsx";
 import Shell from "./components/Shell.jsx";
 import { Meter, Hint, pct, passMark } from "./components/ui.jsx";
+import { PathCard, ConceptCard, rankedPaths } from "./components/LearnUI.jsx";
+import { learnPagePaths } from "./lib/learnNav.js";
+import { useLearning, isLearningMode } from "./lib/learning.js";
 
 // Auto-discover all JSX files in src/pages/
 // To add a new guide: drop a .jsx file into src/pages/ — it becomes /<filename>.
@@ -101,7 +104,7 @@ function Readiness({ sum }) {
   );
 }
 
-function Tile({ sum }) {
+function Tile({ sum, learning }) {
   const { track, best, total, count } = sum;
   const bp = best ? pct(best.score, best.total) : 0;
   return (
@@ -112,20 +115,42 @@ function Tile({ sum }) {
         <div className="crow sm"><span className="mu">Studied</span><span className="push">{count}{total != null ? `/${total}` : ""}</span></div>
         <Meter value={total ? pct(count, total) : 0} />
       </div>
-      <div className="stack" style={{ gap: 4 }}>
+      {!learning && <div className="stack" style={{ gap: 4 }}>
         <div className="crow sm">
           <span className="mu">Best mock · pass 65%</span>
           <span className={`push ${best ? (best.score >= passMark(best.total) ? "ok" : "bad") : "mu"}`}>{best ? `${bp}%` : "No attempt"}</span>
         </div>
         <Meter value={bp} pass />
-      </div>
+      </div>}
     </Link>
+  );
+}
+
+// "Learn without an exam" teaser: concept of the day plus the paths that suit the learner.
+function LearnSection({ concept = true }) {
+  const { level, role } = useLearning();
+  return (
+    <div className="stack" style={{ gap: 12 }}>
+      <div className="crow wrap">
+        <h2>Learn without an exam</h2>
+        <Link className="push crow sm" to="/explore"><Compass className="i" />Explore paths, exercises and tools <ArrowRight className="i" /></Link>
+      </div>
+      {concept ? (
+        <div className="g2a">
+          <div className="g2">{rankedPaths(level, role).slice(0, 4).map((p) => <PathCard key={p.id} path={p} />)}</div>
+          <ConceptCard />
+        </div>
+      ) : (
+        <div className="g3">{rankedPaths(level, role).slice(0, 3).map((p) => <PathCard key={p.id} path={p} />)}</div>
+      )}
+    </div>
   );
 }
 
 function Home() {
   const known = registeredPaths();
-  const extra = routes.filter((r) => !known.has(r.path));
+  const extra = routes.filter((r) => !known.has(r.path) && !learnPagePaths.has(r.path));
+  const learning = isLearningMode(useLearning());
   const [chapters, setChapters] = useState({});
   const [storageOk] = useState(storageWorks);
 
@@ -152,7 +177,7 @@ function Home() {
         {focus ? (
           <>
             {focus.chapters ? <NextCard sum={focus} /> : <div className="next"><span className="mu">Loading…</span></div>}
-            <Readiness sum={focus} />
+            {learning ? <ConceptCard /> : <Readiness sum={focus} />}
           </>
         ) : (
           <>
@@ -180,13 +205,17 @@ function Home() {
         )}
       </div>
 
+      {learning && <LearnSection concept={!focus} />}
+
       <div className="crow wrap">
         <h2>Your tracks</h2>
         <span className="mu sm push">Progress stays in this browser</span>
       </div>
       <div className="g3">
-        {sums.map((s) => <Tile key={s.track.id} sum={s} />)}
+        {sums.map((s) => <Tile key={s.track.id} sum={s} learning={learning} />)}
       </div>
+
+      {!learning && <LearnSection />}
 
       {extra.length > 0 && (
         <div className="stack" style={{ gap: 8 }}>

@@ -20,9 +20,9 @@ Tracks span Foundation, Specialist and Advanced levels already (`level` in track
 
 ## Open Questions
 
-- [ ] Derive depth automatically from track level + K-level, or tag by hand?
-                                  > YOUR ANSWER:
+- [x] Derive depth automatically from track level + K-level, or tag by hand?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Derive automatically: The higher of the track level (Foundation → beginner, Specialist → practitioner, Advanced → expert) and the K-level (K3 → practitioner, K4 → expert). Path steps can override.
 
 ## Status
 
-OPEN
+RESOLVED

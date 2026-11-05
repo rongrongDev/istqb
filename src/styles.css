@@ -288,6 +288,35 @@ button.sech:hover { background: var(--surface-2); }
 .bk2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 18px; }
 
 /* tablet */
+/* ---- Learn without an exam (paths, roles, exercises, toolbox, templates, cases, record) ---- */
+.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.tile.dim { opacity: .7; }
+.tile.sel { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.chip.lvl-beginner { color: var(--ok); }
+.chip.lvl-practitioner { color: var(--warn); }
+.chip.lvl-expert { color: var(--danger); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; background: var(--surface); padding: 2px; gap: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 600; font-size: 13px; min-height: 30px; padding: 0 14px; border-radius: 99px; cursor: pointer; }
+.seg button:hover { color: var(--text); }
+.seg button.on { background: var(--accent); color: var(--accent-fg); }
+.callout.plain { border-color: var(--accent); background: var(--accent-soft); }
+.callout.plain .lbl { color: var(--accent); }
+.callout.plain p { font-size: 14.5px; }
+.ib.modeb.on { color: var(--accent); background: var(--accent-soft); }
+.extx { font-size: 14.5px; line-height: 1.65; max-width: 68ch; white-space: pre-wrap; }
+.tin { min-height: 34px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--raised); color: var(--text); font: inherit; font-size: 14px; flex: 1 1 200px; min-width: 0; max-width: 320px; }
+.tin:focus-visible, .seg button:focus-visible, .term:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.codeb { border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); overflow: hidden; min-width: 0; }
+.codeh { padding: 8px 10px 8px 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.codeb pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.65; color: var(--text); }
+.termw { position: relative; display: inline; }
+.term { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: help; text-decoration: underline dotted; text-decoration-color: var(--muted); text-underline-offset: 3px; }
+.term:hover, .term[aria-expanded="true"] { text-decoration-color: var(--accent); color: var(--text); }
+.tip { position: fixed; z-index: 30; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--raised); box-shadow: var(--shadow-lg); font-size: 13px; line-height: 1.55; font-weight: 400; white-space: normal; text-align: left; }
+.tip b { font-size: 13.5px; }
+.tip a { color: var(--accent); font-weight: 600; font-size: 12.5px; }
+@media (max-width: 900px) { .g2 { grid-template-columns: minmax(0, 1fr); } }
+
 @media (max-width: 900px) {
   .g2a, .exam-body.split { grid-template-columns: minmax(0, 1fr); }
   .g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }

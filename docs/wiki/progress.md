@@ -5,8 +5,8 @@ sources:
   - src/lib/tracks.js
   - src/pages/
   - src/components/
-pinned_commit: 70b2e7a
-updated: 2026-10-25
+pinned_commit: 47192d8
+updated: 2026-11-05
 confidence: observed
 ---
 
@@ -38,8 +38,16 @@ failures (e.g. private browsing) are swallowed and the site works without progre
 | CT-QDO | `ct-qdo-progress` | `QDO` |
 | CT-MAT | `ct-mat-progress` | `MAT` |
 | Soft Skills | `ct-ss-progress` | `SS` |
+| CT-GenAI | `ct-genai-progress` | `GenAI` |
+| CTAL-TAE | `ctal-tae-progress` | `TAE` |
+| CT-TAS | `ct-tas-progress` | `TAS` |
+| CT-PT | `ct-pt-progress` | `PT` |
+| CT-SEC | `ct-sec-progress` | `SEC` |
+| CT-FT | `ct-ft-progress` | `FT` |
+| CT-AcT | `ct-act-progress` | `ACT` |
+| CT-UT | `ct-ut-progress` | `UT` |
 
-Source: `src/lib/progress.js:49-90`. Renaming a key wipes existing learners' progress.
+Source: `src/lib/progress.js:49-148`. Renaming a key wipes existing learners' progress.
 
 ## Readers and writers
 
@@ -51,7 +59,9 @@ Source: `src/lib/progress.js:49-90`. Renaming a key wipes existing learners' pro
   `track.progress` in [tracks](tracks.md). Pass colouring uses the pass mark, 65% of the total
   rounded up.
 - The dashboard probes `localStorage` and shows a banner when writes throw (`src/App.jsx:19-27`).
+- The topic-path reader writes through `track.progress.setStudied`, so a section studied in a path counts in its track and vice versa; path progress is derived, not stored (`src/lib/learning.js:130-138`, [learning](learning.md)).
 - The theme choice uses its own key, `theme` ([theme](theme.md)).
+- Learning features use one more key, `learning-state`: `{mode, level, role, exercisesDone[], selfCheck}` (`src/lib/learning.js:9-10`).
 
 ## Known gaps
 

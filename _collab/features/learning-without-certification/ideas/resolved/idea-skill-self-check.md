@@ -20,9 +20,9 @@ Pairs with role paths and level tags; uses the site's own content as recommendat
 
 ## Open Questions
 
-- [ ] Original diagnostic questions are needed — acceptable here, given the no-invented-exam-questions rule for quizzes?
-                                  > YOUR ANSWER:
+- [x] Original diagnostic questions are needed — acceptable here, given the no-invented-exam-questions rule for quizzes?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) Yes, as long as it is clearly labelled a self-check and never mixed into the exam quizzes.
 
 ## Status
 
-OPEN
+RESOLVED

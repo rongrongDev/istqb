@@ -1,53 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { List, ChevronDown, ChevronLeft, ChevronRight, ArrowRight, Check, Circle, CircleCheck, CircleDashed, X, Info } from "lucide-react";
 import { KChip, Meter, Hint, keywordList, pct } from "./ui.jsx";
-
-function Block({ block }) {
-  switch (block.type) {
-    case "p":
-      return <p>{block.text}</p>;
-    case "list":
-      return (
-        <div>
-          {block.intro && <p className="intro" style={{ marginBottom: 8 }}>{block.intro}</p>}
-          <ul>{block.items.map((it, i) => <li key={i}>{it}</li>)}</ul>
-        </div>
-      );
-    case "table":
-      return (
-        <div className="ptable">
-          <table>
-            <thead><tr>{block.headers.map((h, i) => <th key={i}>{h}</th>)}</tr></thead>
-            <tbody>{block.rows.map((row, r) => <tr key={r}>{row.map((c, i) => <td key={i}>{c}</td>)}</tr>)}</tbody>
-          </table>
-        </div>
-      );
-    case "example":
-      return (
-        <div className="callout ex">
-          <span className="lbl">Example{block.title ? ` — ${block.title}` : ""}</span>
-          <p>{block.text}</p>
-        </div>
-      );
-    case "note":
-      return (
-        <div className="callout nt">
-          <span className="lbl">{block.title || "Remember"}</span>
-          <p>{block.text}</p>
-        </div>
-      );
-    case "seealso":
-      return (
-        <div className="callout nt">
-          <span className="lbl">See also</span>
-          <p><Link to={block.href}>{block.label}</Link>{block.text ? ` — ${block.text}` : ""}</p>
-        </div>
-      );
-    default:
-      return null;
-  }
-}
+import { Block, TermsProvider } from "./Blocks.jsx";
+import { SectionExtras } from "./LearnExtras.jsx";
+import { useCurrentTrack, useTrackData, useLearning, isLearningMode } from "../lib/learning.js";
 
 function Outline({ chapters, chapter, current, studied, go, onClose, onAll }) {
   const done = chapter.sections.filter((s) => studied.has(s.id)).length;
@@ -91,6 +48,9 @@ export default function LearnPage({ chapters, getStudied, setStudied, label, int
   const [params, setParams] = useSearchParams();
   const [studied, setStudiedState] = useState(() => getStudied());
   const [outline, setOutline] = useState(false);
+  const track = useCurrentTrack();
+  const trackData = useTrackData(track?.id);
+  const learning = isLearningMode(useLearning());
 
   const chapter = chapters.find((c) => String(c.id) === params.get("ch"));
   const idx = chapter ? Math.max(0, chapter.sections.findIndex((s) => s.id === params.get("s"))) : -1;
@@ -160,7 +120,7 @@ export default function LearnPage({ chapters, getStudied, setStudied, label, int
             <h2>{chapter.title}</h2>
           </div>
           {learn?.intro && <div className="boxc"><div className="isec prose"><p>{learn.intro}</p></div></div>}
-          {learn?.objectives && (
+          {learn?.objectives && !learning && (
             <div className="boxc">
               <div className="isec">
                 <span className="lbl">Learning objectives — what the exam tests</span>
@@ -173,7 +133,7 @@ export default function LearnPage({ chapters, getStudied, setStudied, label, int
           {keywords.length > 0 && (
             <div className="boxc">
               <div className="isec">
-                <span className="lbl">Keywords — know these definitions</span>
+                <span className="lbl">{learning ? "Key terms in this chapter" : "Keywords — know these definitions"}</span>
                 <div className="crow wrap" style={{ gap: 6 }}>{keywords.map((kw) => <span key={kw} className="chip">{kw}</span>)}</div>
               </div>
             </div>
@@ -193,7 +153,9 @@ export default function LearnPage({ chapters, getStudied, setStudied, label, int
         </div>
         <div className="isec prose">
           {section.learn ? (
-            section.learn.body.map((b, i) => <Block key={i} block={b} />)
+            <TermsProvider glossary={trackData?.glossary} glossaryPath={track?.steps[3].path}>
+              {section.learn.body.map((b, i) => <Block key={i} block={b} />)}
+            </TermsProvider>
           ) : (
             <>
               <Hint icon={Info}>Full teaching content for this section is coming. Here is the summary text meanwhile; the Summaries step has the deep-dive points.</Hint>
@@ -202,6 +164,8 @@ export default function LearnPage({ chapters, getStudied, setStudied, label, int
           )}
         </div>
       </article>
+
+      <SectionExtras trackId={track?.id} sectionId={section.id} />
 
       <div className="reader-foot">
         {prev && <button className="btn" onClick={() => go(prev[0], prev[1].id)}><ChevronLeft className="i" />Previous: {prev[1].id}</button>}

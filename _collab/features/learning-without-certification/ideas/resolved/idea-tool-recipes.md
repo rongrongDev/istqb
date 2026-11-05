@@ -20,9 +20,9 @@ Syllabi stay tool-neutral on purpose; engineers who aren't sitting the exam usua
 
 ## Open Questions
 
-- [ ] Keep recipes inside tracks, or as a separate "Toolbox" area?
-                                  > YOUR ANSWER:
+- [x] Keep recipes inside tracks, or as a separate "Toolbox" area?
+                                  > YOUR ANSWER: (default picked by Claude, since you asked to build everything — change it and I'll adjust) A separate Toolbox area, with links from the related Learn sections.
 
 ## Status
 
-OPEN
+RESOLVED

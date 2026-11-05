@@ -1,0 +1,111 @@
+// Real-world failure case studies, each based on a public investigation or report (see
+// `sources`). Kept to the widely documented facts; figures are rounded as in the sources.
+// `links` = Learn sections whose ideas would have helped.
+
+export const cases = [
+  {
+    id: "therac-25",
+    title: "Therac-25 radiation overdoses",
+    when: "1985–1987",
+    domain: "Medical devices",
+    summary: "A radiation therapy machine gave several patients massive overdoses; some died.",
+    happened: "In at least six accidents the Therac-25 delivered radiation doses far above what was prescribed. Earlier models had hardware interlocks that stopped unsafe beam settings; the Therac-25 relied on software alone, and parts of that software were reused from the older machines.",
+    cause: "A race condition: when an experienced operator edited the treatment settings quickly, the software could set up the machine inconsistently. Cryptic error messages such as \"MALFUNCTION 54\" let operators resume treatment. Incident reports were not acted on quickly.",
+    lessons: [
+      "Safety-critical software needs independent review and testing, not only the developer's own checks.",
+      "Reused code must be retested in its new context — the old hardware had been masking its defects.",
+      "Timing-dependent defects need deliberate tests of fast and concurrent user actions.",
+      "Unclear error messages are usability problems that can cause harm.",
+    ],
+    links: [["ctfl", "1.5.3"], ["ctfl", "1.2.3"], ["ctut", "1.1.1"], ["ctfl", "2.2.3"]],
+    sources: ["N. Leveson and C. Turner, \"An Investigation of the Therac-25 Accidents\", IEEE Computer, July 1993"],
+  },
+  {
+    id: "ariane-5",
+    title: "Ariane 5 Flight 501",
+    when: "4 June 1996",
+    domain: "Aerospace",
+    summary: "A new rocket destroyed itself about 40 seconds after its first launch.",
+    happened: "Shortly after lift-off, both inertial reference systems shut down, the rocket veered off course and self-destructed. The inertial software had been reused from Ariane 4.",
+    cause: "Converting a 64-bit floating-point value (horizontal velocity) to a 16-bit signed integer overflowed, because Ariane 5 flew faster sideways than Ariane 4 ever did. The exception shut down the primary and the identical backup unit. The function that failed wasn't even needed after lift-off.",
+    lessons: [
+      "Boundary values must come from the new system's real ranges, not the old one's.",
+      "Reused components need their assumptions checked against the new context.",
+      "Identical redundant units fail identically — redundancy doesn't protect against a design defect.",
+      "Test with realistic trajectories and data, not only data inherited from the previous product.",
+    ],
+    links: [["ctfl", "4.2.2"], ["ctfl", "1.3"], ["ctfl", "2.2.1"]],
+    sources: ["ESA/CNES Inquiry Board, \"Ariane 5 Flight 501 Failure\" report (J.-L. Lions, chair), July 1996"],
+  },
+  {
+    id: "mars-climate-orbiter",
+    title: "Mars Climate Orbiter",
+    when: "23 September 1999",
+    domain: "Space",
+    summary: "A Mars probe was lost because two systems used different units.",
+    happened: "The spacecraft approached Mars far lower than planned and was lost, probably burning up in the atmosphere.",
+    cause: "Ground software supplied thruster impulse data in pound-force seconds, while the navigation software expected newton-seconds as the interface specification required. Small errors built up over months of trajectory corrections. Concerns raised by the navigation team were not resolved.",
+    lessons: [
+      "Integration testing must check data exchanged between systems, including units and formats.",
+      "Interface specifications are a test basis: review code and data against them.",
+      "Traceability from requirements to tests shows which interface rules were never verified.",
+      "Anomalies reported during operations deserve the same attention as test failures.",
+    ],
+    links: [["ctfl", "2.2.1"], ["ctfl", "3.1.2"], ["ctfl", "1.4.4"]],
+    sources: ["NASA, \"Mars Climate Orbiter Mishap Investigation Board Phase I Report\", 10 November 1999"],
+  },
+  {
+    id: "knight-capital",
+    title: "Knight Capital trading loss",
+    when: "1 August 2012",
+    domain: "Finance",
+    summary: "A trading firm lost about 460 million dollars in roughly 45 minutes after a deployment.",
+    happened: "New trading code was deployed to eight servers, but one server was missed. When the market opened, that server ran old code that sent millions of unintended orders.",
+    cause: "The new code reused a flag that had once switched on an old, unused function (\"Power Peg\"). On the server without the new code, the flag woke up the old function. There was no automated check that every server had the same version, and no adequate kill switch.",
+    lessons: [
+      "Configuration management must confirm every environment runs the intended version.",
+      "Remove dead code instead of leaving it switchable; reusing feature flags is risky.",
+      "Release strategies with monitoring and fast rollback limit how long a bad release runs.",
+      "Maintenance testing must cover what a change can reactivate, not only what it adds.",
+    ],
+    links: [["ctfl", "5.4"], ["ctqdo", "4.2.4"], ["ctqdo", "4.2.2"], ["ctfl", "2.3"], ["ctft", "1.2"]],
+    sources: ["U.S. Securities and Exchange Commission, Order Instituting Proceedings against Knight Capital Americas LLC, Release No. 70694, 16 October 2013"],
+  },
+  {
+    id: "healthcare-gov",
+    title: "HealthCare.gov launch",
+    when: "October 2013",
+    domain: "Public sector",
+    summary: "The US federal health insurance marketplace largely failed when it opened to the public.",
+    happened: "On launch, very few people could create accounts and enrol; the site was slow, errors were frequent, and it took weeks of emergency work to stabilise.",
+    cause: "Investigations found unclear ownership, requirements that kept changing late, and too little time for end-to-end and performance testing before a fixed launch date. Warnings about readiness did not lead to a changed plan.",
+    lessons: [
+      "Performance testing must use realistic peak load before launch, not after.",
+      "Exit criteria need to be agreed and respected, especially against a fixed date.",
+      "Project risks (late requirements, unclear ownership) need to be reported to decision makers in plain terms.",
+      "End-to-end testing across all integrated systems needs time in the schedule.",
+    ],
+    links: [["ctpt", "1.5"], ["ctpt", "3.3"], ["ctfl", "5.1.3"], ["ctfl", "5.2.2"]],
+    sources: ["U.S. HHS Office of Inspector General, \"HealthCare.gov: CMS Management of the Federal Marketplace\" (OEI-06-14-00350), February 2016"],
+  },
+  {
+    id: "crowdstrike-2024",
+    title: "CrowdStrike sensor update outage",
+    when: "19 July 2024",
+    domain: "Infrastructure software",
+    summary: "A faulty content update crashed about 8.5 million Windows computers worldwide.",
+    happened: "A configuration (content) update for the Falcon security sensor was pushed to all customers at once. Affected Windows machines crashed and kept crashing on restart, grounding flights and disrupting hospitals and banks.",
+    cause: "The update provided 21 input fields to a component that expected 20, causing an out-of-bounds memory read in kernel-level code. The content validator didn't catch the mismatch, and the update wasn't rolled out in stages.",
+    lessons: [
+      "Test the boundaries of what a component receives — counts and sizes of inputs, not only their values.",
+      "Configuration and content changes need the same testing as code changes.",
+      "Staged (canary) rollouts limit the blast radius of a bad release.",
+      "Validators and test tools are software too: their gaps become your gaps.",
+    ],
+    links: [["ctqdo", "4.2.2"], ["ctfl", "4.2.2"], ["ctaltae", "7.1.3"], ["ctfl", "1.2.3"]],
+    sources: ["CrowdStrike, \"Channel File 291 Incident — Root Cause Analysis\", 6 August 2024", "Microsoft, \"Helping our customers through the CrowdStrike outage\", 20 July 2024"],
+  },
+];
+
+export const getCase = (id) => cases.find((c) => c.id === id) || null;
+export const casesFor = (track, section) => cases.filter((c) => c.links.some(([t, s]) => t === track && s === section));

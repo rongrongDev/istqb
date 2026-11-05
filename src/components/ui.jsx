@@ -1,4 +1,5 @@
 import { BookOpen, List, Lightbulb, BookA, Timer } from "lucide-react";
+import { useLearning, isLearningMode } from "../lib/learning.js";
 
 // Small shared pieces of the Exam Room design (classes live in src/styles.css).
 
@@ -21,7 +22,10 @@ export function Logo() {
 }
 
 const K = { K1: ["K1 Remember", ""], K2: ["K2 Understand", "acc"], K3: ["K3 Apply", "warn"], K4: ["K4 Analyze", "bad"] };
+// Hidden in Learning mode (no exam framing).
 export function KChip({ level }) {
+  const learning = isLearningMode(useLearning());
+  if (learning) return null;
   const [label, cls] = K[level] || [level, ""];
   return <span className={`chip ${cls}`}>{label}</span>;
 }

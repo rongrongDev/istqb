@@ -4,6 +4,7 @@ import { Timer, ArrowLeft } from "lucide-react";
 import { getTrack, legacyProgress } from "../lib/tracks.js";
 import Shell from "./Shell.jsx";
 import { STEP_ICON, STEP_SHORT, pct, passMark } from "./ui.jsx";
+import { useLearning, isLearningMode } from "../lib/learning.js";
 
 // Track landing page (/track/:id): exam facts, progress stats, the 5-step path and,
 // for CT-AI, the superseded v1.0 pages — all driven by src/lib/tracks.js.
@@ -11,6 +12,7 @@ export default function TrackPage() {
   const { id } = useParams();
   const track = getTrack(id);
   const [chapters, setChapters] = useState(null);
+  const learning = isLearningMode(useLearning());
 
   useEffect(() => {
     let alive = true;
@@ -58,21 +60,21 @@ export default function TrackPage() {
           </div>
         </div>
 
-        <div className="ticket">
+        {!learning && <div className="ticket">
           <div className="stack" style={{ gap: 4 }}>
             <span className="lbl">The exam</span>
-            <b className="nt2">{questions} questions{points !== questions ? ` (${points} points)` : ""} · 60 min · pass at {pass}</b>
+            <b className="nt2">{questions} questions{points !== questions ? ` (${points} points)` : ""} · {track.exam.minutes || 60} min · pass at {pass}</b>
             <span className="mu sm">{note}</span>
           </div>
           <Link className="btn pri" to={`/${quiz}`}><Timer className="i" />Take a mock exam</Link>
-        </div>
+        </div>}
 
         <div className="stats">
           <div>
             <b>{studiedCount}{totalSections != null && <span className="mu">/{totalSections}</span>}</b>
             <span className="mu">sections studied</span>
           </div>
-          <div>
+          {!learning && <div>
             {best ? (
               <>
                 <b className={best.score >= passMark(best.total) ? "ok" : "bad"}>{pct(best.score, best.total)}%</b>
@@ -81,22 +83,23 @@ export default function TrackPage() {
             ) : (
               <><b className="mu">—</b><span className="mu">no mock exam yet</span></>
             )}
-          </div>
-          <div>
+          </div>}
+          {!learning && <div>
             <b>{pass}<span className="mu">/{points}</span></b>
             <span className="mu">points to pass (65%)</span>
-          </div>
+          </div>}
         </div>
 
         <div className="stack" style={{ gap: 8 }}>
           <span className="lbl">Study path — follow the steps in order</span>
           <div className="stepper">
             {track.steps.map((s, i) => {
+              if (learning && i === 2) return null;
               const Icon = STEP_ICON[STEP_SHORT[i]];
               return (
                 <Link key={s.path} to={`/${s.path}`} className={`sc${i === 0 && studiedCount === 0 ? " on" : ""}`}>
                   <div className="crow"><span className="num">{s.step}</span><Icon className="i mu" /></div>
-                  <b>{s.title}</b>
+                  <b>{learning && i === 4 ? "Practice questions" : s.title}</b>
                   <span className="mu sm">{s.desc}</span>
                 </Link>
               );
