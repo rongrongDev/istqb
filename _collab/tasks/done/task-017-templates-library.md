@@ -6,11 +6,11 @@ Ready-to-use Markdown templates (test plan outline, exploratory charter, bug rep
 
 ## Acceptance Criteria
 
-- [ ] `src/data/learning/templates.js` with at least 10 templates
-- [ ] Templates page with filter by area, preview, Copy as Markdown
-- [ ] "Template" links on the related Learn sections
-- [ ] `npm run build` passes; the new screens checked in a browser at desktop and phone width, light and dark
-- [ ] `_collab/TASKS.md` updated when finished
+- [x] `src/data/learning/templates.js` with at least 10 templates
+- [x] Templates page with filter by area, preview, Copy as Markdown
+- [x] "Template" links on the related Learn sections
+- [x] `npm run build` passes; the new screens checked in a browser at desktop and phone width, light and dark — no console errors or horizontal overflow; `npm run check:learning` validates every section reference
+- [x] `_collab/TASKS.md` updated when finished
 
 ## Depends on
 
@@ -22,4 +22,4 @@ Resolved from `_collab/features/learning-without-certification/ideas/resolved/id
 
 ## Status
 
-TODO
+DONE

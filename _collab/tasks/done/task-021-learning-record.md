@@ -6,11 +6,11 @@ A private overview of everything studied across tracks and paths, exercises done
 
 ## Acceptance Criteria
 
-- [ ] Learning record page aggregating tracks, paths, exercises, self-check
-- [ ] Copy summary text, clearly self-reported
-- [ ] Linked from the dashboard
-- [ ] `npm run build` passes; the new screens checked in a browser at desktop and phone width, light and dark
-- [ ] `_collab/TASKS.md` updated when finished
+- [x] Learning record page aggregating tracks, paths, exercises, self-check
+- [x] Copy summary text, clearly self-reported
+- [x] Linked from the dashboard
+- [x] `npm run build` passes; the new screens checked in a browser at desktop and phone width, light and dark — no console errors or horizontal overflow; `npm run check:learning` validates every section reference
+- [x] `_collab/TASKS.md` updated when finished
 
 ## Depends on
 
@@ -24,4 +24,4 @@ Resolved from `_collab/features/learning-without-certification/ideas/resolved/id
 
 ## Status
 
-TODO
+DONE
