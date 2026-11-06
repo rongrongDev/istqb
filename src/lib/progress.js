@@ -88,3 +88,59 @@ export const getStudiedSectionsSS = ss.getStudiedSections;
 export const setSectionStudiedSS = ss.setSectionStudied;
 export const getBestExamScoreSS = ss.getBestExamScore;
 export const recordExamScoreSS = ss.recordExamScore;
+
+// CT-GenAI v1.1 track
+const ctgenai = makeProgress("ct-genai-progress");
+export const getStudiedSectionsGenAI = ctgenai.getStudiedSections;
+export const setSectionStudiedGenAI = ctgenai.setSectionStudied;
+export const getBestExamScoreGenAI = ctgenai.getBestExamScore;
+export const recordExamScoreGenAI = ctgenai.recordExamScore;
+
+// CTAL-TAE v2.0 track
+const ctaltae = makeProgress("ctal-tae-progress");
+export const getStudiedSectionsTAE = ctaltae.getStudiedSections;
+export const setSectionStudiedTAE = ctaltae.setSectionStudied;
+export const getBestExamScoreTAE = ctaltae.getBestExamScore;
+export const recordExamScoreTAE = ctaltae.recordExamScore;
+
+// CT-TAS v1.0 track
+const cttas = makeProgress("ct-tas-progress");
+export const getStudiedSectionsTAS = cttas.getStudiedSections;
+export const setSectionStudiedTAS = cttas.setSectionStudied;
+export const getBestExamScoreTAS = cttas.getBestExamScore;
+export const recordExamScoreTAS = cttas.recordExamScore;
+
+// CT-PT (2018) track
+const ctpt = makeProgress("ct-pt-progress");
+export const getStudiedSectionsPT = ctpt.getStudiedSections;
+export const setSectionStudiedPT = ctpt.setSectionStudied;
+export const getBestExamScorePT = ctpt.getBestExamScore;
+export const recordExamScorePT = ctpt.recordExamScore;
+
+// CT-SEC (2016) track
+const ctsec = makeProgress("ct-sec-progress");
+export const getStudiedSectionsSEC = ctsec.getStudiedSections;
+export const setSectionStudiedSEC = ctsec.setSectionStudied;
+export const getBestExamScoreSEC = ctsec.getBestExamScore;
+export const recordExamScoreSEC = ctsec.recordExamScore;
+
+// CT-FT v1.0 track
+const ctft = makeProgress("ct-ft-progress");
+export const getStudiedSectionsFT = ctft.getStudiedSections;
+export const setSectionStudiedFT = ctft.setSectionStudied;
+export const getBestExamScoreFT = ctft.getBestExamScore;
+export const recordExamScoreFT = ctft.recordExamScore;
+
+// CT-AcT (2019) track
+const ctact = makeProgress("ct-act-progress");
+export const getStudiedSectionsACT = ctact.getStudiedSections;
+export const setSectionStudiedACT = ctact.setSectionStudied;
+export const getBestExamScoreACT = ctact.getBestExamScore;
+export const recordExamScoreACT = ctact.recordExamScore;
+
+// CT-UT (2018) track
+const ctut = makeProgress("ct-ut-progress");
+export const getStudiedSectionsUT = ctut.getStudiedSections;
+export const setSectionStudiedUT = ctut.setSectionStudied;
+export const getBestExamScoreUT = ctut.getBestExamScore;
+export const recordExamScoreUT = ctut.recordExamScore;
